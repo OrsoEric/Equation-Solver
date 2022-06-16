@@ -41,6 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **  GLOBAL INCLUDES
 **********************************************************************************/
 
+#include <vector> 
+
 /**********************************************************************************
 **  DEFINES
 **********************************************************************************/
@@ -102,6 +104,11 @@ class Tokenizer
 			//Checks to be performed on input dependent on internal algorithms
 			static const bool CU1_INTERNAL_CHECKS = true;
 
+            //Decimal Separator
+            static const char CS8_DECIMAL_SEPARATOR = '.';
+            //Maximum number of character that makes up a token name or a number
+            static const int CS32_MAX_ARG_LENGTH = 32;
+
         } Config;
 
         //! @brief Error codes of the class
@@ -148,6 +155,8 @@ class Tokenizer
         **  PUBLIC SETTERS
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
+
+        bool parse( const char *ips8_equation );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -213,6 +222,19 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //I can make token a base class, and specialize it to the various types of tokens I can have
+        //  token -> binary_operator (one father, two children LHS RHS)
+        //  token -> number (one father, no children)
+        typedef struct _Token Token;
+        struct _Token
+        {
+            //Token type
+
+
+            //Array that points to a number of tokens
+            std::vector<Token *> clapst_leaves;
+        };
+
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **	PRIVATE INIT
@@ -221,6 +243,17 @@ class Tokenizer
 
         //Initialize class vars
         bool init_class_vars( void );
+
+        /*********************************************************************************************************************************************************
+        **********************************************************************************************************************************************************
+        **	PRIVATE TESTER
+        **********************************************************************************************************************************************************
+        *********************************************************************************************************************************************************/
+
+        bool is_number( char is8_digit )
+        {
+            return ( (is8_digit == Config::CS8_DECIMAL_SEPARATOR) || ((is8_digit >= '0') && (is8_digit <= '9')) );
+        }
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -246,6 +279,60 @@ class Tokenizer
         const char *gps8_error_code;
 
 };	//End Class: Tokenizer
+
+//Base class, all tokens are compatible with this
+class Token
+{
+    public:
+        Token( void )
+        {
+            //No type
+            this->pcs8_token_type = Token_type::CPS8_NONE;
+            //No father
+            this->pcl_father = nullptr;
+        }
+
+    protected:
+        typedef union _Token_type
+        {
+            static constexpr const char *CPS8_NONE = "None";
+            static constexpr const char *CPS8_BINARY_OPERATOR = "Binary Operator";
+            static constexpr const char *CPS8_NUMBER = "Number";
+        } Token_type;
+    private:
+        //Token type
+        const char *pcs8_token_type;
+        //
+        Token *pcl_father;
+};
+
+//Binary operators have two children and an operator type that describe its function
+class Binary_operator : public Token
+{
+
+
+    private:
+        //Types of operators
+        typedef union _Binary_operator_type
+        {
+            //Equal Operator
+            static constexpr const char *CPS8_EQUAL = "=";
+            //Binary Mul Operator 
+            static constexpr const char *CPS8_MUL = "*";
+        } Binary_operator_type;
+        //Operator type
+        const char *ps8_operator_type;
+        //Pointers to leaves
+        Token *pcl_lhs;
+        Token *pcl_rhs;
+};
+
+
+class Number : public Token
+{
+    private:
+
+};
 
 /**********************************************************************************
 **  NAMESPACE

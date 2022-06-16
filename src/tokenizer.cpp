@@ -70,6 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //Standard C Libraries
 #include <cstdio>
 //#include <cstdlib>
+#include <cstring>
 
 //Standard C++ libraries
 #include <iostream>
@@ -164,6 +165,93 @@ Tokenizer::~Tokenizer( void )
     DRETURN();      //Trace Return
     return;         //OK
 }   //Destructor: Tokenizer | void
+
+/*********************************************************************************************************************************************************
+**********************************************************************************************************************************************************
+**	PUBLIC SETTER
+**********************************************************************************************************************************************************
+*********************************************************************************************************************************************************/
+
+/***************************************************************************/
+//! @brief Public Setter: parse | const char *
+/***************************************************************************/
+// @param
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n Method
+/***************************************************************************/
+
+bool Tokenizer::parse( const char *ips8_equation )
+{
+    DENTER_ARG("%s", ips8_equation); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	INIT
+    //--------------------------------------------------------------------------
+
+    //Equation string length
+    int s32_len = strlen( ips8_equation );
+    if (s32_len <= 0)
+    {
+        this->report_error( Error_code::CPS8_ERR );
+        return true;
+    }
+
+    typedef enum _States
+    {
+        IDLE,
+    } States;
+
+
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+    //Parser
+
+    char s8_token[Config::CS32_MAX_ARG_LENGTH];
+    int s32_token_cnt;
+
+    int s32_t = 0;
+    States e_state = States::IDLE;
+    bool u1_continue = true;
+    while (u1_continue == true)
+    {
+        //Fetch next character
+        char s8_digit = ips8_equation[s32_t];
+        //Machine is IDLE
+        if (e_state == States::IDLE)
+        {
+            //Find first digit of a number
+            if (this->is_number(s8_digit) == true)
+            {
+                //Initialize argument digit counter
+                s32_token_cnt = 0;
+
+                s8_token[s32_token_cnt] = s8_digit;
+                s8_token[s32_token_cnt +1] = '\0';
+                s32_token_cnt++;
+            }
+
+        }
+        else
+        {
+            //Error: bad state
+            u1_continue = false;
+        }
+
+        //Next character
+        s32_t++;
+        if ((s32_t >= s32_len) || (s8_digit == '\0'))
+        {
+            u1_continue = false;
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("Parsed %d digits | Extracted %d tokens", s32_t, 0); //Trace Return
+    return false;	//OK
+}   //Public Setter: parse | const char *
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************

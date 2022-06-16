@@ -8,9 +8,9 @@
 **         \
 **          \
 *****************************************************************
-**	Project
+**	Symbolic Equation Solver
 *****************************************************************
-**  Brief
+**  Tokenizer: Transform a string into an equation
 ****************************************************************/
 
 /****************************************************************
@@ -64,7 +64,7 @@
 #define ENABLE_DEBUG
 #include "debug.h"
 
-#include "class.h"
+#include "tokenizer.h"
 
 /****************************************************************
 **	NAMESPACES
@@ -169,9 +169,11 @@ bool test_bench( void )
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
-	User::Dummy cl_my_instance = User::Dummy();
 
+    User::Tokenizer cl_my_instance;
 	std::cout << cl_my_instance.get_error();
+
+    cl_my_instance.parse( "4Y=3X" );
 
 	//----------------------------------------------------------------
 	//	RETURN
