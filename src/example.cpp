@@ -185,6 +185,10 @@ bool test_bench( void )
 	//This calls also the destructor of Binary Operator
     delete (User::Binary_operator *)pcl_token;
 
+
+    User::Equation cl_my_equation;
+    cl_my_equation.gpcl_root = pcl_token;
+
 	//----------------------------------------------------------------
 	//	RETURN
 	//----------------------------------------------------------------

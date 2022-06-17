@@ -322,6 +322,15 @@ class Token
 class Binary_operator : public Token
 {
 	public:
+		//Types of operators: from outside there is need to know what types are
+        typedef union _Binary_operator_type
+        {
+            //Equal Operator
+            static constexpr const char *CPS8_EQUAL = "=";
+            //Binary Mul Operator
+            static constexpr const char *CPS8_MUL = "*";
+        } Binary_operator_type;
+
 		Binary_operator()
 		{
 			DENTER_ARG("this: %p", this);
@@ -337,14 +346,7 @@ class Binary_operator : public Token
 		}
 
     private:
-        //Types of operators
-        typedef union _Binary_operator_type
-        {
-            //Equal Operator
-            static constexpr const char *CPS8_EQUAL = "=";
-            //Binary Mul Operator
-            static constexpr const char *CPS8_MUL = "*";
-        } Binary_operator_type;
+
         //Operator type
         const char *ps8_operator_type;
         //Pointers to leaves. Left Hand Side and Right Hand Side
@@ -358,6 +360,44 @@ class Number : public Token
     private:
 
 };
+
+//Class that contains equation manipulating function
+//Takes care of creating an equation from strings
+class Equation
+{
+	public:
+
+		//Create a new token of a given type
+		Token *create_binary_operator( Binary_operator::Binary_operator_type ie_binary_operator_type );
+		//Destroy a binary operator, and return all the non null leaves in a vector for destruction
+		bool destroy_binary_operator( std::vector<Token *>& orclapcl_leaves );
+		//Pointer to the root of the solution tree
+        Token *gpcl_root;
+	private:
+		//String holding the equation
+		char *gpas8_equation;
+
+};
+
+//Takes in multiple equations in order to solve a problem
+class Solver
+{
+	public:
+		//register an equation inside the problem
+		bool register_equation( std::string icl_equation, int &ors32_index );
+		//Register a token to be an output token.
+		bool register_output_token( std::string icl_output_token );
+		//Register a token to be an indepentend variable. solver wants all of them to be on RHS
+		bool register_input_token( std::string icl_output_token );
+		//All tokens that are not input or output are taken as numeric constant
+
+		//The solver will try very hard to solve the problem if within its limits.
+		//Solver wants to generate one equation per output token with said token as sole LHS
+		//The Solver tries to isolate input tokens on RHS as best as it can, prioritizing linear
+		//The solver wants to minimize the overall number of tokens needed to represent an equation
+		bool solve( void );
+};
+
 
 /**********************************************************************************
 **  NAMESPACE

@@ -6,13 +6,13 @@
 1653289091 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1655445379 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1655445973 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
 	"tokenizer.h"
 
-1655445194 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tokenizer.h
+1655446062 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tokenizer.h
 	<vector>
 
 1655399113 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tokenizer.cpp
