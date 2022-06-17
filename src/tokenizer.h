@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **  GLOBAL INCLUDES
 **********************************************************************************/
 
-#include <vector> 
+#include <vector>
 
 /**********************************************************************************
 **  DEFINES
@@ -286,11 +286,20 @@ class Token
     public:
         Token( void )
         {
+			DENTER_ARG("this: %p", this);
             //No type
-            this->pcs8_token_type = Token_type::CPS8_NONE;
+            this->gpcs8_token_type = Token_type::CPS8_NONE;
             //No father
-            this->pcl_father = nullptr;
+            this->gpcl_father = nullptr;
+
+            DRETURN();
+            return;
         }
+        ~Token()
+		{
+			DENTER();
+			DRETURN();
+		}
 
     protected:
         typedef union _Token_type
@@ -299,17 +308,33 @@ class Token
             static constexpr const char *CPS8_BINARY_OPERATOR = "Binary Operator";
             static constexpr const char *CPS8_NUMBER = "Number";
         } Token_type;
-    private:
+
         //Token type
-        const char *pcs8_token_type;
+        const char *gpcs8_token_type;
         //
-        Token *pcl_father;
+        Token *gpcl_father;
+    private:
+
+
 };
 
 //Binary operators have two children and an operator type that describe its function
 class Binary_operator : public Token
 {
-
+	public:
+		Binary_operator()
+		{
+			DENTER_ARG("this: %p", this);
+			//I'm constructing a binary operator
+			this->gpcs8_token_type = Token_type::CPS8_BINARY_OPERATOR;
+			DRETURN();
+			return;
+		}
+		~Binary_operator()
+		{
+			DENTER();
+			DRETURN();
+		}
 
     private:
         //Types of operators
@@ -317,12 +342,12 @@ class Binary_operator : public Token
         {
             //Equal Operator
             static constexpr const char *CPS8_EQUAL = "=";
-            //Binary Mul Operator 
+            //Binary Mul Operator
             static constexpr const char *CPS8_MUL = "*";
         } Binary_operator_type;
         //Operator type
         const char *ps8_operator_type;
-        //Pointers to leaves
+        //Pointers to leaves. Left Hand Side and Right Hand Side
         Token *pcl_lhs;
         Token *pcl_rhs;
 };

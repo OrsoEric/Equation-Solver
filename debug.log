@@ -1,8 +1,28 @@
 Start Debug!
--->> "main" |
+-->> "int main()" |
 	OrangeBot Projects
-	-->> "test_bench" |
-	<<-- "test_bench" |
-<<-- "main" |
+	-->> "bool test_bench()" |
+		-->> "User::Tokenizer::Tokenizer()" | This: 006cfedc
+			-->> "bool User::Tokenizer::init_class_vars()" |
+			<<-- "bool User::Tokenizer::init_class_vars()" |
+		<<-- "User::Tokenizer::Tokenizer()" |
+		-->> "const char* User::Tokenizer::get_error()" |
+			-->> "bool User::Tokenizer::error_recovery()" |
+			<<-- "bool User::Tokenizer::error_recovery()" |
+		<<-- "const char* User::Tokenizer::get_error()" |
+		-->> "bool User::Tokenizer::parse(const char*)" | 4Y=3X
+		<<-- "bool User::Tokenizer::parse(const char*)" | Parsed 5 digits | Extracted 0 tokens
+		-->> "User::Token::Token()" | this: 007ba9b8
+		<<-- "User::Token::Token()" |
+		-->> "User::Binary_operator::Binary_operator()" | this: 007ba9b8
+		<<-- "User::Binary_operator::Binary_operator()" |
+		-->> "User::Binary_operator::~Binary_operator()" |
+		<<-- "User::Binary_operator::~Binary_operator()" |
+		-->> "User::Token::~Token()" |
+		<<-- "User::Token::~Token()" |
+	<<-- "bool test_bench()" |
+	-->> "User::Tokenizer::~Tokenizer()" | This: 006cfedc
+	<<-- "User::Tokenizer::~Tokenizer()" |
+<<-- "int main()" |
 
 Debug has Ended!
