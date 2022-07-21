@@ -70,14 +70,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //Standard C Libraries
 #include <cstdio>
 //#include <cstdlib>
-#include <cstring>
 
 //Standard C++ libraries
 #include <iostream>
 //#include <array>
 //#include <vector>
 //#include <queue>
-//#include <string>
+#include <string>
 //#include <fstream>
 //#include <chrono>
 //#include <thread>
@@ -89,7 +88,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //User Libraries
 
 //Class Header
-#include "tokenizer.h"
+#include "parser.h"
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -108,7 +107,7 @@ namespace User
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Constructor: Tokenizer | void
+//! @brief Constructor: Equation_parser | void
 /***************************************************************************/
 // @param
 //! @return no return
@@ -116,7 +115,7 @@ namespace User
 //! \n Empty constructor
 /***************************************************************************/
 
-Tokenizer::Tokenizer( void )
+Equation_parser::Equation_parser( void )
 {
     DENTER_ARG("This: %p", this);   //Trace Enter
     //--------------------------------------------------------------------------
@@ -131,7 +130,7 @@ Tokenizer::Tokenizer( void )
     //--------------------------------------------------------------------------
     DRETURN();  //Trace Return
     return;
-}   //Constructor: Tokenizer | void
+}   //Constructor: Equation_parser | void
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -140,7 +139,7 @@ Tokenizer::Tokenizer( void )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//!	@brief Destructor: Tokenizer | void
+//!	@brief Destructor: Equation_parser | void
 /***************************************************************************/
 // @param
 //! @return no return
@@ -148,7 +147,7 @@ Tokenizer::Tokenizer( void )
 //! \n Empty destructor
 /***************************************************************************/
 
-Tokenizer::~Tokenizer( void )
+Equation_parser::~Equation_parser( void )
 {
     DENTER_ARG("This: %p", this);   //Trace Enter
     //--------------------------------------------------------------------------
@@ -164,7 +163,7 @@ Tokenizer::~Tokenizer( void )
     //--------------------------------------------------------------------------
     DRETURN();      //Trace Return
     return;         //OK
-}   //Destructor: Tokenizer | void
+}   //Destructor: Equation_parser | void
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -173,89 +172,289 @@ Tokenizer::~Tokenizer( void )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Public Setter: parse | const char *
+//! @brief Public Setter: parse | std::string |
 /***************************************************************************/
-// @param
+//! @param icl_equation_string | string containing the equation to be parsed into a vector of string tokens
 //! @return bool | false = OK | true = FAIL |
 //! @details
-//! \n The tokenizer translate the string into a linear vector of tokens in the first pass
-//! \n Second pass, the equation is translated into a tree structure
-//! \n Third pass the equation is cleaned up for redundant tokens
-//! \n e.g. the () tokens are removed, priority is already encoded in the tree structure
+//! \n Parse a string into a vector of string tokens. Basically slice the string into individual tokens.
 /***************************************************************************/
 
-bool Tokenizer::parse( const char *ips8_equation )
+bool Equation_parser::parse( std::string icl_equation_string )
 {
-    DENTER_ARG("%s", ips8_equation); //Trace Enter
+    DENTER_ARG("Parse: %s | Size: %d", icl_equation_string.c_str(), icl_equation_string.size() ); //Trace Enter
     //--------------------------------------------------------------------------
-    //	INIT
+    //	CHECK
     //--------------------------------------------------------------------------
 
-    //Equation string length
-    int s32_len = strlen( ips8_equation );
-    if (s32_len <= 0)
+    if (icl_equation_string.size() <= 0)
     {
-        this->report_error( Error_code::CPS8_ERR );
-        return true;
+		DRETURN_ARG("ERR:%d | Bad input string",__LINE__);
+		return true;
     }
 
-    typedef enum _States
-    {
-        IDLE,
-    } States;
-
-
     //--------------------------------------------------------------------------
-    //	BODY
+    //	LINEAR PARSER
     //--------------------------------------------------------------------------
-    //Parser
+    //	The first pass translates a string into a vector of tokens with base token types
 
-    char s8_token[Config::CS32_MAX_ARG_LENGTH];
-    int s32_token_cnt;
-
-    int s32_t = 0;
-    States e_state = States::IDLE;
+	//Temp storage of token being decoded
+    Token cl_token;
+    //Lambda to reset the token, I use it as a private local function
+	auto reset_token = [](Token &irst_token)
+	{
+		//Clean up the temp string
+		irst_token.cl_str.clear();
+		//Initialize token type to unknown
+		irst_token.e_type = Token_type::UNKNOWN;
+		return false;
+	};
+	//Initialize the token
+	reset_token( cl_token );
+    //The FSM creates a vector holding one string for each token decoded in sequence.
+    //Another algorithm is responsible for translating a sequence of token into a tree
+    std::vector<Token> clast_tokens;
+	//Start by searching the next token
+    Fsm_state e_fsm_state = Fsm_state::SEEK_NEXT_TOKEN;
+    //Start scan from first digit f the equation
+    std::string::iterator clst_item = icl_equation_string.begin();
+    //true = a full token has been decoded by the FSM
+    bool u1_token_decoded = false;
+    //true = the FSM needs to reprocess a digit, so skip advancing to next token
+    bool u1_reprocess_digit = false;
+    //keep looping
     bool u1_continue = true;
+    //While: Iterate until all characters inside the string object have been scanned
     while (u1_continue == true)
     {
-        //Fetch next character
-        char s8_digit = ips8_equation[s32_t];
-        //Machine is IDLE
-        if (e_state == States::IDLE)
-        {
-            //Find first digit of a number
-            if (this->is_number(s8_digit) == true)
-            {
-                //Initialize argument digit counter
-                s32_token_cnt = 0;
+		//--------------------------------------------------------------------------
+		//	PROCESSS DIGIT
+		//--------------------------------------------------------------------------
 
-                s8_token[s32_token_cnt] = s8_digit;
-                s8_token[s32_token_cnt +1] = '\0';
-                s32_token_cnt++;
-            }
+		//Decode the digit
+		char s8_digit = *clst_item;
+		//FSM
+		switch( e_fsm_state )
+		{
+			//--------------------------------------------------------------------------
+			//	SEEK_NEXT_TOKEN
+			//--------------------------------------------------------------------------
+			//No open token. Seek beginning of next token
+			case Fsm_state::SEEK_NEXT_TOKEN:
+				DPRINT_CONDITIONAL( ((Config::CU1_PARSER_EXTENDED_DEBUG==true) && (clst_item != icl_equation_string.end())) , "SEEK_NEXT_TOKEN | Decode: >>%c<<\n",s8_digit);
+				//Detect a number digit
+                if (this->is_number(s8_digit) == true)
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+					e_fsm_state = Fsm_state::TOKEN_NUMBER;
+                }
+                //Detect decimal separator
+                else if (s8_digit == Token_legend::CS8_DECIMAL_SEPARATOR)
+                {
+					//Append 0 before the digit and the digit to the token
+					cl_token.cl_str.push_back( '0' );
+					cl_token.cl_str.push_back( s8_digit );
+					e_fsm_state = Fsm_state::TOKEN_NUMBER;
+                }
+                //Detect a symbol digit. Symbols must start with a symbol digit. Symbols are things like constants or variable names
+                else if (this->is_symbol(s8_digit) == true)
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+					e_fsm_state = Fsm_state::TOKEN_SYMBOL;
+                }
+                //Detect Operator
+                else if (this->is_operator(s8_digit))
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+					//Single digit operator decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_OPERATOR;
+					DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Operator detected: >>%c<< | Token: %s\n",s8_digit, cl_token.cl_str.c_str() );
+                }
+                //Detect Open
+                else if (s8_digit == Token_legend::CS8_PRIORITY_OPEN)
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+					//Single digit operator decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_OPEN;
+					DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Open detected: >>%c<< | Token: %s\n",s8_digit, cl_token.cl_str.c_str() );
+                }
+                //Detect Open
+                else if (s8_digit == Token_legend::CS8_PRIORITY_CLOSE)
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+					//Single digit operator decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_CLOSE;
+					DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Close detected: >>%c<< | Token: %s\n",s8_digit, cl_token.cl_str.c_str() );
+                }
+                //Unknown digit
+                else
+                {
+					//The equation contains invalid digits
+					this->report_error(Error_code::CPS8_ERR_USER_DIGIT);
+					DPRINT("ERR%d: Invalid Digit >>%c<<\n", __LINE__, (s8_digit!='\0')?(s8_digit):(' ') );
+                }
+
+				break;
+			//Parsing a number token
+			case Fsm_state::TOKEN_NUMBER:
+				DPRINT_CONDITIONAL( ((Config::CU1_PARSER_EXTENDED_DEBUG==true) && (clst_item != icl_equation_string.end())) , "TOKEN_NUMBER | Decode: >>%c<<\n",s8_digit);
+				//Last digit
+				if (clst_item == icl_equation_string.end())
+				{
+					//Do not append digit, it's a terminator
+					//Symbol fully decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_NUMBER;
+				}
+				//Ignore thousand separator
+				else if (s8_digit == Token_legend::CS8_THOUSAND_SEPARATOR)
+				{
+					//!@todo Parser should check that the thousand separator token is in the right place
+					//Do nothing
+				}
+				//More numbers or decimal separators
+				else if ((this->is_number(s8_digit)) || (s8_digit == Token_legend::CS8_DECIMAL_SEPARATOR))
+				{
+					//!@todo Parser should check that the decimal separator token is in the right place
+					//Append digit to the token, not done yet
+					cl_token.cl_str.push_back( s8_digit );
+				}
+				//Non number digit
+				else
+				{
+					//Do not append digit, it belongs to another token
+					//Reprocess the digit as it might be the beginning of a new token
+					u1_reprocess_digit = true;
+					//Symbol fully decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_NUMBER;
+				}
+				break;
+
+			//Parsing a symbol token. End when I'm parsing a non symbol non number or when string ends
+			case Fsm_state::TOKEN_SYMBOL:
+				DPRINT_CONDITIONAL( ((Config::CU1_PARSER_EXTENDED_DEBUG==true) && (clst_item != icl_equation_string.end())) , "TOKEN_SYMBOL | Decode: >>%c<<\n",(s8_digit!='\0')?(s8_digit):(' '));
+				//Last digit
+				if (clst_item == icl_equation_string.end())
+				{
+					//Do not append digit, it's a terminator
+					//Symbol fully decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_SYMBOL;
+				}
+				//Detect a symbol digit or a number digit
+				else if ((this->is_symbol(s8_digit) == true) || (this->is_number(s8_digit) == true))
+                {
+					//Append digit to the token
+					cl_token.cl_str.push_back( s8_digit );
+                }
+                //Detect a non symbol not number digit
+                else
+                {
+					//Do not append digit, it belongs to another token
+					//Reprocess the digit as it might be the beginning of a new token
+					u1_reprocess_digit = true;
+					//Symbol fully decoded
+					u1_token_decoded = true;
+					cl_token.e_type = Token_type::BASE_SYMBOL;
+                }
+
+				break;
+
+			//Unknown state
+			default:
+				//FSM error
+				this->report_error(Error_code::CPS8_ERR_FSM);
+				DPRINT("ERR%d: Unknown FSM state >>%d<<... Reset FSM\n", e_fsm_state );
+				//Reset FSM State
+				e_fsm_state = Fsm_state::SEEK_NEXT_TOKEN;
+				//Initialize the token
+				reset_token( cl_token );
+				break;
+		}
+		//If FSM has fully decoded a token
+		if (u1_token_decoded == true)
+		{
+			//Clear flag
+			u1_token_decoded = false;
+			//If: decoding resulted in an empty token
+			if (cl_token.cl_str.size() <= 0)
+			{
+				//Algorithmic error
+				DPRINT("ERR%d: An empty token was decoded\n" ,__LINE__);
+			}
+			else
+			{
+				//Append the decoded string to the token vector
+				clast_tokens.push_back( cl_token );
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %s | type: %d | size: %d\n", cl_token.cl_str.c_str(), cl_token.e_type, cl_token.cl_str.size() );
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Tokens decoded: %d\n", clast_tokens.size() );
+				//Initialize the token
+				reset_token( cl_token );
+			}
+            //FSM is now IDLE
+            e_fsm_state = Fsm_state::SEEK_NEXT_TOKEN;
+		}
+
+		//--------------------------------------------------------------------------
+		//	NEXT
+		//--------------------------------------------------------------------------
+		//If: this is the last digit ('\0')
+		if (clst_item == icl_equation_string.end())
+		{
+			//Done
+			u1_continue = false;
+		}
+		//If FSM asked to reprocess a digit
+		else if (u1_reprocess_digit == true)
+		{
+			//Clear flag
+			u1_reprocess_digit = false;
+		}
+		//If: FSM didn't say anything, advance to next digit to avoid stalling FSM
+		else
+		{
+			//Scan next digit
+			clst_item++;
+		}
+	}	//While: Iterate until all characters inside the string object have been scanned
+
+	//--------------------------------------------------------------------------
+    //	TREE PARSER
+    //--------------------------------------------------------------------------
+    //	Second pass translates an array of tokens into a tree of tokens
+    //	This pass also specializes base token types into specialized token types if needed
+    //	Algorithm
+    //	it's a tile left/right algorithm
+    //	1) search operator =
+    //	2) move everything left of operator to LHS vector, move everything right to RHS vector
+    //	3) add operator to tree
+    //	4) on LHS -> 1), operator is added as leaf to
+    //	5)
 
 
-        }
-        else
-        {
-            //Error: bad state
-            u1_continue = false;
-        }
+	for (std::vector<Token>::iterator cl_token_iter = clast_tokens.begin();cl_token_iter != clast_tokens.end();cl_token_iter++)
+	{
+		DPRINT("Token: >>%s<< | Type: %d | Size: %d\n", cl_token_iter->cl_str.c_str(), cl_token_iter->e_type, cl_token_iter->e_type );
 
-        //Next character
-        s32_t++;
-        if ((s32_t >= s32_len) || (s8_digit == '\0'))
-        {
-            u1_continue = false;
-        }
-    }
+	}
+
+
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Parsed %d digits | Extracted %d tokens", s32_t, 0); //Trace Return
-    return false;	//OK
-}   //Public Setter: parse | const char *
+    DRETURN(); //Trace Return
+    return false; //OK
+} //Public Setter: parse | const char * |
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -272,7 +471,7 @@ bool Tokenizer::parse( const char *ips8_equation )
 //! \n Try to recover from errors
 /***************************************************************************/
 
-const char *Tokenizer::get_error( void )
+const char *Equation_parser::get_error( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -311,7 +510,7 @@ const char *Tokenizer::get_error( void )
 //! \n Method
 /***************************************************************************/
 
-bool Tokenizer::my_public_method( void )
+bool Equation_parser::my_public_method( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -344,7 +543,7 @@ bool Tokenizer::my_public_method( void )
 //! \n Initialize class vars
 /***************************************************************************/
 
-bool Tokenizer::init_class_vars( void )
+bool Equation_parser::init_class_vars( void )
 {
     DENTER();		//Trace Enter
     //--------------------------------------------------------------------------
@@ -362,6 +561,99 @@ bool Tokenizer::init_class_vars( void )
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
+**	PRIVATE TESTER
+**********************************************************************************************************************************************************
+*********************************************************************************************************************************************************/
+
+/***************************************************************************/
+//! @brief Private Tester: is_operator | char
+/***************************************************************************/
+//! @param is8_digit | digit to be tested
+//! @return bool | true = digit is an operator |
+//! @details
+//! \n returns true if the digit is an operator token
+/***************************************************************************/
+
+bool Equation_parser::is_operator( char is8_digit )
+{
+    DENTER_ARG("Digit: >>%c<<", (is8_digit!='\0')?(is8_digit):(' ')  ); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+
+    //Temp return
+	bool u1_ret;
+    switch (is8_digit)
+    {
+		case Token_legend::CS8_OPERATOR_EQUAL:
+		case Token_legend::CS8_OPERATOR_SUM:
+		case Token_legend::CS8_OPERATOR_DIFF:
+		case Token_legend::CS8_OPERATOR_MUL:
+		case Token_legend::CS8_OPERATOR_DIV:
+		//case Token_legend::CS8_PRIORITY_OPEN:
+		//case Token_legend::CS8_PRIORITY_CLOSE:
+			//Operator
+			u1_ret = true;
+			break;
+		default:
+			//Not an operator
+			u1_ret = false;
+			break;
+    }
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("%c",(u1_ret==true?'Y':'N')); //Trace Return
+    return u1_ret;	//Propagate
+}   //Private Tester: is_operator | char
+
+/***************************************************************************/
+//! @brief Private Tester: is_symbol | char
+/***************************************************************************/
+//! @param is8_digit | digit to be tested
+//! @return bool | true = the digit is a symbol digit |
+//! @details
+//! \n returns true if the digit is a symbol digit
+/***************************************************************************/
+
+bool Equation_parser::is_symbol( char is8_digit )
+{
+    DENTER_ARG("Digit: >>%c<<", (is8_digit!='\0')?(is8_digit):(' ') ); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+	//Temp return
+	bool u1_ret;
+    if (this->is_letter(is8_digit) == true)
+    {
+		//Symbol digit
+		u1_ret = true;
+    }
+    else
+    {
+		switch (is8_digit)
+		{
+			case Token_legend::CS8_SYMBOL_DIGIT_UNDERSCORE:
+				//Symbol digit
+				u1_ret = true;
+				break;
+			default:
+				//Not a Symbol digit
+				u1_ret = false;
+				break;
+		}
+	}
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("%c",(u1_ret==true?'Y':'N')); //Trace Return
+    return u1_ret;	//Propagate
+}   //Private Tester: is_symbol | char
+
+/*********************************************************************************************************************************************************
+**********************************************************************************************************************************************************
 **	PRIVATE METHODS
 **********************************************************************************************************************************************************
 *********************************************************************************************************************************************************/
@@ -375,7 +667,7 @@ bool Tokenizer::init_class_vars( void )
 //! \n Report an error. return false: OK | true: Unknown error code
 /***************************************************************************/
 
-bool Tokenizer::report_error( const char *ips8_error_code )
+bool Equation_parser::report_error( const char *ips8_error_code )
 {
     DENTER_ARG("ERR: %p", ips8_error_code ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -411,7 +703,7 @@ bool Tokenizer::report_error( const char *ips8_error_code )
 //! \n Automatically called by get_error.
 /***************************************************************************/
 
-bool Tokenizer::error_recovery( void )
+bool Equation_parser::error_recovery( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -434,7 +726,7 @@ bool Tokenizer::error_recovery( void )
 //! \n Method
 /***************************************************************************/
 
-bool Tokenizer::my_private_method( void )
+bool Equation_parser::my_private_method( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------

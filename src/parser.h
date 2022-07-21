@@ -34,8 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **  ENVIROMENT VARIABILE
 **********************************************************************************/
 
-#ifndef TOKENIZER_H_
-    #define TOKENIZER_H_
+#ifndef EQUATION_PARSER_H_
+    #define EQUATION_PARSER_H_
 
 /**********************************************************************************
 **  GLOBAL INCLUDES
@@ -76,17 +76,17 @@ namespace User
 **********************************************************************************/
 
 /************************************************************************************/
-//! @class      Tokenizer
+//! @class      Equation_parser
 /************************************************************************************/
 //!	@author     Orso Eric
-//! @version    2020-06
+//! @version    2022-06-DD
 //! @brief      xxx
 //! @copyright  BSD 3-Clause License Copyright (c) 2020, Orso Eric
 //! @details
-//! \n Verbose description
+//! \n This class translates an equation in string form into an equation in tree form
 /************************************************************************************/
 
-class Tokenizer
+class Equation_parser
 {
     //Visible to all
     public:
@@ -96,20 +96,7 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-        //! @brief Configurations of the class
-        typedef union _Config
-        {
-            //Checks to be performed on user dependent data
-			static const bool CU1_EXTERNAL_CHECKS = true;
-			//Checks to be performed on input dependent on internal algorithms
-			static const bool CU1_INTERNAL_CHECKS = true;
 
-            //Decimal Separator
-            static const char CS8_DECIMAL_SEPARATOR = '.';
-            //Maximum number of character that makes up a token name or a number
-            static const int CS32_MAX_ARG_LENGTH = 32;
-
-        } Config;
         //! @brief Error codes of the class
         typedef union _Error_code
         {
@@ -117,6 +104,10 @@ class Tokenizer
 			static constexpr const char *CPS8_OK = "OK";
 			//Generic error
 			static constexpr const char *CPS8_ERR = "ERR";
+			//FSM Error
+			static constexpr const char *CPS8_ERR_FSM = "ERR:FSM";
+			//Invalid user digit
+			static constexpr const char *CPS8_ERR_USER_DIGIT = "ERR:FORBIDDEN DIGIT";
         } Error_code;
 
         /*********************************************************************************************************************************************************
@@ -132,7 +123,7 @@ class Tokenizer
         *********************************************************************************************************************************************************/
 
         //Empty Constructor
-        Tokenizer( void );
+        Equation_parser( void );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -141,7 +132,7 @@ class Tokenizer
         *********************************************************************************************************************************************************/
 
         //Empty destructor
-        ~Tokenizer( void );
+        ~Equation_parser( void );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -155,7 +146,12 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-        bool parse( const char *ips8_equation );
+        //Parse a string as an equation
+        bool parse( std::string icl_equation_string );
+        bool parse( const char *ipcs8_equation_string )
+        {
+			return parse( std::string( ipcs8_equation_string ) );
+        }
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -178,7 +174,7 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-		//Tokenizer public method
+		//Equation_parser public method
         bool my_public_method( void );
 
         /*********************************************************************************************************************************************************
@@ -215,24 +211,93 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+		//! @brief Configurations of the class
+        typedef union _Config
+        {
+            //Checks to be performed on user dependent data
+			static const bool CU1_EXTERNAL_CHECKS = true;
+			//Checks to be performed on input dependent on internal algorithms
+			static const bool CU1_INTERNAL_CHECKS = true;
+			//Show extended parser debug strings on log
+			static const bool CU1_PARSER_EXTENDED_DEBUG = true;
+        } Config;
+
+
+		//! @brief Legend of all special tokens recognized by the parser
+        typedef union _Token_legend
+        {
+			//Numeric separator for decimal numbers
+			static const char CS8_THOUSAND_SEPARATOR = ',';
+			static const char CS8_DECIMAL_SEPARATOR = '.';
+			//Force priority of token resolution
+			static const char CS8_PRIORITY_OPEN = '(';
+			static const char CS8_PRIORITY_CLOSE = ')';
+			//Operators
+			static const char CS8_OPERATOR_EQUAL = '=';
+			static const char CS8_OPERATOR_SUM = '+';
+			static const char CS8_OPERATOR_DIFF = '-';
+			static const char CS8_OPERATOR_MUL = '*';
+			static const char CS8_OPERATOR_DIV = '/';
+			//Allowed symbol digits
+			static const char CS8_SYMBOL_DIGIT_UNDERSCORE = '_';
+
+        } Token_legend;
+
+
+        typedef enum _Token_type
+        {
+				//Base symbols. Decoded by the linear parser first step
+			//Generic Number
+			BASE_NUMBER,
+			//Generic Symbol
+			BASE_SYMBOL,
+			//Generic Operator
+			BASE_OPERATOR,
+			//Priority and argument operators
+			BASE_OPEN,
+			BASE_CLOSE,
+
+				//Specialized Symbols. Decoded by the tree parser translator
+			//Symbol is a function with arguments
+			SYMBOL_FUNCTION,
+			//Symbol is an input variable name
+			SYMBOL_INPUT,
+			//Symbol is an output variable name
+			SYMBOL_OUTPUT,
+			//Symbol is a variable
+			SYMBOL_VAR,
+			//Symbol is a constant
+			SYMBOL_CONST,
+
+			//Unknown type
+			UNKNOWN,
+        } Token_type;
+
+        //! @brief states of the parser FSM
+        typedef enum _Fsm_state
+        {
+			//Machine is IDLE and searching for the beginning of the next token
+			SEEK_NEXT_TOKEN,
+			//FSM is parsing a number
+			TOKEN_NUMBER,
+			//FSM is parsing a symbol
+			TOKEN_SYMBOL,
+        } Fsm_state;
+
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **	PRIVATE TYPEDEFS
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-        //I can make token a base class, and specialize it to the various types of tokens I can have
-        //  token -> binary_operator (one father, two children LHS RHS)
-        //  token -> number (one father, no children)
-        typedef struct _Token Token;
-        struct _Token
+        //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
+        typedef struct _Token
         {
-            //Token type
-
-
-            //Array that points to a number of tokens
-            std::vector<Token *> clapst_leaves;
-        };
+			//String containing the token
+			std::string cl_str;
+			//Token type as decoded by the parser. Token type is decoded
+			Token_type e_type;
+        } Token;
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -249,10 +314,30 @@ class Tokenizer
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief true = digit is a number
         bool is_number( char is8_digit )
         {
-            return ( (is8_digit == Config::CS8_DECIMAL_SEPARATOR) || ((is8_digit >= '0') && (is8_digit <= '9')) );
+			return ((is8_digit >= '0') && (is8_digit <= '9'));
         }
+        //! @brief true = digit is a lower case letter
+        bool is_letter_lower_case( char is8_digit )
+        {
+			return ((is8_digit >= 'a') && (is8_digit <= 'z'));
+        }
+        //! @brief true = digit is an upper case letter
+        bool is_letter_upper_case( char is8_digit )
+        {
+			return ((is8_digit >= 'A') && (is8_digit <= 'Z'));
+        }
+        //! @brief true = digit is a letter
+        bool is_letter( char is8_digit )
+        {
+			return ((this->is_letter_lower_case( is8_digit )) || (this->is_letter_upper_case( is8_digit )));
+        }
+        //returns true if the digit is an operator token
+		bool is_operator( char is8_digit );
+		//returns true if the digit is a symbol digit
+		bool is_symbol( char is8_digit );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -264,8 +349,7 @@ class Tokenizer
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail
         bool error_recovery( void );
-
-        //Tokenizer method to copy the code
+        //Equation_parser method to copy the code
         bool my_private_method( void );
 
         /*********************************************************************************************************************************************************
@@ -276,135 +360,9 @@ class Tokenizer
 
         //! @brief Error code of the class
         const char *gps8_error_code;
-
-};	//End Class: Tokenizer
-
-//Base class, all tokens are compatible with this
-class Token
-{
-    public:
-        Token( void )
-        {
-			DENTER_ARG("this: %p", this);
-            //No type
-            this->gpcs8_token_type = Token_type::CPS8_NONE;
-            //No father
-            this->gpcl_father = nullptr;
-
-            DRETURN();
-            return;
-        }
-        ~Token()
-		{
-			DENTER();
-			DRETURN();
-		}
-
-    protected:
-        typedef union _Token_type
-        {
-            static constexpr const char *CPS8_NONE = "None";
-            static constexpr const char *CPS8_BINARY_OPERATOR = "Binary Operator";
-            static constexpr const char *CPS8_NUMBER = "Number";
-        } Token_type;
-
-        //Token type
-        const char *gpcs8_token_type;
-        //
-        Token *gpcl_father;
-    private:
-
-
-};
-
-//Binary operators have two children and an operator type that describe its function
-class Binary_operator : public Token
-{
-	public:
-		//Types of operators: from outside there is need to know what types are
-        typedef union _Binary_operator_type
-        {
-            //Equal Operator
-            static constexpr const char *CPS8_EQUAL = "=";
-            //Binary Mul Operator
-            static constexpr const char *CPS8_MUL = "*";
-        } Binary_operator_type;
-
-		Binary_operator()
-		{
-			DENTER_ARG("this: %p", this);
-			//I'm constructing a binary operator
-			this->gpcs8_token_type = Token_type::CPS8_BINARY_OPERATOR;
-			DRETURN();
-			return;
-		}
-		~Binary_operator()
-		{
-			DENTER();
-			DRETURN();
-		}
-
-    private:
-
-        //Operator type
-        const char *ps8_operator_type;
-        //Pointers to leaves. Left Hand Side and Right Hand Side
-        Token *pcl_lhs;
-        Token *pcl_rhs;
-};
-
-
-class Number : public Token
-{
-    private:
-
-};
-
-//Class that contains equation manipulating function
-//Takes care of creating an equation from strings
-class Equation
-{
-	public:
-
-		//Create a new token of a given type
-		Token *create_binary_operator( Binary_operator::Binary_operator_type ie_binary_operator_type );
-		//Destroy a binary operator, and return all the non null leaves in a vector for destruction
-		bool destroy_binary_operator( std::vector<Token *>& orclapcl_leaves );
-		//Pointer to the root of the solution tree
-        Token *gpcl_root;
-	private:
-		//String holding the equation
-		char *gpas8_equation;
-
-};
-
-//Takes in multiple equations in order to solve a problem
-class Solver
-{
-	public:
-		//register an equation inside the problem
-		bool register_equation( std::string icl_equation, int &ors32_index );
-		//Register a token to be an output token.
-		bool register_output_token( std::string icl_output_token );
-		//Register a token to be an indepentend variable. solver wants all of them to be on RHS
-		bool register_input_token( std::string icl_output_token );
-		//All tokens that are not input or output are taken as numeric constant
-
-		//The solver will try very hard to solve the problem if within its limits.
-		//Solver wants to generate one equation per output token with said token as sole LHS
-		//The Solver tries to isolate input tokens on RHS as best as it can, prioritizing linear
-		//The solver wants to minimize the overall number of tokens needed to represent an equation
-		bool solve( void );
-
-		//The solver relies on a transformation table on text, that represent possible transformations
-        //Commutative rule
-        //"LHS=RHS"<=>"RHS=LHS"
-        //Divide both sides of equal
-        //"TARGET*LHS=RHS"<=>"(TARGET*LHS)/TARGET=(RHS)/(TARGET)"
-        //
-        //"CA*x+CB*x"
-};
-
+        //Array of tokens
+        std::vector<std::string> gclacl_tokens;
+};	//End Class: Equation_parser
 
 /**********************************************************************************
 **  NAMESPACE
@@ -413,5 +371,5 @@ class Solver
 }	//end namespace
 
 #else
-    #warning "Multiple inclusion of hader file TOKENIZER_H_"
+    #warning "Multiple inclusion of hader file EQUATION_PARSER_H_"
 #endif

@@ -1,0 +1,23 @@
+{
+	"Rule":
+	{
+		"Rule Name":"Operator Equal Commutative Rule"
+		"Before":
+		{
+			"Operator":"="
+			"LHS":"LHS",
+			"RHS":"RHS"
+		}
+		"After":
+		{
+			"Operator":"="
+			"LHS":"RHS",
+			"RHS":"LHS"
+		}
+
+	}
+
+
+
+
+}

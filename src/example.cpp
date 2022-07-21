@@ -64,7 +64,8 @@
 #define ENABLE_DEBUG
 #include "debug.h"
 
-#include "tokenizer.h"
+//#include "tokenizer.h"
+#include "parser.h"
 
 /****************************************************************
 **	NAMESPACES
@@ -169,7 +170,7 @@ bool test_bench( void )
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
-
+	/*
     User::Tokenizer cl_my_instance;
 	std::cout << cl_my_instance.get_error();
 
@@ -188,6 +189,11 @@ bool test_bench( void )
 
     User::Equation cl_my_equation;
     cl_my_equation.gpcl_root = pcl_token;
+    */
+
+	User::Equation_parser cl_equation;
+	cl_equation.parse( "x=(pippo+(1.2+.233))" );
+
 
 	//----------------------------------------------------------------
 	//	RETURN

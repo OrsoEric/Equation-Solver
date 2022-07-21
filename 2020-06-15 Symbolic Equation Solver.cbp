@@ -22,6 +22,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,11 +34,20 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="debug.cpp" />
-		<Unit filename="debug.h" />
-		<Unit filename="example.cpp" />
-		<Unit filename="root.cpp" />
-		<Unit filename="root.h" />
+		<Unit filename="debug.log" />
+		<Unit filename="src/debug.cpp" />
+		<Unit filename="src/debug.h" />
+		<Unit filename="src/example.cpp" />
+		<Unit filename="src/parser.cpp" />
+		<Unit filename="src/parser.h" />
+		<Unit filename="src/rules.json" />
+		<Unit filename="src/saved_equation.json" />
+		<Unit filename="src/tokenizer.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/tokenizer.h" />
+		<Unit filename="src/tree.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

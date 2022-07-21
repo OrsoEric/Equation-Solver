@@ -1,0 +1,19 @@
+{
+	"Version":"2022-07-04",
+	"Name":"Untitled1",
+	"Translation":"y=3+x"
+	"Operator":"=",
+    "LHS":"y",
+    "RHS":{
+		"Operator":"+",
+		"LHS":"3",
+		"RHS":"x"
+		"Stats":{
+		"Operators":1
+		"Tokens":3
+	}
+	"Stats":{
+		"Operators":2
+		"Tokens":5
+	}
+}

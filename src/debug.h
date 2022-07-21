@@ -71,6 +71,9 @@
 		#define DPRINT_NOTAB( ... )	\
 			(((_debug_file != NULL) && (_debug_indent_level >= _debug_show_level))?(fprintf(_debug_file, __VA_ARGS__ )):(0))
 
+		#define DPRINT_CONDITIONAL( iu1_enable, ... ) \
+			((iu1_enable==false)?(false):(DPRINT(__VA_ARGS__)))
+
 		//Just print the tabs
 		#define DPRINT_TAB()	\
 			(((_debug_file != NULL) && (_debug_indent_level >= _debug_show_level))?(fprintf(_debug_file,"%.*s", _debug_indent_level, "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t") ):(0))
