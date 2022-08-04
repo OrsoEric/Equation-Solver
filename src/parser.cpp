@@ -489,6 +489,8 @@ bool Equation_parser::parse( std::string icl_equation_string )
 	//Recursively translate an array of token into a tree of tokens
 	this->token_array_to_tree( clast_tokens, this->gcl_token_tree );
 
+	this->gcl_token_tree.print();
+	std::cout << "--------------------------------------\n";
 
 
 
@@ -1080,16 +1082,13 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //	The core token become the content of the leaf
     //	Up to two branches are created, tiling all tokens left of core LHS, and all tokens right of the core RHS
 
-	/*
     //Aid vectors. Tiled left and right around an operator.
     std::vector<Token> clast_lhs;
     std::vector<Token> clast_rhs;
 	//Start from first token
-	cl_token_iterator = irclacl_token_array.begin();
-	//Stop condition and found condition
-	u1_continue = true;
+	std::vector<Token>::iterator cl_token_iterator = irclacl_token_array.begin();
 	//Scan the given array of token until a core token is found or until the array is over
-	while (u1_continue == true)
+	for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
 	{
 		//if: LHS token
 		if (cl_token_iterator < cl_core_iterator)
@@ -1106,24 +1105,44 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		{
 			//Do nothing
 		}
-		//Next
-		cl_token_iterator++;
-		if (cl_token_iterator == irclacl_token_array.end())
-		{
-			u1_continue = false;
-		}
 	}
 	DPRINT("LHS Tokens: %d | RHS Tokens: %d\n", clast_lhs.size(), clast_rhs.size() );
 
 
+	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
+	{
+		orcl_token_tree.set_payload( *cl_core_iterator );
+		//Show the tree
+		orcl_token_tree.print();
+		//Execute the search on the LHS and RHS sides of the equation
+		token_array_to_tree( clast_lhs, orcl_token_tree );
+		token_array_to_tree( clast_rhs, orcl_token_tree );
+
+	}
+	else
+	{
+		unsigned int u32_index;
+		//Add a leaf to the current branch holding the Payload of the core token found
+		u1_ret = orcl_token_tree.create_leaf( *cl_core_iterator, u32_index );
+		if (u1_ret == true)
+		{
+			DRETURN_ARG("ERR:%d | Failed to add branch to tree", __LINE__);
+			return true;
+		}
+		//Show the tree
+		orcl_token_tree.print();
+		std::cout << "--------------------------------------\n";
+		//Execute the search on the LHS and RHS sides of the equation
+		token_array_to_tree( clast_lhs, orcl_token_tree[u32_index] );
+		token_array_to_tree( clast_rhs, orcl_token_tree[u32_index] );
+	}
+
 
 	//Set the payload of the branch to the tiling token found
-	orcl_token_tree.set_payload( *cl_core_iterator );
-	//Add a leaf to the current branch holding the Payload
-	//orcl_token_tree.create_leaf(  );
-	orcl_token_tree.print();
+	//
 
-	*/
+
+
 
     //--------------------------------------------------------------------------
     //	RETURN
