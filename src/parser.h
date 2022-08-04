@@ -267,6 +267,9 @@ class Equation_parser
 			static const bool CU1_INTERNAL_CHECKS = true;
 			//Show extended parser debug strings on log
 			static const bool CU1_PARSER_EXTENDED_DEBUG = true;
+
+            //Enable the detailed debug of individual functions
+			static const bool CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY = false;
         } Config;
 
 		//! @brief Legend of all special tokens recognized by the parser

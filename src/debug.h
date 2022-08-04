@@ -85,18 +85,26 @@
 		//Enter Function and increase indent level. No argument print version
 		#define DENTER()	\
 			DPRINT( "-->> \"%s\" |\n", __PRETTY_FUNCTION__), (_debug_indent_level<_DEBUG_MAX_INDENT_LEVEL)?(++_debug_indent_level):(_DEBUG_MAX_INDENT_LEVEL)
+		#define DENTER_CONDITIONAL( iu1_enable, ... ) \
+			((iu1_enable==false)?(false):(DENTER(__VA_ARGS__)))
 
 		//Return from function and decrease indent level. No argument version
 		#define DRETURN()	\
 			(_debug_indent_level>0)?(--_debug_indent_level):(0), DPRINT( "<<-- \"%s\" |\n", __PRETTY_FUNCTION__)
+		#define DRETURN_CONDITIONAL( iu1_enable, ... ) \
+			((iu1_enable==false)?(false):(DRETURN(__VA_ARGS__)))
 
 		//Enter Function and increase indent level. No argument print version
 		#define DENTER_ARG( ... )	\
 			DPRINT( "-->> \"%s\" | ", __PRETTY_FUNCTION__), DPRINT_NOTAB( __VA_ARGS__ ), DPRINT_NOTAB( "\n" ), (_debug_indent_level<_DEBUG_MAX_INDENT_LEVEL)?(++_debug_indent_level):(_DEBUG_MAX_INDENT_LEVEL)
+		#define DENTER_ARG_CONDITIONAL( iu1_enable, ... ) \
+			((iu1_enable==false)?(false):(DENTER_ARG(__VA_ARGS__)))
 
 		//Return from function and decrease indent level. No argument version
 		#define DRETURN_ARG( ... )	\
 			(_debug_indent_level>0)?(--_debug_indent_level):(0), DPRINT( "<<-- \"%s\" | ", __PRETTY_FUNCTION__), DPRINT_NOTAB( __VA_ARGS__ ), DPRINT_NOTAB( "\n" )
+		#define DRETURN_ARG_CONDITIONAL( iu1_enable, ... ) \
+			((iu1_enable==false)?(false):(DRETURN_ARG(__VA_ARGS__)))
 
 	#else
 		#define DEBUG_VARS_PROTOTYPES()

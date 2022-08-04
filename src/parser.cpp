@@ -949,7 +949,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 
 bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 {
-    DENTER_ARG("Token type: %d | Token size: %d", irst_token.e_type, irst_token.cl_str.size() ); //Trace Enter
+    DENTER_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "Token type: %d | Token size: %d", irst_token.e_type, irst_token.cl_str.size() ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -957,7 +957,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
     if (irst_token.cl_str.size() <= 0)
     {
 		irst_token.s32_symbol_priority = -1;
-		DRETURN_ARG("ERR:%d | Empty symbol...", __LINE__ );
+		DRETURN_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "ERR:%d | Empty symbol...", __LINE__ );
 		return true;
     }
 
@@ -1010,7 +1010,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 	else
 	{
 		irst_token.s32_symbol_priority = -1;
-		DRETURN_ARG("ERR:%d | Unknown Symbol >%s<", __LINE__, irst_token.cl_str.c_str() );
+		DRETURN_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "ERR:%d | Unknown Symbol >%s<", __LINE__, irst_token.cl_str.c_str() );
 		return true;
 	}
 
@@ -1019,7 +1019,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
     //--------------------------------------------------------------------------
     //Save symbol priority
 	irst_token.s32_symbol_priority = s32_symbol_priority;
-    DRETURN_ARG("Symbol Priority: %d", s32_symbol_priority ); //Trace Return
+    DRETURN_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "Symbol Priority: %d", s32_symbol_priority ); //Trace Return
     return false;	//OK
 } 	//Private Static Method | compute_token_symbol_priority | Token & |
 
@@ -1108,7 +1108,18 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	}
 	DPRINT("LHS Tokens: %d | RHS Tokens: %d\n", clast_lhs.size(), clast_rhs.size() );
 
+	//--------------------------------------------------------------------------
+    //	Sanity Check
+    //--------------------------------------------------------------------------
 
+	//Binary Operators must have both RHS and LHS
+	if ((cl_core_iterator->e_type == Token_type::BASE_OPERATOR) && ( (clast_lhs.size() == 0) || (clast_rhs.size() == 0) ))
+	{
+		DRETURN_ARG("ERR:%d | Operator without RHS and LHS", __LINE__);
+		return true;
+	}
+
+	//Equal is special, it's the first simbol that becomes the root of the tree
 	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
 	{
 		orcl_token_tree.set_payload( *cl_core_iterator );
@@ -1133,8 +1144,14 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		orcl_token_tree.print();
 		std::cout << "--------------------------------------\n";
 		//Execute the search on the LHS and RHS sides of the equation
-		token_array_to_tree( clast_lhs, orcl_token_tree[u32_index] );
-		token_array_to_tree( clast_rhs, orcl_token_tree[u32_index] );
+		if (clast_lhs.size() > 0)
+		{
+			token_array_to_tree( clast_lhs, orcl_token_tree[u32_index] );
+		}
+		if (clast_rhs.size() > 0)
+		{
+			token_array_to_tree( clast_rhs, orcl_token_tree[u32_index] );
+		}
 	}
 
 
