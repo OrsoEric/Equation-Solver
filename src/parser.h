@@ -380,6 +380,8 @@ class Equation_parser
 
         //Overloads the std stream operator for Token
         friend std::ostream& operator<<( std::ostream& icl_stream, const Token &irst_rhs );
+        //Overloads the std stream operator to print out Arrays of Tokens
+		friend std::ostream& operator<<( std::ostream& icl_stream, std::vector<Token> &irclast_tokens );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************

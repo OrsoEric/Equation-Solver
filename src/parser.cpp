@@ -199,6 +199,50 @@ std::ostream& operator<<( std::ostream& icl_stream, const Equation_parser::Token
     return icl_stream;	//OK
 }   //End: Public Operator |  operator<< | const Lesson_operator_overloading::Error_code ie_error_code
 
+/***************************************************************************/
+//! @brief Public Operator | operator<< | const Lesson_operator_overloading &icl_rhs
+/***************************************************************************/
+//! @param icl_stream | reference to stream
+//! @param irclast_tokens | array of tokens
+//! @return std::ostream&
+//! @details
+//! \n Overloads the std stream operator to print out Arrays of Tokens
+/***************************************************************************/
+
+std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser::Token> &irclast_tokens )
+{
+    DENTER(); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+	//Header
+    icl_stream << "Tokens ";
+    DPRINT("Tokens ");
+	//Scan all tokens
+    for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
+    {
+		//Valid token
+		if (cl_token_iterator->cl_str.size() > 0)
+		{
+			icl_stream << "|" << cl_token_iterator->cl_str.c_str();
+			DPRINT_NOTAB("|%s", cl_token_iterator->cl_str.c_str() );
+		}
+		//Empty token
+		else
+		{
+			icl_stream << "<" << cl_token_iterator->e_type;
+			DPRINT_NOTAB("<%d", cl_token_iterator->e_type );
+		}
+    }
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN(); //Trace Return
+    return icl_stream;	//OK
+}   //End: Public Operator |  operator<< | const Lesson_operator_overloading::Error_code ie_error_code
+
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
 **	PUBLIC SETTER
@@ -873,6 +917,8 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		}	//While: scan is not complete
 		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", irclacl_token_array.size() );
 	}	//If: I have redundant priority tokens
+
+	std::cout << irclacl_token_array << "\n";
 
 	//--------------------------------------------------------------------------
     //	SEEK HIGHEST PRIORITY "NON PRIORITY" TOKEN
