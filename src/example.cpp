@@ -192,7 +192,19 @@ bool test_bench( void )
     */
 
 	User::Equation_parser cl_equation;
-	cl_equation.parse( "x=(pippo+(1.2+.233))" );
+
+	//Empty equation
+	cl_equation.parse( "" );
+	//Unbalanced Open
+	cl_equation.parse( "((1)" );
+	//Unbalanced Close
+	cl_equation.parse( "(1))" );
+	//redundant priority token
+	cl_equation.parse( "(1)" );
+	cl_equation.parse( "(((((1)))))" );
+	//Equation
+	cl_equation.parse( "x*1.000=((pippo+1.2)+(y+.233)*2)*0.001" );
+    //Equation with function
 
 
 	//----------------------------------------------------------------

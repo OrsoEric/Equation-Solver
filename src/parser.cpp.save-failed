@@ -887,31 +887,14 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		//If the token has the lowest open/close priority
 		if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
 		{
-			//There is an algorithmic error, symbol priority is uninitialized
-			if ((Config::CU1_INTERNAL_CHECKS == true) && (cl_token_iterator->s32_symbol_priority == -1))
-			{
-				DRETURN_ARG("ERR:%d | Symbol has uninitialized priority... | Index: %d ", __LINE__, (cl_token_iterator -irclacl_token_array.begin()) );
-				return true;
-			}
 			//No best token has been found yet
-			else if (s32_best_priority == -1)
+			if (s32_best_priority == -1)
 			{
-				//New best
-				cl_best_iterator = cl_token_iterator;
-				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+
 			}
-			//Current symbol has stronger priority then best symbol
-			else if (s32_best_priority > cl_token_iterator->s32_symbol_priority)
-			{
-				//New best
-				cl_best_iterator = cl_token_iterator;
-				s32_best_priority = cl_token_iterator->s32_symbol_priority;
-			}
-			//Current symbol has weaker priority then best symbol
-			else
-			{
-				//Ignore it
-			}
+
+
+
 		}
 		//If token has higher open/close priority
 		else
@@ -922,8 +905,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //If search couldn't find the best token
     if (s32_best_priority == -1)
     {
-		DRETURN_ARG("ERR:%d | Could not find the strongest priority token...", __LINE__ );
-		return true;
+
     }
 
 	//Return highest priority token
@@ -1060,6 +1042,8 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 
 	//Start from first token
 	std::vector<Token>::iterator cl_token_iterator = irclacl_token_array.begin();
+	std::vector<Token>::iterator cl_core_iterator = irclacl_token_array.begin();
+	Equation_parser::compute_token_array_priority( irclacl_token_array, cl_core_iterator );
 	//Priority Operator, if priority operators don't return to zero, it's an unbalanced bracket error
 	unsigned int s32_open_close_priority_operator = 0;
 	//First digit of the token, usually operators have only one digit
@@ -1123,7 +1107,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	//if: I didn't found a token, this branch is closed and recursion can stop
 	if (u1_found == false)
 	{
-		DRETURN_ARG("ERR:%d | No core token found, recursion ends", __LINE__);
+		DRETURN_ARG("%d | No core token found, recursion ends", __LINE__);
 		return false;
 	}
 
@@ -1133,17 +1117,6 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //	Having found a core token
     //	The core token become the content of the leaf
     //	Up to two branches are created, tiling all tokens left of core LHS, and all tokens right of the core RHS
-
-    //Token that will become the branch
-    std::vector<Token>::iterator cl_core_iterator;
-	//Compute priorities and search for the strongest symbol
-    bool u1_ret = Equation_parser::compute_token_array_priority( irclacl_token_array, cl_core_iterator );
-	if (u1_ret == true)
-	{
-		DRETURN_ARG("ERR:%d | Priority computation failed", __LINE__);
-		return true;
-    }
-    DPRINT("Core Token: %s | Size: %d | Open/Close Priority: %d | Symbol Priority: %d\n", cl_core_iterator->cl_str, cl_core_iterator->cl_str.size(), cl_core_iterator->s32_open_close_priority, cl_core_iterator->s32_symbol_priority );
 	/*
     //Aid vectors. Tiled left and right around an operator.
     std::vector<Token> clast_lhs;
@@ -1186,8 +1159,9 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	//Add a leaf to the current branch holding the Payload
 	//orcl_token_tree.create_leaf(  );
 	orcl_token_tree.print();
-
 	*/
+
+
 
     //--------------------------------------------------------------------------
     //	RETURN

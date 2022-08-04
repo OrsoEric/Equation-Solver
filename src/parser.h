@@ -43,6 +43,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <vector>
 
+#include "tree.hpp"
+
 /**********************************************************************************
 **  DEFINES
 **********************************************************************************/
@@ -108,6 +110,8 @@ class Equation_parser
 			static constexpr const char *CPS8_ERR_FSM = "ERR:FSM";
 			//Invalid user digit
 			static constexpr const char *CPS8_ERR_USER_DIGIT = "ERR:FORBIDDEN DIGIT";
+			//Unbalanced Brackets
+			static constexpr const char *CPS8_ERR_UNBALANCED_BRACKETS = "ERR:Unbalanced Brackets";
         } Error_code;
 
         /*********************************************************************************************************************************************************
@@ -115,6 +119,49 @@ class Equation_parser
         **  PUBLIC TYPEDEFS
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
+
+		//! @brief Describe the token type
+		typedef enum _Token_type
+        {
+				//Base symbols. Decoded by the linear parser first step
+			//Generic Number
+			BASE_NUMBER,
+			//Generic Symbol
+			BASE_SYMBOL,
+			//Generic Operator
+			BASE_OPERATOR,
+			//Priority and argument operators
+			BASE_OPEN,
+			BASE_CLOSE,
+
+				//Specialized Symbols. Decoded by the tree parser translator
+			//Symbol is a function with arguments
+			SYMBOL_FUNCTION,
+			//Symbol is an input variable name
+			SYMBOL_INPUT,
+			//Symbol is an output variable name
+			SYMBOL_OUTPUT,
+			//Symbol is a variable
+			SYMBOL_VAR,
+			//Symbol is a constant
+			SYMBOL_CONST,
+
+			//Unknown type
+			UNKNOWN,
+        } Token_type;
+
+        //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
+        typedef struct _Token
+        {
+			//String containing the token
+			std::string cl_str;
+			//Token type as decoded by the parser. Token type is decoded
+			Token_type e_type;
+			//Token priority. Priority is forced by open/close operators
+			int s32_open_close_priority;
+			//Token priority. Piriority due to the symbol itself. e.g. = is higher priority than *
+			int s32_symbol_priority;
+        } Token;
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -222,7 +269,6 @@ class Equation_parser
 			static const bool CU1_PARSER_EXTENDED_DEBUG = true;
         } Config;
 
-
 		//! @brief Legend of all special tokens recognized by the parser
         typedef union _Token_legend
         {
@@ -243,36 +289,6 @@ class Equation_parser
 
         } Token_legend;
 
-
-        typedef enum _Token_type
-        {
-				//Base symbols. Decoded by the linear parser first step
-			//Generic Number
-			BASE_NUMBER,
-			//Generic Symbol
-			BASE_SYMBOL,
-			//Generic Operator
-			BASE_OPERATOR,
-			//Priority and argument operators
-			BASE_OPEN,
-			BASE_CLOSE,
-
-				//Specialized Symbols. Decoded by the tree parser translator
-			//Symbol is a function with arguments
-			SYMBOL_FUNCTION,
-			//Symbol is an input variable name
-			SYMBOL_INPUT,
-			//Symbol is an output variable name
-			SYMBOL_OUTPUT,
-			//Symbol is a variable
-			SYMBOL_VAR,
-			//Symbol is a constant
-			SYMBOL_CONST,
-
-			//Unknown type
-			UNKNOWN,
-        } Token_type;
-
         //! @brief states of the parser FSM
         typedef enum _Fsm_state
         {
@@ -289,15 +305,6 @@ class Equation_parser
         **	PRIVATE TYPEDEFS
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
-
-        //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
-        typedef struct _Token
-        {
-			//String containing the token
-			std::string cl_str;
-			//Token type as decoded by the parser. Token type is decoded
-			Token_type e_type;
-        } Token;
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -339,6 +346,19 @@ class Equation_parser
 		//returns true if the digit is a symbol digit
 		bool is_symbol( char is8_digit );
 
+		/*********************************************************************************************************************************************************
+        **********************************************************************************************************************************************************
+        **	PRIVATE STATIC METHODS
+        **********************************************************************************************************************************************************
+        *********************************************************************************************************************************************************/
+
+		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
+        static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree );
+        //Takes a vector of tokens, and compute priority
+        static bool compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token );
+		//Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
+        static bool compute_token_symbol_priority( Token &irst_token );
+
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **	PRIVATE METHODS
@@ -349,8 +369,14 @@ class Equation_parser
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail
         bool error_recovery( void );
+
+
+
         //Equation_parser method to copy the code
         bool my_private_method( void );
+
+        //Overloads the std stream operator for Token
+        friend std::ostream& operator<<( std::ostream& icl_stream, const Token &irst_rhs );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -360,8 +386,11 @@ class Equation_parser
 
         //! @brief Error code of the class
         const char *gps8_error_code;
-        //Array of tokens
+        //! @brief Array of tokens
         std::vector<std::string> gclacl_tokens;
+        //! @brief Tree representing an equation
+        Tree<Token> gcl_token_tree;
+
 };	//End Class: Equation_parser
 
 /**********************************************************************************

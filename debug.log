@@ -2,26 +2,152 @@ Start Debug!
 -->> "int main()" |
 	OrangeBot Projects
 	-->> "bool test_bench()" |
-		-->> "User::Equation_parser::Equation_parser()" | This: 006cfeb8
+		-->> "User::Tree<Payload>::Tree() [with Payload = User::Equation_parser::_Token]" | This: 006cfeac
+			-->> "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
+			<<-- "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
+		<<-- "User::Tree<Payload>::Tree() [with Payload = User::Equation_parser::_Token]" |
+		-->> "User::Equation_parser::Equation_parser()" | This: 006cfe9c
 			-->> "bool User::Equation_parser::init_class_vars()" |
 			<<-- "bool User::Equation_parser::init_class_vars()" |
 		<<-- "User::Equation_parser::Equation_parser()" |
-		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: x=(pippo+(1.2+.233)) | Size: 20
-			SEEK_NEXT_TOKEN | Decode: >>x<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>x<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>=<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>=<<
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse:  | Size: 0
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR:226 | Bad input string
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: ((1) | Size: 4
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
-			Token fully decoded: x | type: 1 | size: 1
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
 			Tokens decoded: 1
-			SEEK_NEXT_TOKEN | Decode: >>=<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>=<<
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
-			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>=<<
-			<<-- "bool User::Equation_parser::is_operator(char)" | Y
-			Operator detected: >>=<< | Token: =
-			Token fully decoded: = | type: 2 | size: 1
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 2
+			SEEK_NEXT_TOKEN | Decode: >>1<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 1 | type: 0 | size: 1
+			Tokens decoded: 3
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 4
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			<<-- "bool User::Equation_parser::report_error(const char*)" |
+			ERR342: Invalid Digit >> <<
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR472: Unbalanced brackets | Open 2 | Close 1
+		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd5bc
+		<<-- "bool User::Equation_parser::report_error(const char*)" |
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1)) | Size: 4
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 1
+			SEEK_NEXT_TOKEN | Decode: >>1<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 1 | type: 0 | size: 1
+			Tokens decoded: 2
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 3
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 4
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			<<-- "bool User::Equation_parser::report_error(const char*)" |
+			ERR342: Invalid Digit >> <<
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR472: Unbalanced brackets | Open 1 | Close 2
+		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd5bc
+		<<-- "bool User::Equation_parser::report_error(const char*)" |
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1) | Size: 3
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 1
+			SEEK_NEXT_TOKEN | Decode: >>1<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 1 | type: 0 | size: 1
+			Tokens decoded: 2
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 3
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			<<-- "bool User::Equation_parser::report_error(const char*)" |
+			ERR342: Invalid Digit >> <<
+			Equations decoded into 3 tokens
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>1<< | Type: 0 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 3 | 
+				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 3
+					Open | Priority: 1
+					Token: 1 | Priority: 1
+					Close| Priority: 1
+					Deleted redundant priority tokens | Tokens: 1
+				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
+				ERR:1032 | Unknown token
+			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | 1045 | No core token found, recursion ends
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (((((1))))) | Size: 11
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 1
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
 			Tokens decoded: 2
 			SEEK_NEXT_TOKEN | Decode: >>(<<
 			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
@@ -31,34 +157,6 @@ Start Debug!
 			Open detected: >>(<< | Token: (
 			Token fully decoded: ( | type: 3 | size: 1
 			Tokens decoded: 3
-			SEEK_NEXT_TOKEN | Decode: >>p<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>i<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>i<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>p<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>p<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>o<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>o<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
-			TOKEN_SYMBOL | Decode: >>+<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | N
-			Token fully decoded: pippo | type: 1 | size: 5
-			Tokens decoded: 4
-			SEEK_NEXT_TOKEN | Decode: >>+<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
-			<<-- "bool User::Equation_parser::is_symbol(char)" | N
-			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>+<<
-			<<-- "bool User::Equation_parser::is_operator(char)" | Y
-			Operator detected: >>+<< | Token: +
-			Token fully decoded: + | type: 2 | size: 1
-			Tokens decoded: 5
 			SEEK_NEXT_TOKEN | Decode: >>(<<
 			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
@@ -66,27 +164,42 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
 			Open detected: >>(<< | Token: (
 			Token fully decoded: ( | type: 3 | size: 1
-			Tokens decoded: 6
-			SEEK_NEXT_TOKEN | Decode: >>1<<
-			TOKEN_NUMBER | Decode: >>.<<
-			TOKEN_NUMBER | Decode: >>2<<
-			TOKEN_NUMBER | Decode: >>+<<
-			Token fully decoded: 1.2 | type: 0 | size: 3
-			Tokens decoded: 7
-			SEEK_NEXT_TOKEN | Decode: >>+<<
-			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			Tokens decoded: 4
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
-			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>+<<
-			<<-- "bool User::Equation_parser::is_operator(char)" | Y
-			Operator detected: >>+<< | Token: +
-			Token fully decoded: + | type: 2 | size: 1
-			Tokens decoded: 8
-			SEEK_NEXT_TOKEN | Decode: >>.<<
-			TOKEN_NUMBER | Decode: >>2<<
-			TOKEN_NUMBER | Decode: >>3<<
-			TOKEN_NUMBER | Decode: >>3<<
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 5
+			SEEK_NEXT_TOKEN | Decode: >>1<<
 			TOKEN_NUMBER | Decode: >>)<<
-			Token fully decoded: 0.233 | type: 0 | size: 5
+			Token fully decoded: 1 | type: 0 | size: 1
+			Tokens decoded: 6
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 7
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 8
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
 			Tokens decoded: 9
 			SEEK_NEXT_TOKEN | Decode: >>)<<
 			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
@@ -108,24 +221,268 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
 			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
-			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bc2d4
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
 			<<-- "bool User::Equation_parser::report_error(const char*)" |
-			ERR302: Invalid Digit >> <<
+			ERR342: Invalid Digit >> <<
+			Equations decoded into 11 tokens
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>1<< | Type: 0 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 11 | 
+				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 11
+					Open | Priority: 1
+					Open | Priority: 2
+					Open | Priority: 3
+					Open | Priority: 4
+					Open | Priority: 5
+					Token: 1 | Priority: 5
+					Close| Priority: 5
+					Close| Priority: 4
+					Close| Priority: 3
+					Close| Priority: 2
+					Close| Priority: 1
+					Deleted redundant priority tokens | Tokens: 1
+				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
+				ERR:1032 | Unknown token
+			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | 1045 | No core token found, recursion ends
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
+		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: x*1.000=((pippo+1.2)+(y+.233)*2)*0.001 | Size: 38
+			SEEK_NEXT_TOKEN | Decode: >>x<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>x<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>*<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			Token fully decoded: x | type: 1 | size: 1
+			Tokens decoded: 1
+			SEEK_NEXT_TOKEN | Decode: >>*<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>*<< | Token: *
+			Token fully decoded: * | type: 2 | size: 1
+			Tokens decoded: 2
+			SEEK_NEXT_TOKEN | Decode: >>1<<
+			TOKEN_NUMBER | Decode: >>.<<
+			TOKEN_NUMBER | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>=<<
+			Token fully decoded: 1.000 | type: 0 | size: 5
+			Tokens decoded: 3
+			SEEK_NEXT_TOKEN | Decode: >>=<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>=<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>=<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>=<< | Token: =
+			Token fully decoded: = | type: 2 | size: 1
+			Tokens decoded: 4
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 5
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 6
+			SEEK_NEXT_TOKEN | Decode: >>p<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>i<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>i<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>p<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>p<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>p<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>o<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>o<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>+<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			Token fully decoded: pippo | type: 1 | size: 5
+			Tokens decoded: 7
+			SEEK_NEXT_TOKEN | Decode: >>+<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>+<< | Token: +
+			Token fully decoded: + | type: 2 | size: 1
+			Tokens decoded: 8
+			SEEK_NEXT_TOKEN | Decode: >>1<<
+			TOKEN_NUMBER | Decode: >>.<<
+			TOKEN_NUMBER | Decode: >>2<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 1.2 | type: 0 | size: 3
+			Tokens decoded: 9
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 10
+			SEEK_NEXT_TOKEN | Decode: >>+<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>+<< | Token: +
+			Token fully decoded: + | type: 2 | size: 1
+			Tokens decoded: 11
+			SEEK_NEXT_TOKEN | Decode: >>(<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Open detected: >>(<< | Token: (
+			Token fully decoded: ( | type: 3 | size: 1
+			Tokens decoded: 12
+			SEEK_NEXT_TOKEN | Decode: >>y<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>y<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | Y
+			TOKEN_SYMBOL | Decode: >>+<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			Token fully decoded: y | type: 1 | size: 1
+			Tokens decoded: 13
+			SEEK_NEXT_TOKEN | Decode: >>+<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>+<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>+<< | Token: +
+			Token fully decoded: + | type: 2 | size: 1
+			Tokens decoded: 14
+			SEEK_NEXT_TOKEN | Decode: >>.<<
+			TOKEN_NUMBER | Decode: >>2<<
+			TOKEN_NUMBER | Decode: >>3<<
+			TOKEN_NUMBER | Decode: >>3<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 0.233 | type: 0 | size: 5
+			Tokens decoded: 15
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 16
+			SEEK_NEXT_TOKEN | Decode: >>*<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>*<< | Token: *
+			Token fully decoded: * | type: 2 | size: 1
+			Tokens decoded: 17
+			SEEK_NEXT_TOKEN | Decode: >>2<<
+			TOKEN_NUMBER | Decode: >>)<<
+			Token fully decoded: 2 | type: 0 | size: 1
+			Tokens decoded: 18
+			SEEK_NEXT_TOKEN | Decode: >>)<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | N
+			Close detected: >>)<< | Token: )
+			Token fully decoded: ) | type: 4 | size: 1
+			Tokens decoded: 19
+			SEEK_NEXT_TOKEN | Decode: >>*<<
+			-->> "bool User::Equation_parser::is_symbol(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_symbol(char)" | N
+			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >>*<<
+			<<-- "bool User::Equation_parser::is_operator(char)" | Y
+			Operator detected: >>*<< | Token: *
+			Token fully decoded: * | type: 2 | size: 1
+			Tokens decoded: 20
+			SEEK_NEXT_TOKEN | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>.<<
+			TOKEN_NUMBER | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>0<<
+			TOKEN_NUMBER | Decode: >>1<<
+			Token fully decoded: 0.001 | type: 0 | size: 5
+			Tokens decoded: 21
+			Equations decoded into 21 tokens
 			Token: >>x<< | Type: 1 | Size: 1
-			Token: >>=<< | Type: 2 | Size: 2
-			Token: >>(<< | Type: 3 | Size: 3
-			Token: >>pippo<< | Type: 1 | Size: 1
-			Token: >>+<< | Type: 2 | Size: 2
-			Token: >>(<< | Type: 3 | Size: 3
-			Token: >>1.2<< | Type: 0 | Size: 0
-			Token: >>+<< | Type: 2 | Size: 2
-			Token: >>0.233<< | Type: 0 | Size: 0
-			Token: >>)<< | Type: 4 | Size: 4
-			Token: >>)<< | Type: 4 | Size: 4
+			Token: >>*<< | Type: 2 | Size: 1
+			Token: >>1.000<< | Type: 0 | Size: 5
+			Token: >>=<< | Type: 2 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>pippo<< | Type: 1 | Size: 5
+			Token: >>+<< | Type: 2 | Size: 1
+			Token: >>1.2<< | Type: 0 | Size: 3
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>+<< | Type: 2 | Size: 1
+			Token: >>(<< | Type: 3 | Size: 1
+			Token: >>y<< | Type: 1 | Size: 1
+			Token: >>+<< | Type: 2 | Size: 1
+			Token: >>0.233<< | Type: 0 | Size: 5
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>*<< | Type: 2 | Size: 1
+			Token: >>2<< | Type: 0 | Size: 1
+			Token: >>)<< | Type: 4 | Size: 1
+			Token: >>*<< | Type: 2 | Size: 1
+			Token: >>0.001<< | Type: 0 | Size: 5
+			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 21 | 
+				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 21
+					Token: x | Priority: 0
+					Token: * | Priority: 0
+					Token: 1.000 | Priority: 0
+					Token: = | Priority: 0
+					Open | Priority: 1
+					Open | Priority: 2
+					Token: pippo | Priority: 2
+					Token: + | Priority: 2
+					Token: 1.2 | Priority: 2
+					Close| Priority: 2
+					Token: + | Priority: 1
+					Open | Priority: 2
+					Token: y | Priority: 2
+					Token: + | Priority: 2
+					Token: 0.233 | Priority: 2
+					Close| Priority: 2
+					Token: * | Priority: 1
+					Token: 2 | Priority: 1
+					Close| Priority: 1
+					Token: * | Priority: 0
+					Token: 0.001 | Priority: 0
+				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 21
+				ERR:1032 | Unknown token
+				ERR:1032 | Unknown token
+				ERR:1032 | Unknown token
+			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" |
 		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
 	<<-- "bool test_bench()" |
-	-->> "User::Equation_parser::~Equation_parser()" | This: 006cfeb8
+	-->> "User::Equation_parser::~Equation_parser()" | This: 006cfe9c
 	<<-- "User::Equation_parser::~Equation_parser()" |
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 006cfeac
+	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
 <<-- "int main()" |
 
 Debug has Ended!

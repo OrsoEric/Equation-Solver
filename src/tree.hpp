@@ -166,6 +166,12 @@ class Tree
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //
+        bool set_payload( Payload it_payload )
+        {
+			gt_payload = it_payload;
+			return false;
+        }
 		//Create a new leaf with a given payload
         bool create_leaf( Payload it_payload, unsigned int &oru32_index );
         bool create_leaf( Payload it_payload )
