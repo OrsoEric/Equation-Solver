@@ -23,11 +23,11 @@
 	<iostream>
 	"tokenizer.h"
 
-1659626171 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
+1659626691 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
 	<vector>
 	"tree.hpp"
 
-1659626538 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
+1659629963 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>

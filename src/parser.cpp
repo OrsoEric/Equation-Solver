@@ -992,6 +992,14 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 				break;
 		}
 	}
+	else if (irst_token.e_type == Token_type::BASE_SYMBOL)
+	{
+		s32_symbol_priority = 4;
+	}
+	else if (irst_token.e_type == Token_type::BASE_NUMBER)
+	{
+		s32_symbol_priority = 5;
+	}
 	else if ((irst_token.e_type == Token_type::BASE_OPEN) || (irst_token.e_type == Token_type::BASE_CLOSE))
 	{
 		//Low priority, open and close are handled by the second dimension of priority
@@ -1000,7 +1008,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 	else
 	{
 		irst_token.s32_symbol_priority = -1;
-		DRETURN_ARG("ERR:%d | Unknown Symbol...", __LINE__ );
+		DRETURN_ARG("ERR:%d | Unknown Symbol >%s<", __LINE__, irst_token.cl_str.c_str() );
 		return true;
 	}
 
@@ -1045,10 +1053,6 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //	4) on LHS -> 1), operator is added as leaf to
     //	5)
 
-
-
-
-
     //--------------------------------------------------------------------------
     //	Search CORE token
     //--------------------------------------------------------------------------
@@ -1057,82 +1061,6 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //	All tokens to its right are to be added to the RHS leaves recursively
     //	Open and Close token help enforce Priority
 	//	priority is encoded in tree structure (that's the point of treezation)
-
-	//Start from first token
-	std::vector<Token>::iterator cl_token_iterator = irclacl_token_array.begin();
-	//Priority Operator, if priority operators don't return to zero, it's an unbalanced bracket error
-	unsigned int s32_open_close_priority_operator = 0;
-	//First digit of the token, usually operators have only one digit
-	char s8_digit;
-	//Stop condition and found condition
-	bool u1_continue = true;
-	bool u1_found =false;
-	//Scan the given array of token until a core token is found or until the array is over
-	while (u1_continue == true)
-	{
-		//Fetch first token
-		s8_digit = cl_token_iterator->cl_str.c_str()[0];
-		//Equal is the highest priority operator. It instantly concludes the search.
-		if (s8_digit == Token_legend::CS8_OPERATOR_EQUAL)
-		{
-			cl_core_iterator = cl_token_iterator;
-			u1_continue = false;
-			u1_found = true;
-		}
-		//Open bracket increase the priority of what is after, open brackets are never pushed inside the tree
-		else if (s8_digit == Token_legend::CS8_PRIORITY_OPEN)
-		{
-			//Open
-			s32_open_close_priority_operator++;
-			cl_token_iterator->s32_open_close_priority = s32_open_close_priority_operator;
-			DPRINT("Open: %d\n", s32_open_close_priority_operator );
-		}
-		//Close bracket decrease the priority of what is after, open brackets are never pushed inside the tree
-		else if (s8_digit == Token_legend::CS8_PRIORITY_OPEN)
-		{
-			//If I close one too many time, this is an unbalanced bracket error
-			if (s32_open_close_priority_operator == 0)
-			{
-				//ERR
-				u1_continue = false;
-				DPRINT("ERR:%d | %s", __LINE__, Error_code::CPS8_ERR_UNBALANCED_BRACKETS );
-				//! @todo The output should print out the equation with the digit index of the error
-				//! @todo an aid function should reverse print back an array of token with an highlight
-			}
-			else
-			{
-				//Close
-				cl_token_iterator->s32_open_close_priority = s32_open_close_priority_operator;
-				s32_open_close_priority_operator--;
-				DPRINT("Close: %d\n", s32_open_close_priority_operator );
-			}
-		}
-		//Unknown token
-		else
-		{
-			DPRINT("ERR:%d | Unknown token\n", __LINE__);
-		}
-		//NEXT
-		cl_token_iterator++;
-		if (cl_token_iterator == irclacl_token_array.end())
-		{
-			u1_continue = false;
-		}
-
-	}
-	//if: I didn't found a token, this branch is closed and recursion can stop
-	if (u1_found == false)
-	{
-		DRETURN_ARG("ERR:%d | No core token found, recursion ends", __LINE__);
-		return false;
-	}
-
-	//--------------------------------------------------------------------------
-    //	LHS | CORE | RHS
-    //--------------------------------------------------------------------------
-    //	Having found a core token
-    //	The core token become the content of the leaf
-    //	Up to two branches are created, tiling all tokens left of core LHS, and all tokens right of the core RHS
 
     //Token that will become the branch
     std::vector<Token>::iterator cl_core_iterator;
@@ -1143,7 +1071,15 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		DRETURN_ARG("ERR:%d | Priority computation failed", __LINE__);
 		return true;
     }
-    DPRINT("Core Token: %s | Size: %d | Open/Close Priority: %d | Symbol Priority: %d\n", cl_core_iterator->cl_str, cl_core_iterator->cl_str.size(), cl_core_iterator->s32_open_close_priority, cl_core_iterator->s32_symbol_priority );
+    DPRINT("Core Token: >%s< | Size: %d | Open/Close Priority: %d | Symbol Priority: %d\n", cl_core_iterator->cl_str.c_str(), cl_core_iterator->cl_str.size(), cl_core_iterator->s32_open_close_priority, cl_core_iterator->s32_symbol_priority );
+
+	//--------------------------------------------------------------------------
+    //	LHS | CORE | RHS
+    //--------------------------------------------------------------------------
+    //	Having found a core token
+    //	The core token become the content of the leaf
+    //	Up to two branches are created, tiling all tokens left of core LHS, and all tokens right of the core RHS
+
 	/*
     //Aid vectors. Tiled left and right around an operator.
     std::vector<Token> clast_lhs;

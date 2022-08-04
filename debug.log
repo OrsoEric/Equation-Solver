@@ -45,11 +45,11 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
 			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
-			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd608
 			<<-- "bool User::Equation_parser::report_error(const char*)" |
-			ERR342: Invalid Digit >> <<
-		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR472: Unbalanced brackets | Open 2 | Close 1
-		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd5bc
+			ERR343: Invalid Digit >> <<
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR473: Unbalanced brackets | Open 2 | Close 1
+		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd714
 		<<-- "bool User::Equation_parser::report_error(const char*)" |
 		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1)) | Size: 4
 			SEEK_NEXT_TOKEN | Decode: >>(<<
@@ -84,11 +84,11 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
 			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
-			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd608
 			<<-- "bool User::Equation_parser::report_error(const char*)" |
-			ERR342: Invalid Digit >> <<
-		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR472: Unbalanced brackets | Open 1 | Close 2
-		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd5bc
+			ERR343: Invalid Digit >> <<
+		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR473: Unbalanced brackets | Open 1 | Close 2
+		-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd714
 		<<-- "bool User::Equation_parser::report_error(const char*)" |
 		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1) | Size: 3
 			SEEK_NEXT_TOKEN | Decode: >>(<<
@@ -115,22 +115,28 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
 			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
-			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd608
 			<<-- "bool User::Equation_parser::report_error(const char*)" |
-			ERR342: Invalid Digit >> <<
+			ERR343: Invalid Digit >> <<
 			Equations decoded into 3 tokens
 			Token: >>(<< | Type: 3 | Size: 1
 			Token: >>1<< | Type: 0 | Size: 1
 			Token: >>)<< | Type: 4 | Size: 1
 			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 3 | 
 				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 3
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 1 | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 1
 					Deleted redundant priority tokens | Tokens: 1
 				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
-				ERR:1032 | Unknown token
-			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | 1045 | No core token found, recursion ends
+				Core Token: 1 | Size: 1 | Open/Close Priority: 1 | Symbol Priority: 5
+			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" |
 		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
 		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (((((1))))) | Size: 11
 			SEEK_NEXT_TOKEN | Decode: >>(<<
@@ -221,9 +227,9 @@ Start Debug!
 			<<-- "bool User::Equation_parser::is_symbol(char)" | N
 			-->> "bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 			<<-- "bool User::Equation_parser::is_operator(char)" | N
-			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd4b0
+			-->> "bool User::Equation_parser::report_error(const char*)" | ERR: 004bd608
 			<<-- "bool User::Equation_parser::report_error(const char*)" |
-			ERR342: Invalid Digit >> <<
+			ERR343: Invalid Digit >> <<
 			Equations decoded into 11 tokens
 			Token: >>(<< | Type: 3 | Size: 1
 			Token: >>(<< | Type: 3 | Size: 1
@@ -238,21 +244,43 @@ Start Debug!
 			Token: >>)<< | Type: 4 | Size: 1
 			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 11 | 
 				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 11
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 3
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 4
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 5
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 1 | Priority: 5
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 5
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 4
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 3
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 1
 					Deleted redundant priority tokens | Tokens: 1
 				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
-				ERR:1032 | Unknown token
-			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | 1045 | No core token found, recursion ends
+				Core Token: 1 | Size: 1 | Open/Close Priority: 5 | Symbol Priority: 5
+			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" |
 		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
 		-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: x*1.000=((pippo+1.2)+(y+.233)*2)*0.001 | Size: 38
 			SEEK_NEXT_TOKEN | Decode: >>x<<
@@ -451,31 +479,71 @@ Start Debug!
 			Token: >>0.001<< | Type: 0 | Size: 5
 			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 21 | 
 				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 21
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 1 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 4
 					Token: x | Priority: 0
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 1
 					Token: * | Priority: 0
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 5
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 1.000 | Priority: 0
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 0
 					Token: = | Priority: 0
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 1 | Token size: 5
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 4
 					Token: pippo | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 3
 					Token: + | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 3
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 1.2 | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 3
 					Token: + | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 3 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Open | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 1 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 4
 					Token: y | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 3
 					Token: + | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 5
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 0.233 | Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 2
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 1
 					Token: * | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 2 | Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 4 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 10
 					Close| Priority: 1
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 2 | Token size: 1
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 1
 					Token: * | Priority: 0
+					-->> "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Token type: 0 | Token size: 5
+					<<-- "static bool User::Equation_parser::compute_token_symbol_priority(User::Equation_parser::Token&)" | Symbol Priority: 5
 					Token: 0.001 | Priority: 0
 				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 21
-				ERR:1032 | Unknown token
-				ERR:1032 | Unknown token
-				ERR:1032 | Unknown token
+				Core Token: = | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 			<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" |
 		<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" |
 	<<-- "bool test_bench()" |
