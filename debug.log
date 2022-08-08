@@ -229,7 +229,13 @@ Start Debug!
 					Token: * | Priority: 0
 					Token: 0.001 | Priority: 0
 					-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-						Tokens |x|*|1.000|=|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001					<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+						Tokens  :|x|*|1.000|=|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001
+						Priority:|0|0|0    |0|1|2|2    |2|2  |2|1|2|2|2|2    |2|1|1|1|0|0    
+					<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+					-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+						Tokens  :|x|*|1.000|=|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001
+						Priority:|0|0|0    |0|1|2|2    |2|2  |2|1|2|2|2|2    |2|1|1|1|0|0    
+					<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 21
 				Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 				LHS Tokens: 3 | RHS Tokens: 17
@@ -244,7 +250,13 @@ Start Debug!
 						Token: * | Priority: 0
 						Token: 1.000 | Priority: 0
 						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-							Tokens |x|*|1.000						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							Tokens  :|x|*|1.000
+							Priority:|0|0|0    
+						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							Tokens  :|x|*|1.000
+							Priority:|0|0|0    
+						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 3
 					Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 					LHS Tokens: 1 | RHS Tokens: 1
@@ -272,7 +284,13 @@ Start Debug!
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 							Token: x | Priority: 0
 							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-								Tokens |x							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|x
+								Priority:|0
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|x
+								Priority:|0
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 						Core Token: >x< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -301,7 +319,13 @@ Start Debug!
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 							Token: 1.000 | Priority: 0
 							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-								Tokens |1.000							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|1.000
+								Priority:|0    
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|1.000
+								Priority:|0    
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 						Core Token: >1.000< | Size: 5 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -310,7 +334,7 @@ Start Debug!
 								-->> "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 								<<-- "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 							<<-- "User::Tree<Payload>::Tree(Payload) [with Payload = User::Equation_parser::_Token]" |
-							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115c340
+							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fec340
 							<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
 							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 006dfa7c
 							<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
@@ -352,7 +376,13 @@ Start Debug!
 						Token: * | Priority: 0
 						Token: 0.001 | Priority: 0
 						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-							Tokens |(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							Tokens  :|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001
+							Priority:|1|2|2    |2|2  |2|1|2|2|2|2    |2|1|1|1|0|0    
+						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							Tokens  :|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)|*|0.001
+							Priority:|1|2|2    |2|2  |2|1|2|2|2|2    |2|1|1|1|0|0    
+						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 17
 					Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 					LHS Tokens: 15 | RHS Tokens: 1
@@ -361,11 +391,11 @@ Start Debug!
 							-->> "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 							<<-- "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 						<<-- "User::Tree<Payload>::Tree(Payload) [with Payload = User::Equation_parser::_Token]" |
-						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115a978
+						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fea978
 						<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115c380
+						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fec380
 						<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115c3b4
+						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fec3b4
 						<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
 						-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 006dfb5c
 						<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
@@ -414,9 +444,15 @@ Start Debug!
 							Token: * | Priority: 1
 							Token: 2 | Priority: 1
 							Close| Priority: 1
+							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|(|(|pippo|+|1.2|)|+|(|y|+|0.233|)|*|2|)
+								Priority:|1|2|2    |2|2  |2|1|2|2|2|2    |2|1|1|1
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 							Deleted redundant priority tokens | Tokens: 10
 							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-								Tokens |(|pippo|+|1.2|+|y|+|0.233|*|2							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|(|pippo|+|1.2|+|y|+|0.233|*|2
+								Priority:|2|1    |1|1  |1|2|1|1    |1|0
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 10
 						Core Token: >*< | Size: 1 | Open/Close Priority: 1 | Symbol Priority: 1
 						LHS Tokens: 8 | RHS Tokens: 1
@@ -438,7 +474,7 @@ Start Debug!
 								<<-- "std::ostream& User::operator<<(std::ostream&, const Token&)" |
 							<<-- "bool User::Tree<Payload>::print(unsigned int) [with Payload = User::Equation_parser::_Token]" |
 						<<-- "bool User::Tree<Payload>::print(unsigned int) [with Payload = User::Equation_parser::_Token]" |
-						-->> "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" | Object: 0115bb7c, Index: 0
+						-->> "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" | Object: 00febb7c, Index: 0
 						<<-- "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" |
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 8 | 
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 8
@@ -450,15 +486,25 @@ Start Debug!
 								Token: y | Priority: 1
 								Token: + | Priority: 1
 								Token: 0.233 | Priority: 1
-							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | ERR:871 | Unbalanced Brackets, extra open
-						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | ERR:1119 | Priority computation failed
-						-->> "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" | Object: 0115bb7c, Index: 0
+								-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+									Tokens  :|(|pippo|+|1.2|+|y|+|0.233
+									Priority:|1|1    |1|1  |1|1|1|1    
+								<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | ERR:890 | Unbalanced Brackets, extra open
+						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | ERR:1138 | Priority computation failed
+						-->> "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" | Object: 00febb7c, Index: 0
 						<<-- "User::Tree<Payload>& User::Tree<Payload>::operator[](unsigned int) [with Payload = User::Equation_parser::_Token]" |
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&)" | Token Array Size: 1 | 
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 								Token: 2 | Priority: 0
 								-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-									Tokens |2								<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+									Tokens  :|2
+									Priority:|0
+								<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+									Tokens  :|2
+									Priority:|0
+								<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 							Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -488,7 +534,13 @@ Start Debug!
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 							Token: 0.001 | Priority: 0
 							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-								Tokens |0.001							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|0.001
+								Priority:|0    
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+							-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
+								Tokens  :|0.001
+								Priority:|0    
+							<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1
 						Core Token: >0.001< | Size: 5 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -497,9 +549,9 @@ Start Debug!
 								-->> "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 								<<-- "bool User::Tree<Payload>::init_class_vars() [with Payload = User::Equation_parser::_Token]" |
 							<<-- "User::Tree<Payload>::Tree(Payload) [with Payload = User::Equation_parser::_Token]" |
-							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115c530
+							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fec530
 							<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115c370
+							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fec370
 							<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
 							-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 006dfa7c
 							<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
@@ -573,19 +625,19 @@ Start Debug!
 	<<-- "User::Equation_parser::~Equation_parser()" |
 	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 006dfeac
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115bb48
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00febb48
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115bbb8
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00febbb8
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115bbec
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00febbec
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115bb7c
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00febb7c
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115a918
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fea918
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115a988
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fea988
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0115a94c
+	-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00fea94c
 	<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
 <<-- "int main()" |
 

@@ -218,7 +218,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 
 	//Header
     icl_stream << "Tokens ";
-    DPRINT("Tokens ");
+    DPRINT("Tokens  :");
 	//Scan all tokens
     for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
@@ -235,6 +235,23 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 			DPRINT_NOTAB("<%d", cl_token_iterator->e_type );
 		}
     }
+    DPRINT_NOTAB("\n");
+    //Show the priority in the line below
+    DPRINT("Priority:");
+	//Scan all tokens
+    for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
+    {
+		DPRINT_NOTAB("|%d", cl_token_iterator->s32_open_close_priority );
+		//Valid token
+		if (cl_token_iterator->cl_str.size() > 1)
+		{
+			for (int s32_cnt = 0;s32_cnt < cl_token_iterator->cl_str.size()-1;s32_cnt++)
+			{
+				DPRINT_NOTAB(" ");
+			}
+		}
+    }
+	DPRINT_NOTAB("\n");
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -859,6 +876,8 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			DPRINT("Token: %s | Priority: %d\n", cl_token_iterator->cl_str.c_str() , s32_open_close_priority );
 		}
 	}	//Scan the given array of token and compute the open/clsoe priority
+	//DEBUG
+	std::cout << irclacl_token_array << "\n";
 
 	//--------------------------------------------------------------------------
     //	SANITY CHECK
@@ -917,7 +936,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		}	//While: scan is not complete
 		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", irclacl_token_array.size() );
 	}	//If: I have redundant priority tokens
-
+	//DEBUG
 	std::cout << irclacl_token_array << "\n";
 
 	//--------------------------------------------------------------------------
