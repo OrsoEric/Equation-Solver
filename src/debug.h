@@ -86,13 +86,13 @@
 		#define DENTER()	\
 			DPRINT( "-->> \"%s\" |\n", __PRETTY_FUNCTION__), (_debug_indent_level<_DEBUG_MAX_INDENT_LEVEL)?(++_debug_indent_level):(_DEBUG_MAX_INDENT_LEVEL)
 		#define DENTER_CONDITIONAL( iu1_enable, ... ) \
-			((iu1_enable==false)?(false):(DENTER(__VA_ARGS__)))
+			((iu1_enable==false)?:(DENTER(__VA_ARGS__)))
 
 		//Return from function and decrease indent level. No argument version
 		#define DRETURN()	\
 			(_debug_indent_level>0)?(--_debug_indent_level):(0), DPRINT( "<<-- \"%s\" |\n", __PRETTY_FUNCTION__)
 		#define DRETURN_CONDITIONAL( iu1_enable, ... ) \
-			((iu1_enable==false)?(false):(DRETURN(__VA_ARGS__)))
+			((iu1_enable==false)?:(DRETURN(__VA_ARGS__)))
 
 		//Enter Function and increase indent level. No argument print version
 		#define DENTER_ARG( ... )	\

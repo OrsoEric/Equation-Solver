@@ -3,10 +3,10 @@
 	<cstdio>
 	"debug.h"
 
-1659631391 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
+1659941197 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1659940217 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1659941013 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
@@ -23,11 +23,11 @@
 	<iostream>
 	"tokenizer.h"
 
-1659632742 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
+1659953250 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
 	<vector>
 	"tree.hpp"
 
-1659940368 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
+1659953204 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -35,6 +35,6 @@
 	<string>
 	"parser.h"
 
-1659940490 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+1659953122 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
 	<vector>
 

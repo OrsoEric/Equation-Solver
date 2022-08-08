@@ -221,6 +221,8 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //Reverse translation of a tree of tokens back to an equation is string form
+        std::string tree_to_equation( void );
 		//Equation_parser public method
         bool my_public_method( void );
 
@@ -357,10 +359,14 @@ class Equation_parser
 
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
         static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree );
+        //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
+        static bool token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
         //Takes a vector of tokens, and compute priority
         static bool compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token );
 		//Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
         static bool compute_token_symbol_priority( Token &irst_token );
+		//Within a tree of tokens, search for sum and diff operators, and use only sum operators with a greater number of leaves | -1 fail | return number of tokens merged
+        //static int compress_tree_token_sum_diff( void );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -372,11 +378,14 @@ class Equation_parser
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail
         bool error_recovery( void );
-
-
-
         //Equation_parser method to copy the code
         bool my_private_method( void );
+
+        /*********************************************************************************************************************************************************
+        **********************************************************************************************************************************************************
+        **	PUBLIC FRIENDS METHODS
+        **********************************************************************************************************************************************************
+        *********************************************************************************************************************************************************/
 
         //Overloads the std stream operator for Token
         friend std::ostream& operator<<( std::ostream& icl_stream, const Token &irst_rhs );

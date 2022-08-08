@@ -243,7 +243,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 		//Valid token
 		if (cl_token_iterator->cl_str.size() > 1)
 		{
-			for (int s32_cnt = 0;s32_cnt < cl_token_iterator->cl_str.size()-1;s32_cnt++)
+			for (unsigned int u32_cnt = 0;u32_cnt < cl_token_iterator->cl_str.size()-1;u32_cnt++)
 			{
 				DPRINT_NOTAB(" ");
 			}
@@ -551,8 +551,6 @@ bool Equation_parser::parse( std::string icl_equation_string )
 	this->gcl_token_tree.print();
 	std::cout << "--------------------------------------\n";
 
-
-
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
@@ -565,6 +563,32 @@ bool Equation_parser::parse( std::string icl_equation_string )
 **	PUBLIC GETTERS
 **********************************************************************************************************************************************************
 *********************************************************************************************************************************************************/
+
+/***************************************************************************/
+//! @brief Public Getter: tree_to_equation | void |
+/***************************************************************************/
+//! @return std::string | string containing the literal equation reverse transated from a tree, if any
+//! @details
+//! \n Reverse translation of a tree of tokens back to an equation is string form
+/***************************************************************************/
+
+std::string Equation_parser::tree_to_equation( void )
+{
+    DENTER(); //Trace Enter
+    std::string cl_str;
+
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG( "<%s> | %d", cl_str.c_str(), cl_str.size() ); //Trace Return
+    return cl_str; //OK
+}   //Public Getter: tree_to_equation | void |
 
 /***************************************************************************/
 //! @brief Public Getter: get_error | void |
@@ -818,8 +842,6 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	int s32_min_priority = -1;
 	//Number of non priority tokens
 	int u32_num_non_priority = 0;
-	//Stop condition and found condition
-	bool u1_continue = true;
 	//Scan the given array of token and compute the open/clsoe priority
 	for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
 	{
@@ -1026,7 +1048,6 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra open", __LINE__ );
 		return true;
 	}
-
 	//Return highest priority token
 	orclacl_highest_priority_token = cl_best_iterator;
 
@@ -1064,7 +1085,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
     //	BODY
     //--------------------------------------------------------------------------
 
-	int s32_symbol_priority;
+	int s32_symbol_priority = -1;
 	//If: token is an operator
 	if (irst_token.e_type == Token_type::BASE_OPERATOR)
 	{
@@ -1129,7 +1150,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Public method: my_public_method | void
+//! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
 /***************************************************************************/
 //! @param irclacl_token_array | array of Tokens
 //! @param orclacl_token_array | tree of tokens. This function will fill up the tree
@@ -1141,19 +1162,6 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree )
 {
     DENTER_ARG("Token Array Size: %d | ", irclacl_token_array.size() ); //Trace Enter
-    //--------------------------------------------------------------------------
-    //	TREE PARSER
-    //--------------------------------------------------------------------------
-    //	Second pass translates an array of tokens into a tree of tokens
-    //	This pass also specializes base token types into specialized token types if needed
-    //	Algorithm
-    //	it's a tile left/right algorithm
-    //	1) search operator =
-    //	2) move everything left of operator to LHS vector, move everything right to RHS vector
-    //	3) add operator to tree
-    //	4) on LHS -> 1), operator is added as leaf to
-    //	5)
-
     //--------------------------------------------------------------------------
     //	Search CORE token
     //--------------------------------------------------------------------------
@@ -1217,7 +1225,6 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		DRETURN_ARG("ERR:%d | Operator without RHS and LHS", __LINE__);
 		return true;
 	}
-
 	//Equal is special, it's the first simbol that becomes the root of the tree
 	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
 	{
@@ -1252,19 +1259,43 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		}
 	}
 
-
 	//Set the payload of the branch to the tiling token found
 	//
-
-
-
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
     DRETURN(); //Trace Return
     return false;	//OK
-}   //Public method: my_public_method | void
+}   //Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
+
+/***************************************************************************/
+//! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
+/***************************************************************************/
+//! @param ircl_token_tree | tree of tokens
+//! @param orast_token_array | array of Tokens filled by method
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
+/***************************************************************************/
+
+bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &orast_token_array )
+{
+    DENTER(); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN(); //Trace Return
+    return false;	//OK
+}   //Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
 
 /***************************************************************************/
 //! @brief Private Method | report_error | Error_code

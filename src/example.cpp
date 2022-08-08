@@ -202,12 +202,13 @@ bool test_bench( void )
 	//redundant priority token
 	//cl_equation.parse( "(1)" );
 	//cl_equation.parse( "(((((1)))))" );
-	//Equation Simple
+	//Equation Simple (OK)
 	//cl_equation.parse( "x*1.000=y*2" );
-	//Equation Harder
-	cl_equation.parse( "x*1.000=((pippo+1.2)+(y+.233)*2)*0.001" );
+	//Equation Harder (OK)
+	//cl_equation.parse( "x*1.000=((pippo+1.2)+(y+.233)*2)*0.001" );
+	//Test unary operators
+	cl_equation.parse( "x*(-1.000)=(-y+.233)*2" );
     //Equation with function
-
 
 	//----------------------------------------------------------------
 	//	RETURN
