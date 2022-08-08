@@ -677,7 +677,7 @@ bool Tree<Payload>::my_public_method( void )
 template <class Payload>
 bool Tree<Payload>::print( unsigned int iu32_depth )
 {
-    DENTER(); //Trace Enter
+    DENTER_ARG_CONDITIONAL(iu32_depth==0, ""); //Trace Enter only for the top iteration
     //--------------------------------------------------------------------------
     //	INIT
     //--------------------------------------------------------------------------
@@ -708,7 +708,7 @@ bool Tree<Payload>::print( unsigned int iu32_depth )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN(); //Trace Return
+    DRETURN_ARG_CONDITIONAL(iu32_depth==0, ""); //Trace Enter only for the top iteration
     return false;	//OK
 }   //Public method: print | void
 

@@ -183,19 +183,17 @@ Equation_parser::~Equation_parser( void )
 
 std::ostream& operator<<( std::ostream& icl_stream, const Equation_parser::Token &irst_rhs )
 {
-    DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
 
     DPRINT("Token: %s | Type: %d | Priority: %d\n",irst_rhs.cl_str.c_str(), irst_rhs.e_type, irst_rhs.s32_open_close_priority );
     //Stream payload
-    icl_stream << "Token: " << irst_rhs.cl_str.c_str() << " | Type: " << irst_rhs.e_type << " | Priority: " << irst_rhs.s32_open_close_priority << "\n";
+    icl_stream << "Token: " << irst_rhs.cl_str.c_str() << " | Type: " << irst_rhs.e_type << " | Priority: " << irst_rhs.s32_open_close_priority;
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN(); //Trace Return
     return icl_stream;	//OK
 }   //End: Public Operator |  operator<< | const Lesson_operator_overloading::Error_code ie_error_code
 
@@ -218,7 +216,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 
 	//Header
     icl_stream << "Tokens ";
-    DPRINT("Tokens  :");
+    DPRINT("Tokens   ");
 	//Scan all tokens
     for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
@@ -237,7 +235,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
     }
     DPRINT_NOTAB("\n");
     //Show the priority in the line below
-    DPRINT("Priority:");
+    DPRINT("Priority ");
 	//Scan all tokens
     for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
@@ -914,6 +912,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//Redundant "Priority" open token
 			if ((cl_token_iterator->e_type == Token_type::BASE_OPEN) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
+				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", (cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -921,6 +920,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//"Priority" close
 			else if ((cl_token_iterator->e_type == Token_type::BASE_CLOSE) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
+				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", (cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -928,16 +928,20 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//"Non Priority"
 			else
 			{
-				//Next
-				cl_token_iterator++;
 				//Update its priority
 				cl_token_iterator->s32_open_close_priority -= s32_min_priority;
+				//Next Token
+				cl_token_iterator++;
+				if ((Config::CU1_INTERNAL_CHECKS == true) && (cl_token_iterator->s32_open_close_priority < 0))
+				{
+					DRETURN_ARG("ERR:%d | Algrithmic error, bracket elision token priority negative...", cl_token_iterator->s32_open_close_priority );
+				}
 			}
 		}	//While: scan is not complete
 		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", irclacl_token_array.size() );
+		//DEBUG
+		std::cout << irclacl_token_array << "\n";
 	}	//If: I have redundant priority tokens
-	//DEBUG
-	std::cout << irclacl_token_array << "\n";
 
 	//--------------------------------------------------------------------------
     //	SEEK HIGHEST PRIORITY "NON PRIORITY" TOKEN
@@ -948,11 +952,35 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //Initialize seek
     std::vector<Token>::iterator cl_best_iterator;
     int s32_best_priority = -1;
+    //Reset open close priority
+    s32_open_close_priority = 0;
 	//Scan all tokens
     for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
     {
+			//Check forbracket balance
+		//!@todo I can do better than repeating this code. Look to make a lambda or split hierarch and add incapsulate priority computation
+		//"Priority" open
+		if (cl_token_iterator->e_type == Token_type::BASE_OPEN)
+		{
+			//Open, increase priority of what comes after
+			s32_open_close_priority++;
+			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
+		}
+		//"Priority" close
+		else if (cl_token_iterator->e_type == Token_type::BASE_CLOSE)
+		{
+			//If: I have more close tokens than open tokens
+			if (s32_open_close_priority <= 0)
+			{
+				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, (cl_token_iterator -irclacl_token_array.begin()) );
+				return true;
+			}
+			//Open, decrease priority of what comes after
+			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
+			s32_open_close_priority--;
+		}
 		//If the token has the lowest open/close priority
-		if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
+		else if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
 		{
 			//There is an algorithmic error, symbol priority is uninitialized
 			if ((Config::CU1_INTERNAL_CHECKS == true) && (cl_token_iterator->s32_symbol_priority == -1))
@@ -992,6 +1020,12 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		DRETURN_ARG("ERR:%d | Could not find the strongest priority token...", __LINE__ );
 		return true;
     }
+    //If: I have more open tokens than close tokens
+	if (s32_open_close_priority > 0)
+	{
+		DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra open", __LINE__ );
+		return true;
+	}
 
 	//Return highest priority token
 	orclacl_highest_priority_token = cl_best_iterator;
@@ -999,7 +1033,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Tokens: %d", irclacl_token_array.size() ); //Trace Return
+    DRETURN_ARG("Tokens: %d | Highest Priority Token: <%s> | %d %d", irclacl_token_array.size(), cl_best_iterator->cl_str.c_str(), cl_best_iterator->s32_open_close_priority, cl_best_iterator->s32_symbol_priority ); //Trace Return
     return false;	//OK
 }   //Private Static Method: compute_token_array_priority | std::vector<Token> & | std::vector<Token>::iterator & |
 
@@ -1193,7 +1227,6 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		//Execute the search on the LHS and RHS sides of the equation
 		token_array_to_tree( clast_lhs, orcl_token_tree );
 		token_array_to_tree( clast_rhs, orcl_token_tree );
-
 	}
 	else
 	{
