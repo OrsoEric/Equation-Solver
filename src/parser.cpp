@@ -187,9 +187,9 @@ std::ostream& operator<<( std::ostream& icl_stream, const Equation_parser::Token
     //	BODY
     //--------------------------------------------------------------------------
 
-    DPRINT("Token: %s | Type: %d | Priority: %d\n",irst_rhs.cl_str.c_str(), irst_rhs.e_type, irst_rhs.s32_open_close_priority );
+    DPRINT("Token: %c%s | Type: %d | Priority: %d\n", (irst_rhs.u1_negative)?('-'):(' '), irst_rhs.cl_str.c_str(), irst_rhs.e_type, irst_rhs.s32_open_close_priority );
     //Stream payload
-    icl_stream << "Token: " << irst_rhs.cl_str.c_str() << " | Type: " << irst_rhs.e_type << " | Priority: " << irst_rhs.s32_open_close_priority;
+    icl_stream << "Token: " << ((irst_rhs.u1_negative)?('-'):(' ')) << irst_rhs.cl_str.c_str() << " | Type: " << irst_rhs.e_type << " | Priority: " << irst_rhs.s32_open_close_priority;
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -224,7 +224,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 		if (cl_token_iterator->cl_str.size() > 0)
 		{
 			icl_stream << "|" << cl_token_iterator->cl_str.c_str();
-			DPRINT_NOTAB("|%s", cl_token_iterator->cl_str.c_str() );
+			DPRINT_NOTAB("|%c%s", (cl_token_iterator->u1_negative)?('-'):(' '),cl_token_iterator->cl_str.c_str() );
 		}
 		//Empty token
 		else
@@ -239,10 +239,11 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 	//Scan all tokens
     for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
-		DPRINT_NOTAB("|%d", cl_token_iterator->s32_open_close_priority );
+		DPRINT_NOTAB("| %d", cl_token_iterator->s32_open_close_priority );
 		//Valid token
 		if (cl_token_iterator->cl_str.size() > 1)
 		{
+
 			for (unsigned int u32_cnt = 0;u32_cnt < cl_token_iterator->cl_str.size()-1;u32_cnt++)
 			{
 				DPRINT_NOTAB(" ");
@@ -271,6 +272,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 //! @return bool | false = OK | true = FAIL |
 //! @details
 //! \n Parse a string into a vector of string tokens. Basically slice the string into individual tokens.
+//! \n Unary operators (+ and (- are tokenized at this stage, by deleting them and applying negation to the following token if needed
 /***************************************************************************/
 
 bool Equation_parser::parse( std::string icl_equation_string )
@@ -303,6 +305,7 @@ bool Equation_parser::parse( std::string icl_equation_string )
 		//Initialize priority to uninitialized
 		irst_token.s32_open_close_priority = -1;
 		irst_token.s32_symbol_priority = -1;
+		irst_token.u1_negative = false;
 		return false;
 	};
 	//Initialize the token
@@ -320,6 +323,11 @@ bool Equation_parser::parse( std::string icl_equation_string )
     bool u1_reprocess_digit = false;
     //keep looping
     bool u1_continue = true;
+	//Detect if a unary operator has been detected and if negation has to be applied to the next token
+	bool u1_unary_operator = false;
+    bool u1_unary_negation = false;
+    //Detect if the previous token was an OPEN
+    bool u1_unary_previous_open = false;
 	//Count open and close brackets
     int s32_cnt_open = 0, s32_cnt_close = 0;
     //While: Iterate until all characters inside the string object have been scanned
@@ -365,12 +373,32 @@ bool Equation_parser::parse( std::string icl_equation_string )
                 //Detect Operator
                 else if (this->is_operator(s8_digit))
                 {
-					//Append digit to the token
-					cl_token.cl_str.push_back( s8_digit );
-					//Single digit operator decoded
-					u1_token_decoded = true;
-					cl_token.e_type = Token_type::BASE_OPERATOR;
-					DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Operator detected: >>%c<< | Token: %s\n",s8_digit, cl_token.cl_str.c_str() );
+					//Special Unary Positive Detection. "(+"
+					if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_SUM))
+					{
+						//Detected a + unary operator, It has no effect other than deleting the token
+						u1_unary_operator = true;
+                        u1_unary_negation = false;
+                        DPRINT("Unary + detected\n");
+					}
+					//Special Unary Negative Detection "(-"
+					else if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_DIFF))
+					{
+						//Detected an unary operator. It has the effect of setting the negate flag of the next token
+						u1_unary_operator = true;
+                        u1_unary_negation = true;
+                        DPRINT("Unary - detected\n");
+					}
+					//Not an unary operator
+					else
+					{
+						//Append digit to the token
+						cl_token.cl_str.push_back( s8_digit );
+						//Single digit operator decoded
+						u1_token_decoded = true;
+						cl_token.e_type = Token_type::BASE_OPERATOR;
+						DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Operator detected: >>%c<< | Token: %s\n",s8_digit, cl_token.cl_str.c_str() );
+					}
                 }
                 //Detect Open
                 else if (s8_digit == Token_legend::CS8_PRIORITY_OPEN)
@@ -485,6 +513,19 @@ bool Equation_parser::parse( std::string icl_equation_string )
 		{
 			//Clear flag
 			u1_token_decoded = false;
+			//If: unary detection was tripped
+			if (u1_unary_operator == true)
+			{
+				//acknoweldge
+				u1_unary_operator = false;
+				//Propagate negation to token
+				cl_token.u1_negative = u1_unary_negation;
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Unary Operator: %c\n", (u1_unary_negation)?('-'):('+') );
+				//Clear negation (can be skipped for performance)
+				u1_unary_negation = false;
+			}
+			//Special detection of previous OPEN, used for Unary detection
+			u1_unary_previous_open = (cl_token.e_type == Token_type::BASE_OPEN);
 			//If: decoding resulted in an empty token
 			if (cl_token.cl_str.size() <= 0)
 			{
@@ -495,7 +536,7 @@ bool Equation_parser::parse( std::string icl_equation_string )
 			{
 				//Append the decoded string to the token vector
 				clast_tokens.push_back( cl_token );
-				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %s | type: %d | size: %d\n", cl_token.cl_str.c_str(), cl_token.e_type, cl_token.cl_str.size() );
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %c%s | type: %d | size: %d\n", (cl_token.u1_negative)?('-'):(' '),cl_token.cl_str.c_str(), cl_token.e_type, cl_token.cl_str.size() );
 				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Tokens decoded: %d\n", clast_tokens.size() );
 				//Initialize the token
 				reset_token( cl_token );
@@ -529,7 +570,7 @@ bool Equation_parser::parse( std::string icl_equation_string )
 	//Check bracket balance
 	if (s32_cnt_close != s32_cnt_open)
 	{
-		DRETURN_ARG("ERR%d: Unbalanced brackets | Open %d | Close %d", __LINE__, s32_cnt_open, s32_cnt_close );
+		DRETURN_ARG("ERR%d | Unbalanced brackets | Open %d | Close %d", __LINE__, s32_cnt_open, s32_cnt_close );
 		this->report_error( Error_code::CPS8_ERR_UNBALANCED_BRACKETS );
 		//FAIL
 		return true;
@@ -546,8 +587,25 @@ bool Equation_parser::parse( std::string icl_equation_string )
 	}
 
 	//Recursively translate an array of token into a tree of tokens
-	this->token_array_to_tree( clast_tokens, this->gcl_token_tree );
+	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree );
+	if (u1_ret == true)
+	{
+		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
+		return true;
+	}
+	std::cout << "Array->Tree\n";
+	this->gcl_token_tree.print();
+	std::cout << "--------------------------------------\n";
 
+
+	//Recursively
+	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
+	if (s32_ret < 0)
+	{
+		DRETURN_ARG("ERR:%d | Could not aggregate sum/diff operators into wide sum operators...", __LINE__ );
+		return true;
+	}
+	std::cout << "Aggregate\n";
 	this->gcl_token_tree.print();
 	std::cout << "--------------------------------------\n";
 
@@ -1157,6 +1215,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 //! @return bool | false = OK | true = FAIL |
 //! @details
 //! \n Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
+//! \n The tokenizer wants to use only sum and negation, with large number of leaves if possible
 /***************************************************************************/
 
 bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree )
@@ -1228,7 +1287,8 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	//Equal is special, it's the first simbol that becomes the root of the tree
 	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
 	{
-		orcl_token_tree.set_payload( *cl_core_iterator );
+		//
+		orcl_token_tree[0] = *cl_core_iterator;
 		//Show the tree
 		orcl_token_tree.print();
 		//Execute the search on the LHS and RHS sides of the equation
@@ -1239,7 +1299,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	{
 		unsigned int u32_index;
 		//Add a leaf to the current branch holding the Payload of the core token found
-		u1_ret = orcl_token_tree.create_leaf( *cl_core_iterator, u32_index );
+		u1_ret = orcl_token_tree.create_child( *cl_core_iterator )   .create_leaf( , u32_index );
 		if (u1_ret == true)
 		{
 			DRETURN_ARG("ERR:%d | Failed to add branch to tree", __LINE__);
@@ -1272,14 +1332,14 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 /***************************************************************************/
 //! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
 /***************************************************************************/
-//! @param ircl_token_tree | tree of tokens
+//! @param ircl_tree_root | tree of tokens
 //! @param orast_token_array | array of Tokens filled by method
 //! @return bool | false = OK | true = FAIL |
 //! @details
 //! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
 /***************************************************************************/
 
-bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &orast_token_array )
+bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1296,6 +1356,131 @@ bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_token_tree, std::ve
     DRETURN(); //Trace Return
     return false;	//OK
 }   //Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
+
+/***************************************************************************/
+//! @brief Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
+/***************************************************************************/
+//! @param ircl_token_tree | tree of tokens
+//! @return int | -1 fail | return number of tokens merged
+//! @details
+//! \n Within a tree of tokens, search for sum and diff operators, aggregate them in sum operators with a greater number of leaves
+//! \n Navigate the tree
+//! \n if the root is a sum operator
+//! \n search for sum operators in the leaves. That leaf's leaves are added to the root and the leaf is destroyed
+//! \n	e.g.
+//! \n	Before					After
+//! \n	=						=
+//! \n		y						y
+//! \n		+						+
+//! \n			2						2
+//! \n			+						-1
+//! \n				-1					x
+//! \n				x
+/***************************************************************************/
+
+int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
+{
+    DENTER(); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+
+    bool u1_ret;
+    int s32_cnt_destroyed = 0;
+    int s32_cnt_moved = 0;
+
+    unsigned int u32_ret;
+	//Root token
+    Token &rst_token_root = ircl_tree_root.payload();
+	//If the token is a SUM and there is at least one leaf
+    if ((rst_token_root.e_type == Token_type::BASE_OPERATOR) && (rst_token_root.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
+    {
+		//An operator MUST have at least two operands under it
+		if (ircl_tree_root.get_num_leaves() < 2)
+		{
+			DRETURN_ARG("ERR:%d | Root Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_root.cl_str[0], ircl_tree_root.get_num_leaves() );
+			return -1;
+		}
+		//Save the number of leaves to search for. the leaves might increase in number after merging
+		unsigned int u32_num_leaves = ircl_tree_root.get_num_leaves();
+		//For each leaf already there before starting, the number may reduce when deleting a leaf
+		unsigned int u32_index = 0;
+		while (u32_index < u32_num_leaves)
+        {
+			//Fetch leaf
+			Tree<Token> &rst_tree_leaf = ircl_tree_root[u32_index];
+			//Fetch Token
+			Token &rst_token_leaf = rst_tree_leaf.payload();
+			//If leaf is a SUM/DIFF operator
+			if ((rst_token_leaf.e_type == Token_type::BASE_OPERATOR) && (rst_token_leaf.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
+			{
+				//An operator MUST have at least two operands under it
+				if (rst_tree_leaf.get_num_leaves() < 2)
+				{
+					DRETURN_ARG("ERR:%d | Leaf Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_leaf.cl_str[0], rst_tree_leaf.get_num_leaves() );
+					return -1;
+				}
+				//For there are leaflets remaining under the leaf
+				while (rst_tree_leaf.get_num_leaves() > 0)
+				{
+					//move the leaflet
+					u1_ret = rst_tree_leaf.move_leaf( 0, ircl_tree_root, u32_ret );
+					if (u1_ret == true)
+					{
+						DRETURN_ARG("ERR:%d | failed to move leaflet %d of leaf %p %d to root %p...\n", __LINE__, 0, rst_tree_leaf, ircl_tree_root );
+						return -1;
+					}
+                    DPRINT("%d | Added leaf %d to root with now %d leaves\n", __LINE__, u32_ret, ircl_tree_root);
+                    //Count the moved leaves
+					s32_cnt_destroyed++;
+				}
+				//I now need to remove the leaf
+				u1_ret = ircl_tree_root.destroy_leaf( u32_index );
+				if (u1_ret == true)
+				{
+					DRETURN_ARG("ERR:%d | Failed to destroy leaf %d...\n", __LINE__, u32_index );
+					return -1;
+				}
+				//Count the destroyed leaves
+				s32_cnt_destroyed++;
+				DPRINT("%d | Destroyed leaf %d\n", __LINE__, u32_index);
+				//This now requires updating the indexes, I have one fewer leaves to search for
+				if (u32_num_leaves <= 0)
+				{
+					DRETURN_ARG("ERR:%d | Not enough maximum leaves remaining %d...\n", __LINE__, u32_num_leaves );
+					return -1;
+				}
+				u32_num_leaves--;
+			}
+			//If: not a SUM/DIFF
+			else
+			{
+				//Advance
+				u32_index++;
+			}
+        }	//For each leaf
+    }
+    if (ircl_tree_root.get_num_leaves() > 0)
+    {
+		//For each leaf after the merge, I now have to call recursively the merge process
+		for (unsigned int u32_index = 0;u32_index < ircl_tree_root.get_num_leaves();u32_index++)
+		{
+			u32_ret = aggregate_tree_token_sum_diff( ircl_tree_root[u32_index] );
+			if (u32_ret < 0)
+			{
+				DRETURN_ARG("ERR:%d | failed to recursively aggregate...\n", __LINE__ );
+				return -1;
+			}
+		}
+	}
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("Destroyed: %d | Moved: %d", s32_cnt_destroyed, s32_cnt_moved ); //Trace Return
+    return 0;	//OK
+}   //Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
 
 /***************************************************************************/
 //! @brief Private Method | report_error | Error_code

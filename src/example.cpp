@@ -207,8 +207,19 @@ bool test_bench( void )
 	//Equation Harder (OK)
 	//cl_equation.parse( "x*1.000=((pippo+1.2)+(y+.233)*2)*0.001" );
 	//Test unary operators
-	cl_equation.parse( "x*(-1.000)=(-y+.233)*2" );
-    //Equation with function
+	//cl_equation.parse( "x*(-1.000)=(-y+.233)*2" );
+    //harder with unary and diff
+	//cl_equation.parse( "((-x)*(-1.000))=((-pippo-1.2)+(y-.233)*2)*(-0.001)" );
+	//Function are just symbols with arguments! Already work with current parser
+	//cl_equation.parse( "y=sin(x)" );
+	//Tree operation: merge sum operation.
+	//cl_equation.parse( "y=8+8+8" );
+	//Tree operation: merge sum operation. Preserve tree
+	cl_equation.parse( "y=8+(9+10+23*2)+(x*y)" );
+	//Tree operation: merge sum operation, turn all diffs into sums.
+	//cl_equation.parse( "y=(-1+2+3+4-5-6-7+8)" );
+
+
 
 	//----------------------------------------------------------------
 	//	RETURN

@@ -12,6 +12,10 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-pedantic" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -47,7 +51,11 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="src/tokenizer.h" />
-		<Unit filename="src/tree.hpp" />
+		<Unit filename="src/tree.hpp">
+			<Option compile="1" />
+			<Option link="1" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
