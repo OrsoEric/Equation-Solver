@@ -202,6 +202,8 @@ bool test_bench( void )
 	//redundant priority token
 	//cl_equation.parse( "(1)" );
 	//cl_equation.parse( "(((((1)))))" );
+	//Equation
+	cl_equation.parse( "1=1" );
 	//Equation Simple (OK)
 	//cl_equation.parse( "x*1.000=y*2" );
 	//Equation Harder (OK)
@@ -215,7 +217,7 @@ bool test_bench( void )
 	//Tree operation: merge sum operation.
 	//cl_equation.parse( "y=8+8+8" );
 	//Tree operation: merge sum operation. Preserve tree
-	cl_equation.parse( "y=8+(9+10+23*2)+(x*y)" );
+	//cl_equation.parse( "y=8+(9+10+23*2)+(x*y)" );
 	//Tree operation: merge sum operation, turn all diffs into sums.
 	//cl_equation.parse( "y=(-1+2+3+4-5-6-7+8)" );
 

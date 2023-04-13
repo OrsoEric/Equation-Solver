@@ -221,6 +221,12 @@ class Tree : public Tree_interface<Payload>
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+		//! @brief return the size of the tree, counting the root
+        size_t size( void )
+        {
+			return this->gast_nodes.size();
+        }
+
         //Reference to Payload of the root node, overload available to discard success
         Payload &root( bool &orx_fail );
         Payload &root( void )
@@ -243,7 +249,9 @@ class Tree : public Tree_interface<Payload>
 
         bool print( void )
         {
+			std::cout << "List of nodes:\n";
 			show();
+			std::cout << "Tree representation:\n";
 			show(0);
 			return false;
         }

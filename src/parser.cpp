@@ -123,7 +123,7 @@ Equation_parser::Equation_parser( void )
     //--------------------------------------------------------------------------
 
     //Initialize class vars
-    this -> init_class_vars();
+    this->init_class_vars();
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -586,8 +586,13 @@ bool Equation_parser::parse( std::string icl_equation_string )
 		DPRINT("Token: >>%s<< | Type: %d | Size: %d\n", cl_token_iter->cl_str.c_str(), cl_token_iter->e_type, cl_token_iter->cl_str.size() );
 	}
 
-	//Recursively translate an array of token into a tree of tokens
-	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree );
+	//Link the decorator for the tree to print out the token
+	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str; };
+	//Link the provided decorator to replace the default decorator
+	this->gcl_token_tree.link_decorator( f_my_decorator );
+
+	//Recursively translate an array of token into a tree of tokens, starting from the root
+	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree, 0 );
 	if (u1_ret == true)
 	{
 		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
@@ -1212,15 +1217,16 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 /***************************************************************************/
 //! @param irclacl_token_array | array of Tokens
 //! @param orclacl_token_array | tree of tokens. This function will fill up the tree
+//! @param in_index_father | index of the father where the token should be spawned
 //! @return bool | false = OK | true = FAIL |
 //! @details
 //! \n Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
 //! \n The tokenizer wants to use only sum and negation, with large number of leaves if possible
 /***************************************************************************/
 
-bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree )
+bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father )
 {
-    DENTER_ARG("Token Array Size: %d | ", irclacl_token_array.size() ); //Trace Enter
+    DENTER_ARG("Token Array Size: %d | Father %d", irclacl_token_array.size(), in_index_father ); //Trace Enter
     //--------------------------------------------------------------------------
     //	Search CORE token
     //--------------------------------------------------------------------------
@@ -1285,24 +1291,23 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		return true;
 	}
 	//Equal is special, it's the first simbol that becomes the root of the tree
-	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
+	if ((cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL) && (in_index_father == 0))
 	{
-		//
+		//Write the payload on the root
 		orcl_token_tree[0] = *cl_core_iterator;
 		//Show the tree
 		orcl_token_tree.print();
-		//Execute the search on the LHS and RHS sides of the equation
-		token_array_to_tree( clast_lhs, orcl_token_tree );
-		token_array_to_tree( clast_rhs, orcl_token_tree );
+		//Execute the search on the LHS and RHS sides of the equation, root is the father
+		token_array_to_tree( clast_lhs, orcl_token_tree, 0 );
+		token_array_to_tree( clast_rhs, orcl_token_tree, 0 );
 	}
 	else
 	{
-		unsigned int u32_index;
-		//Add a leaf to the current branch holding the Payload of the core token found
-		u1_ret = orcl_token_tree.create_child( *cl_core_iterator )   .create_leaf( , u32_index );
-		if (u1_ret == true)
+		//Add a child to the current branch holding the Payload of the core token found
+		size_t n_child_index = orcl_token_tree.create_child( in_index_father, *cl_core_iterator );
+		if (n_child_index >= orcl_token_tree.size() )
 		{
-			DRETURN_ARG("ERR:%d | Failed to add branch to tree", __LINE__);
+			DRETURN_ARG("ERR:%d | Failed to add branch to tree | index: %d", __LINE__, n_child_index);
 			return true;
 		}
 		//Show the tree
@@ -1311,11 +1316,11 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		//Execute the search on the LHS and RHS sides of the equation
 		if (clast_lhs.size() > 0)
 		{
-			token_array_to_tree( clast_lhs, orcl_token_tree[u32_index] );
+			token_array_to_tree( clast_lhs, orcl_token_tree, n_child_index );
 		}
 		if (clast_rhs.size() > 0)
 		{
-			token_array_to_tree( clast_rhs, orcl_token_tree[u32_index] );
+			token_array_to_tree( clast_rhs, orcl_token_tree, n_child_index );
 		}
 	}
 
@@ -1392,24 +1397,25 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 
     unsigned int u32_ret;
 	//Root token
-    Token &rst_token_root = ircl_tree_root.payload();
+    Token &rst_token_root = ircl_tree_root[0];
 	//If the token is a SUM and there is at least one leaf
     if ((rst_token_root.e_type == Token_type::BASE_OPERATOR) && (rst_token_root.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
     {
 		//An operator MUST have at least two operands under it
-		if (ircl_tree_root.get_num_leaves() < 2)
+		if (ircl_tree_root.size() < 2)
 		{
-			DRETURN_ARG("ERR:%d | Root Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_root.cl_str[0], ircl_tree_root.get_num_leaves() );
+			DRETURN_ARG("ERR:%d | Root Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_root.cl_str[0], ircl_tree_root.size() );
 			return -1;
 		}
 		//Save the number of leaves to search for. the leaves might increase in number after merging
-		unsigned int u32_num_leaves = ircl_tree_root.get_num_leaves();
+		unsigned int u32_num_leaves = ircl_tree_root.size();
 		//For each leaf already there before starting, the number may reduce when deleting a leaf
+		/*
 		unsigned int u32_index = 0;
 		while (u32_index < u32_num_leaves)
         {
 			//Fetch leaf
-			Tree<Token> &rst_tree_leaf = ircl_tree_root[u32_index];
+			Token &rst_tree_leaf = ircl_tree_root[u32_index];
 			//Fetch Token
 			Token &rst_token_leaf = rst_tree_leaf.payload();
 			//If leaf is a SUM/DIFF operator
@@ -1460,9 +1466,11 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 				u32_index++;
 			}
         }	//For each leaf
+        */
     }
-    if (ircl_tree_root.get_num_leaves() > 0)
+    if (ircl_tree_root.size() > 0)
     {
+		/*
 		//For each leaf after the merge, I now have to call recursively the merge process
 		for (unsigned int u32_index = 0;u32_index < ircl_tree_root.get_num_leaves();u32_index++)
 		{
@@ -1473,6 +1481,7 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 				return -1;
 			}
 		}
+		*/
 	}
 
     //--------------------------------------------------------------------------

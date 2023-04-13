@@ -359,7 +359,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
-        static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree );
+        static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father );
         //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
         static bool token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
         //Takes a vector of tokens, and compute priority
