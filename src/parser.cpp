@@ -1381,10 +1381,22 @@ bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vec
 //! \n			+						-1
 //! \n				-1					x
 //! \n				x
+//! \n	e.g.
+//! \n	Before					After
+//! \n	=						=
+//! \n		y						y
+//! \n		+						+
+//! \n			+						1
+//! \n				1					2
+//! \n				2					-3
+//! \n			-						-4
+//! \n				3
+//! \n				4
 /***************************************************************************/
 
 int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
 {
+	/*
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
@@ -1410,21 +1422,18 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 		//Save the number of leaves to search for. the leaves might increase in number after merging
 		unsigned int u32_num_leaves = ircl_tree_root.size();
 		//For each leaf already there before starting, the number may reduce when deleting a leaf
-		/*
 		unsigned int u32_index = 0;
 		while (u32_index < u32_num_leaves)
         {
-			//Fetch leaf
-			Token &rst_tree_leaf = ircl_tree_root[u32_index];
 			//Fetch Token
 			Token &rst_token_leaf = rst_tree_leaf.payload();
 			//If leaf is a SUM/DIFF operator
 			if ((rst_token_leaf.e_type == Token_type::BASE_OPERATOR) && (rst_token_leaf.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
 			{
 				//An operator MUST have at least two operands under it
-				if (rst_tree_leaf.get_num_leaves() < 2)
+				if (ircl_tree_root.get_children(u32_index) < 2)
 				{
-					DRETURN_ARG("ERR:%d | Leaf Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_leaf.cl_str[0], rst_tree_leaf.get_num_leaves() );
+					DRETURN_ARG("ERR:%d | Leaf Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_leaf.cl_str[0], ircl_tree_root.get_children(u32_index) );
 					return -1;
 				}
 				//For there are leaflets remaining under the leaf
@@ -1466,11 +1475,11 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 				u32_index++;
 			}
         }	//For each leaf
-        */
+
     }
     if (ircl_tree_root.size() > 0)
     {
-		/*
+
 		//For each leaf after the merge, I now have to call recursively the merge process
 		for (unsigned int u32_index = 0;u32_index < ircl_tree_root.get_num_leaves();u32_index++)
 		{
@@ -1481,13 +1490,15 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 				return -1;
 			}
 		}
-		*/
 	}
+
+
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
     DRETURN_ARG("Destroyed: %d | Moved: %d", s32_cnt_destroyed, s32_cnt_moved ); //Trace Return
+    */
     return 0;	//OK
 }   //Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
 

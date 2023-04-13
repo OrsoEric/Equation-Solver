@@ -56,6 +56,7 @@
 			<Option link="1" />
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="src/tree_interface.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

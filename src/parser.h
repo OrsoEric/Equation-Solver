@@ -208,6 +208,11 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief return reference to the array of tokens
+        std::vector<std::string> get_array_of_token( void )
+        {
+			return this->gclacl_tokens;
+        }
         //Get current error state of the library
         const char *get_error( void );
 
@@ -349,6 +354,8 @@ class Equation_parser
         }
         //returns true if the digit is an operator token
 		bool is_operator( char is8_digit );
+		//Return true if a token is of the type under test
+		//bool is_operator( Token &irst_token, Token_legend ie_token_type );
 		//returns true if the digit is a symbol digit
 		bool is_symbol( char is8_digit );
 

@@ -89,6 +89,8 @@ using std::endl;
 
 extern bool test_bench( void );
 
+extern int unit_test_parse_token_array( void );
+
 /****************************************************************
 **	GLOBAL VARIABILES
 ****************************************************************/
@@ -191,7 +193,12 @@ bool test_bench( void )
     cl_my_equation.gpcl_root = pcl_token;
     */
 
-	User::Equation_parser cl_equation;
+    //unit test the token array parser
+	int n_fail = unit_test_parse_token_array();
+	DPRINT("Failed test patterns: %d\n", n_fail );
+	std::cout << "Unit Test: parser token array |:" << n_fail << "\n";
+
+	//User::Equation_parser cl_equation;
 
 	//Empty equation
 	//cl_equation.parse( "" );
@@ -203,7 +210,11 @@ bool test_bench( void )
 	//cl_equation.parse( "(1)" );
 	//cl_equation.parse( "(((((1)))))" );
 	//Equation
-	cl_equation.parse( "1=1" );
+	//cl_equation.parse( "1=1" );
+	//Equation
+	//cl_equation.parse( "5=2+3" );
+	//Equation
+	//cl_equation.parse( "1+4=2+3" );
 	//Equation Simple (OK)
 	//cl_equation.parse( "x*1.000=y*2" );
 	//Equation Harder (OK)
@@ -239,10 +250,11 @@ bool test_bench( void )
 //! @param f bool
 //! @return bool |
 //! @details
-//! dummy method to copy the code
+//! runs a number of unit tests on the equation solver
+//! feed a string, manually create a token array, and checks that the two are the same.
 /***************************************************************************/
 
-bool f( bool f )
+int unit_test_parse_token_array( void )
 {
 	//Trace Enter with arguments
 	DENTER_ARG("in: %d\n", 0);
@@ -251,20 +263,100 @@ bool f( bool f )
 	//	VARS
 	//----------------------------------------------------------------
 
+	User::Equation_parser cl_equation_parser;
+
 	//----------------------------------------------------------------
 	//	INIT
 	//----------------------------------------------------------------
+
+	//count the test patterns that failed the check
+	int n_cnt_fail = 0;
+	//Test patterns
+	const char *as_test_equations[] =
+	{
+		//Empty string, FAIL
+		"",
+
+		//Unbalanced brackets, FAIL
+		"(1",
+		"((1",
+		"(1))",
+
+		//Regular equation, SUCCESS
+		"1=1",
+	};
+	size_t n_num_test_equations = sizeof( as_test_equations )/ sizeof(const char *);
+	std::cout << "Test patterns: " << n_num_test_equations << "\n";
+	//Test pattern expected fail
+	bool ax_fail_pattern[] =
+	{
+		true,
+		true,
+		true,
+		true,
+		false,
+	};
+	//Vector of Token (string form) that should represent the matching equation of the test case
+	std::vector<std::string> as_token_vector[] =
+	{
+		std::vector<std::string>(),
+		std::vector<std::string>(),
+		std::vector<std::string>(),
+		std::vector<std::string>(),
+		std::vector<std::string>( {std::string("1"), std::string("="), std::string("1")} ),
+	};
+
+	//Tree of Token that represent the equation
+
+
+
 
 	//----------------------------------------------------------------
 	//	BODY
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
+	for (size_t n_test_pattern_index = 0; n_test_pattern_index < n_num_test_equations;n_test_pattern_index++)
+	{
+		//Feed the test pattern
+		bool x_fail = cl_equation_parser.parse( as_test_equations[n_test_pattern_index] );
+		//If expected fail state
+		if (x_fail == ax_fail_pattern[n_test_pattern_index])
+		{
+			//Get the array of string tokens
+			std::vector<std::string> ras_array_token = cl_equation_parser.get_array_of_token();
+
+			size_t n_num_tokens = ras_array_token.size();
+			//if not
+			if (n_num_tokens == as_token_vector[n_test_pattern_index].size())
+			{
+				for (size_t n_array_token_index = 0;n_array_token_index < n_num_tokens;n_num_tokens++)
+				{
+
+
+				}
+			}
+			else
+			{
+				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, as_token_vector[n_test_pattern_index].size(), n_num_tokens );
+				n_cnt_fail++;
+			}
+		}
+		//if expected fail state
+		else
+		{
+			DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+			n_cnt_fail++;
+		}
+
+
+	}
+
 	//----------------------------------------------------------------
 	//	RETURN
 	//----------------------------------------------------------------
 
 	//Trace Return vith return value
-	DRETURN_ARG("out: %d\n", 0);
-	return false; //OK
+	DRETURN_ARG("Failed test patterns: %d", n_cnt_fail);
+	return n_cnt_fail; //OK
 }	//end function: Dummy | bool
