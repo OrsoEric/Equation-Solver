@@ -196,7 +196,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //Parse a string as an equation
-        bool parse( std::string icl_equation_string );
+        bool parse( std::string is_equation );
         bool parse( const char *ipcs8_equation_string )
         {
 			return parse( std::string( ipcs8_equation_string ) );
@@ -333,31 +333,31 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //! @brief true = digit is a number
-        bool is_number( char is8_digit )
+        static bool is_number( char is8_digit )
         {
 			return ((is8_digit >= '0') && (is8_digit <= '9'));
         }
         //! @brief true = digit is a lower case letter
-        bool is_letter_lower_case( char is8_digit )
+        static bool is_letter_lower_case( char is8_digit )
         {
 			return ((is8_digit >= 'a') && (is8_digit <= 'z'));
         }
         //! @brief true = digit is an upper case letter
-        bool is_letter_upper_case( char is8_digit )
+        static bool is_letter_upper_case( char is8_digit )
         {
 			return ((is8_digit >= 'A') && (is8_digit <= 'Z'));
         }
         //! @brief true = digit is a letter
-        bool is_letter( char is8_digit )
+        static bool is_letter( char is8_digit )
         {
-			return ((this->is_letter_lower_case( is8_digit )) || (this->is_letter_upper_case( is8_digit )));
+			return ((Equation_parser::is_letter_lower_case( is8_digit )) || (Equation_parser::is_letter_upper_case( is8_digit )));
         }
         //returns true if the digit is an operator token
-		bool is_operator( char is8_digit );
+		static bool is_operator( char is8_digit );
 		//Return true if a token is of the type under test
 		//bool is_operator( Token &irst_token, Token_legend ie_token_type );
 		//returns true if the digit is a symbol digit
-		bool is_symbol( char is8_digit );
+		static bool is_symbol( char is8_digit );
 
 		/*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -365,6 +365,8 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+        static bool equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Token> &orast_token_array );
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
         static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father );
         //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
@@ -375,6 +377,8 @@ class Equation_parser
         static bool compute_token_symbol_priority( Token &irst_token );
 		//Within a tree of tokens, search for sum and diff operators, and use only sum operators with a greater number of leaves | -1 fail | return number of tokens merged
         static int aggregate_tree_token_sum_diff( Tree<Token> &ircl_token_tree );
+
+
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
