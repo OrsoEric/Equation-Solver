@@ -281,29 +281,51 @@ int unit_test_parse_token_array( void )
 		"(1",
 		"((1",
 		"(1))",
+		"(((((1)))))",
 
 		//Regular equation, SUCCESS
 		"1=1",
+		"5=2+3",
+		"1+4=2+3",
+
 	};
 	size_t n_num_test_equations = sizeof( as_test_equations )/ sizeof(const char *);
 	std::cout << "Test patterns: " << n_num_test_equations << "\n";
 	//Test pattern expected fail
 	bool ax_fail_pattern[] =
 	{
+		//Empty string
 		true,
+
+		//Unbalanced brackets
 		true,
 		true,
 		true,
 		false,
+
+		//Regular equation
+		false,
+		false,
+		false,
+
 	};
 	//Vector of Token (string form) that should represent the matching equation of the test case
 	std::vector<std::string> as_token_vector[] =
 	{
+		//Empty string
+		std::vector<std::string>(),
+
+		//Unbalanced brackets
 		std::vector<std::string>(),
 		std::vector<std::string>(),
 		std::vector<std::string>(),
-		std::vector<std::string>(),
-		std::vector<std::string>( {std::string("1"), std::string("="), std::string("1")} ),
+		std::vector<std::string>( { std::string("1") } ),
+
+		//Regular equation
+		std::vector<std::string>( { std::string("1"), std::string("="), std::string("1") } ),
+		std::vector<std::string>( { std::string("5"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ),
+		std::vector<std::string>( { std::string("1"), std::string("+"), std::string("4"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ),
+
 	};
 
 	//Tree of Token that represent the equation

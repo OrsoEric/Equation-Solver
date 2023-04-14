@@ -386,6 +386,8 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief flush the token array and the token tree
+        bool flush( void );
         //Report an error. return false: OK | true: Unknown error code
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail

@@ -325,7 +325,7 @@ bool Equation_parser::parse( std::string is_equation )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN(); //Trace Return
+    DRETURN_ARG( "Token array size: %d | Token tree size: %d", this->gclacl_tokens.size(), this->gcl_token_tree.size() ); //Trace Return
     return false; //OK
 } //Public Setter: parse | const char * |
 
@@ -921,7 +921,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Private Method: error_recovery | void |
+//! @brief Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation_parser::Token> &
 /***************************************************************************/
 //! @return return false = OK | true = fail
 //! @details
@@ -940,6 +940,10 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 		DRETURN_ARG("ERR:%d | Bad input string",__LINE__);
 		return true;
     }
+
+    //Flush arrays
+	oras_token_array = std::vector<std::string>();
+	orast_token_array = std::vector<Equation_parser::Token>();
 
     //--------------------------------------------------------------------------
     //	BODY
@@ -1183,7 +1187,9 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 			}
 			else
 			{
-				//Append the decoded string to the token vector
+				//Append the decoded string to the string token vector
+				oras_token_array.push_back( cl_token.cl_str );
+				//Append the decoded string to the token vector (structure)
 				orast_token_array.push_back( cl_token );
 				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %c%s | type: %d | size: %d\n", (cl_token.u1_negative)?('-'):(' '),cl_token.cl_str.c_str(), cl_token.e_type, cl_token.cl_str.size() );
 				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Tokens decoded: %d\n", orast_token_array.size() );
@@ -1236,9 +1242,9 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN();      //Trace Return
-    return true;    //FAIL
-}   //Private Method: error_recovery | void |
+    DRETURN_ARG("Decoded %d tokens", oras_token_array.size() );
+    return false;
+}   //Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation_parser::Token> &
 
 /***************************************************************************/
 //! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
@@ -1529,6 +1535,44 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
     */
     return 0;	//OK
 }   //Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
+
+/***************************************************************************/
+//! @brief Private Method | flush | void
+/***************************************************************************/
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n flush the token array and the token tree
+/***************************************************************************/
+
+bool Equation_parser::flush( void )
+{
+    DENTER(); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    //Clear the array of tokens
+    this->gclacl_tokens.clear();
+    if (this->gclacl_tokens.size() != 0)
+    {
+		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT CLEAR VECTOR %d", this->gclacl_tokens.size() );
+		return true;
+    }
+
+    //Clear the array of tokens
+    this->gcl_token_tree.flush();
+    if (this->gcl_token_tree.size() != 1)
+    {
+		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT FLUSH TREE %d", this->gclacl_tokens.size() );
+		return true;
+    }
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN(); //Trace Return
+    return false;	//OK
+} 	//Private Method: flush | void
 
 /***************************************************************************/
 //! @brief Private Method | report_error | Error_code
