@@ -46,3 +46,39 @@
 1681364986 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
 	<vector>
 
+1653285491 source:f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
+	<cstdio>
+	"debug.h"
+
+1659937597 f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
+	<cstdio>
+
+1681548437 source:f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
+	<cstdio>
+	"debug.h"
+	<cstdio>
+	<iostream>
+	<string>
+	"parser.h"
+
+1681486753 f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
+	<vector>
+	"tree.hpp"
+
+1681548501 f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+	<string>
+	<vector>
+	<stack>
+	<algorithm>
+	<functional>
+	"Tree_interface.h"
+
+1681361386 f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
+	<vector>
+
+1681547632 source:f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+	<cstdio>
+	<iostream>
+	"debug.h"
+	"parser.h"
+
