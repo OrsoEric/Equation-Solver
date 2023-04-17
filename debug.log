@@ -4,19 +4,22 @@ Start Debug!
 	-->> "bool test_bench()" |
 		-->> "int unit_test_parse_token_array()" | in: 0
 
-			-->> "User::Tree<Payload>::Tree() [with Payload = User::Equation_parser::_Token]" | This: 0075fca0
+			-->> "User::Tree<Payload>::Tree() [with Payload = User::Equation_parser::_Token]" | This: 00000000006afa80
 				-->> "bool User::Tree<Payload>::init_class_vars(Payload) [with Payload = User::Equation_parser::_Token]" |
 				<<-- "bool User::Tree<Payload>::init_class_vars(Payload) [with Payload = User::Equation_parser::_Token]" |
 			<<-- "User::Tree<Payload>::Tree() [with Payload = User::Equation_parser::_Token]" |
-			-->> "User::Equation_parser::Equation_parser()" | This: 0075fc90
+			-->> "User::Equation_parser::Equation_parser()" | This: 00000000006afa60
 				-->> "bool User::Equation_parser::init_class_vars()" |
 				<<-- "bool User::Equation_parser::init_class_vars()" |
 			<<-- "User::Equation_parser::Equation_parser()" |
+			Number of test patterns 8			PATTERN0
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse:  | Size: 0
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse:  | Size: 0
 				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR:948 | Bad input string
 			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
+			ERR: FAIL test pattern: 0
+			PATTERN1
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1 | Size: 2
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: (1 | Size: 2
 					SEEK_NEXT_TOKEN | Decode: >>(<<
@@ -34,8 +37,9 @@ Start Debug!
 			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			ERR: Pattern: 1 | TOKEN COUNT expected 0 | measured 2
-			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: ((1 | Size: 3
-				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: ((1 | Size: 3
+			PATTERN2
+			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: ((1) | Size: 4
+				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: ((1) | Size: 4
 					SEEK_NEXT_TOKEN | Decode: >>(<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -53,12 +57,14 @@ Start Debug!
 					Token fully decoded:  ( | type: 3 | size: 1
 					Tokens decoded: 2
 					SEEK_NEXT_TOKEN | Decode: >>1<<
+					TOKEN_NUMBER | Decode: >>)<<
 					Token fully decoded:  1 | type: 0 | size: 1
 					Tokens decoded: 3
 				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1236 | Unbalanced brackets | Open 2 | Close 0
 			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
-			ERR: Pattern: 2 | TOKEN COUNT expected 0 | measured 3
+			ERR: Pattern: 2 | TOKEN COUNT expected 0 | measured 4
+			PATTERN3
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1)) | Size: 4
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: (1)) | Size: 4
 					SEEK_NEXT_TOKEN | Decode: >>(<<
@@ -98,8 +104,9 @@ Start Debug!
 			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			ERR: Pattern: 3 | TOKEN COUNT expected 0 | measured 4
-			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (((((1))))) | Size: 11
-				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: (((((1))))) | Size: 11
+			PATTERN4
+			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: ((((((1)))))) | Size: 13
+				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: ((((((1)))))) | Size: 13
 					SEEK_NEXT_TOKEN | Decode: >>(<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -140,17 +147,17 @@ Start Debug!
 					Open detected: >>(<< | Token: (
 					Token fully decoded:  ( | type: 3 | size: 1
 					Tokens decoded: 5
+					SEEK_NEXT_TOKEN | Decode: >>(<<
+					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>(<<
+					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
+					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >>(<<
+					<<-- "static bool User::Equation_parser::is_operator(char)" | N
+					Open detected: >>(<< | Token: (
+					Token fully decoded:  ( | type: 3 | size: 1
+					Tokens decoded: 6
 					SEEK_NEXT_TOKEN | Decode: >>1<<
 					TOKEN_NUMBER | Decode: >>)<<
 					Token fully decoded:  1 | type: 0 | size: 1
-					Tokens decoded: 6
-					SEEK_NEXT_TOKEN | Decode: >>)<<
-					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
-					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
-					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
-					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					Close detected: >>)<< | Token: )
-					Token fully decoded:  ) | type: 4 | size: 1
 					Tokens decoded: 7
 					SEEK_NEXT_TOKEN | Decode: >>)<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
@@ -184,6 +191,22 @@ Start Debug!
 					Close detected: >>)<< | Token: )
 					Token fully decoded:  ) | type: 4 | size: 1
 					Tokens decoded: 11
+					SEEK_NEXT_TOKEN | Decode: >>)<<
+					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
+					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+					<<-- "static bool User::Equation_parser::is_operator(char)" | N
+					Close detected: >>)<< | Token: )
+					Token fully decoded:  ) | type: 4 | size: 1
+					Tokens decoded: 12
+					SEEK_NEXT_TOKEN | Decode: >>)<<
+					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>)<<
+					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
+					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >>)<<
+					<<-- "static bool User::Equation_parser::is_operator(char)" | N
+					Close detected: >>)<< | Token: )
+					Token fully decoded:  ) | type: 4 | size: 1
+					Tokens decoded: 13
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
@@ -201,34 +224,39 @@ Start Debug!
 					Token: >>)<< | Type: 4 | Size: 1
 					Token: >>)<< | Type: 4 | Size: 1
 					Token: >>)<< | Type: 4 | Size: 1
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Decoded 11 tokens
-				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&, size_t)" | Token Array Size: 11 | Father 0
-					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 11
+					Token: >>)<< | Type: 4 | Size: 1
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Decoded 13 tokens
+				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&, size_t)" | Token Array Size: 13 | Father 0
+					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 13
 						Open | Priority: 1
 						Open | Priority: 2
 						Open | Priority: 3
 						Open | Priority: 4
 						Open | Priority: 5
-						Token: 1 | Priority: 5
+						Open | Priority: 6
+						Token: 1 | Priority: 6
+						Close| Priority: 6
 						Close| Priority: 5
 						Close| Priority: 4
 						Close| Priority: 3
 						Close| Priority: 2
 						Close| Priority: 1
 						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-							Tokens   | (| (| (| (| (| 1| )| )| )| )| )
-							Priority | 1| 2| 3| 4| 5| 5| 5| 4| 3| 2| 1
+							Tokens   | (| (| (| (| (| (| 1| )| )| )| )| )| )
+							Priority | 1| 2| 3| 4| 5| 6| 6| 6| 5| 4| 3| 2| 1
 						<<-- "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
-						Delete Open 0 | Priority: 1 | Min Priority: 5 
-						Delete Open 0 | Priority: 2 | Min Priority: 5 
-						Delete Open 0 | Priority: 3 | Min Priority: 5 
-						Delete Open 0 | Priority: 4 | Min Priority: 5 
-						Delete Open 0 | Priority: 5 | Min Priority: 5 
-						Delete Close 1 | Priority: 5 | Min Priority: 5 
-						Delete Close 1 | Priority: 4 | Min Priority: 5 
-						Delete Close 1 | Priority: 3 | Min Priority: 5 
-						Delete Close 1 | Priority: 2 | Min Priority: 5 
-						Delete Close 1 | Priority: 1 | Min Priority: 5 
+						Delete Open 0 | Priority: 1 | Min Priority: 6 
+						Delete Open 0 | Priority: 2 | Min Priority: 6 
+						Delete Open 0 | Priority: 3 | Min Priority: 6 
+						Delete Open 0 | Priority: 4 | Min Priority: 6 
+						Delete Open 0 | Priority: 5 | Min Priority: 6 
+						Delete Open 0 | Priority: 6 | Min Priority: 6 
+						Delete Close 1 | Priority: 6 | Min Priority: 6 
+						Delete Close 1 | Priority: 5 | Min Priority: 6 
+						Delete Close 1 | Priority: 4 | Min Priority: 6 
+						Delete Close 1 | Priority: 3 | Min Priority: 6 
+						Delete Close 1 | Priority: 2 | Min Priority: 6 
+						Delete Close 1 | Priority: 1 | Min Priority: 6 
 						Deleted redundant priority tokens | Tokens: 1
 						-->> "std::ostream& User::operator<<(std::ostream&, std::vector<User::Equation_parser::_Token>&)" |
 							Tokens   | 1
@@ -237,74 +265,75 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::_Token>&, std::vector<User::Equation_parser::_Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 					Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 					LHS Tokens: 0 | RHS Tokens: 0
-					-->> "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-					<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 1 | Nodes under Father: 2
+					-->> "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+					<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father Index: 0 | Own Index: 1 | Nodes under Father: 2
 					-->> "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" | Nodes: 2
 					<<-- "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" |
-					-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Index: 0
-						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f7f4 | Begin: 1 | Index: 0
-						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 0 | Stack size: 1
-						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f824 | Begin: 0 | Index: 0
-						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-						-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-							-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 0
+					-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Index: 0
+						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af460 | Begin: 1 | Index: 0
+						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 0 | Stack size: 1
+						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af4c0 | Begin: 0 | Index: 0
+						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+						-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+							-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 0
 								Found children || Index 1 | Own Index: 1 | Father Index: 0 | Own Priority 0 | Children: 0 | Depth: 1
-							<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 1 | 1 children
-						<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 1 | Index: 0
-						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f824 | Begin: 0 | Index: 0
-						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-						-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-							-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 1
-							<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 0 | 0 children
-						<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Index: 1
-						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f824 | Begin: 0 | Index: 0
-						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-					<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
+							<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 1 | 1 children
+						<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 1 | Index: 0
+						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af4c0 | Begin: 0 | Index: 0
+						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+						-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+							-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 1
+							<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 0 | 0 children
+						<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Index: 1
+						-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af4c0 | Begin: 0 | Index: 0
+						<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+					<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
 				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::_Token>&, User::Tree<User::Equation_parser::_Token>&, size_t)" |
 				-->> "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" | Nodes: 2
 				<<-- "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" |
-				-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Index: 0
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f8d4 | Begin: 1 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 0 | Stack size: 1
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 0
+				-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Index: 0
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af560 | Begin: 1 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 0 | Stack size: 1
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 0
 							Found children || Index 1 | Own Index: 1 | Father Index: 0 | Own Priority 0 | Children: 0 | Depth: 1
-						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 1 | 1 children
-					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 1 | Index: 0
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 1
-						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 0 | 0 children
-					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Index: 1
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-				<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
+						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 1 | 1 children
+					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 1 | Index: 0
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 1
+						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 0 | 0 children
+					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Index: 1
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+				<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
 				-->> "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" | Nodes: 2
 				<<-- "bool User::Tree<Payload>::show() [with Payload = User::Equation_parser::_Token]" |
-				-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Index: 0
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f8d4 | Begin: 1 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 0 | Stack size: 1
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 0
+				-->> "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Index: 0
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af560 | Begin: 1 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 0 | Stack size: 1
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 0
 							Found children || Index 1 | Own Index: 1 | Father Index: 0 | Own Priority 0 | Children: 0 | Depth: 1
-						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 1 | 1 children
-					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 1 | Index: 0
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Father: 1
-						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Found 0 | 0 children
-					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Index: 1
-					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Parent tree: 0075f904 | Begin: 0 | Index: 0
-					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = unsigned int]" | Count nodes: 2 | Stack size: 0
-				<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = unsigned int]" |
-			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | Token array size: 11 | Token tree size: 2
-			ERR: Pattern: 4 | TOKEN COUNT expected 1 | measured 11
+						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 1 | 1 children
+					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 1 | Index: 0
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+					-->> "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+						-->> "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Father: 1
+						<<-- "bool User::Tree<Payload>::find_children(size_t, std::vector<long long unsigned int>&) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Found 0 | 0 children
+					<<-- "size_t User::Tree<Payload>::iterator<T>::next() [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Index: 1
+					-->> "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Parent tree: 00000000006af5c0 | Begin: 0 | Index: 0
+					<<-- "bool User::Tree<Payload>::iterator<T>::init(User::Tree<Payload>&, bool, size_t) [with T = User::Tree<User::Equation_parser::_Token>::Node; Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" | Count nodes: 2 | Stack size: 0
+				<<-- "bool User::Tree<Payload>::show(size_t) [with Payload = User::Equation_parser::_Token; size_t = long long unsigned int]" |
+			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | Token array size: 13 | Token tree size: 2
+			ERR: Pattern: 4 | TOKEN COUNT expected 1 | measured 13
+			PATTERN5
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: 1=1 | Size: 3
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: 1=1 | Size: 3
 					SEEK_NEXT_TOKEN | Decode: >>1<<
@@ -1383,9 +1412,9 @@ Start Debug!
 		<<-- "int unit_test_parse_token_array()" | Failed test patterns: 4
 		-->> "User::Equation_parser::~Equation_parser()" | This: 0075fc90
 		<<-- "User::Equation_parser::~Equation_parser()" |
-		-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 0075fca0
+		-->> "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" | This: 00000000006afa80
 		<<-- "User::Tree<Payload>::~Tree() [with Payload = User::Equation_parser::_Token]" |
-		Failed test patterns: 4
+		Failed test patterns: 5
 	<<-- "bool test_bench()" |
 <<-- "int main()" |
 

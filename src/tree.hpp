@@ -406,7 +406,7 @@ class Tree : public Tree_interface<Payload>
             private:
 				bool init( Tree<Payload>& ircl_parent_tree, bool ix_begin, size_t in_begin_index )
 				{
-					DENTER_ARG("Parent tree: %p | Begin: %d | Index: %d", &(*this), ix_begin, in_begin_index );
+					DENTER_ARG("Parent tree: %p | Begin: %d | Index: %d", (void*)(&(*this)), ix_begin, int(in_begin_index) );
                     //Constructing a begin iterator
                     if (ix_begin == true)
                     {
@@ -422,7 +422,7 @@ class Tree : public Tree_interface<Payload>
                         //I need to scan a number of nodes equal to the array size, so I just set the number of scanned nodes
                         this->gn_cnt_nodes = ircl_parent_tree.gast_nodes.size();
                     }
-                    DRETURN_ARG("Count nodes: %d | Stack size: %d", this->gn_cnt_nodes, this->gcl_pseudorecursive_stack.size() );
+                    DRETURN_ARG("Count nodes: %d | Stack size: %d", int(this->gn_cnt_nodes), int(this->gcl_pseudorecursive_stack.size()) );
                     return false;
 				}
 				//! @brief flush pseudorecursive stack
@@ -447,7 +447,7 @@ class Tree : public Tree_interface<Payload>
                         this->gcl_pseudorecursive_stack.pop();
                         if ((Config::CU1_INTERNAL_CHECKS) && (n_current_index >= this->grcl_tree.gast_nodes.size()))
                         {
-                            DRETURN_ARG("ERR%d: Wrong index popped from stack. This should NEVER happen. Popped index: %d of %d", __LINE__, n_current_index, this->grcl_tree.gast_nodes.size());
+                            DRETURN_ARG("ERR%d: Wrong index popped from stack. This should NEVER happen. Popped index: %d of %d", __LINE__, int(n_current_index), int(this->grcl_tree.gast_nodes.size()));
                             return true;
                         }
                         //I find all the children of the node I just popped, and push them
@@ -471,12 +471,12 @@ class Tree : public Tree_interface<Payload>
 							{
 								if (this->grcl_tree.gast_nodes[n_current_index].n_index_father != 0 )
 								{
-									DPRINT("ERR%d: n_index_father of root is wrong %d ... FIXED\n", __LINE__, this->grcl_tree.gast_nodes[n_current_index].n_index_father );
+									DPRINT("ERR%d: n_index_father of root is wrong %d ... FIXED\n", __LINE__, int(this->grcl_tree.gast_nodes[n_current_index].n_index_father) );
 									this->grcl_tree.gast_nodes[n_current_index].n_index_father = 0;
 								}
 								if (this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root != 0)
 								{
-									DPRINT("ERR%d: n_depth of root is wrong %d ... FIXED\n", __LINE__, this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root );
+									DPRINT("ERR%d: n_depth of root is wrong %d ... FIXED\n", __LINE__, int(this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root) );
 									this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root = 0;
 								}
 							}
@@ -484,7 +484,7 @@ class Tree : public Tree_interface<Payload>
 							{
 								if (this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root != (this->grcl_tree.gast_nodes[this->grcl_tree.gast_nodes[n_current_index].n_index_father].n_distance_from_root +1))
 								{
-									DPRINT("ERR%d: n_depth of children %d is inconsistent with depth of father %d... FIXED\n", __LINE__, this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root, this->grcl_tree.gast_nodes[ this->grcl_tree.gast_nodes[n_current_index].n_index_father ].n_distance_from_root );
+									DPRINT("ERR%d: n_depth of children %d is inconsistent with depth of father %d... FIXED\n", __LINE__, int(this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root), int(this->grcl_tree.gast_nodes[ this->grcl_tree.gast_nodes[n_current_index].n_index_father ].n_distance_from_root) );
 									this->grcl_tree.gast_nodes[n_current_index].n_distance_from_root = this->grcl_tree.gast_nodes[ this->grcl_tree.gast_nodes[n_current_index].n_index_father ].n_distance_from_root +1;
 								}
 							}
@@ -492,7 +492,7 @@ class Tree : public Tree_interface<Payload>
                         //I have scanned a node
 						this->gn_cnt_nodes++;
 						//Return index popped or max size if nothing was popped
-						DRETURN_ARG("Count nodes: %d | Index: %d", this->gn_cnt_nodes, n_current_index );
+						DRETURN_ARG("Count nodes: %d | Index: %d", int(this->gn_cnt_nodes), int(n_current_index) );
 						return n_current_index;
                     }
                     //Stack is empty
@@ -632,7 +632,7 @@ class Tree : public Tree_interface<Payload>
 template <class Payload>
 Tree<Payload>::Tree( void )
 {
-    DENTER_ARG("This: %p", &(*this));   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -659,7 +659,7 @@ Tree<Payload>::Tree( void )
 template <class Payload>
 Tree<Payload>::Tree( Payload it_default_payload )
 {
-    DENTER_ARG("This: %p", &(*this));   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -687,7 +687,7 @@ Tree<Payload>::Tree( Payload it_default_payload )
 template <class Payload>
 Tree<Payload>::Tree( Payload it_default_payload, Payload it_root_payload )
 {
-    DENTER_ARG("This: %p", &(*this));   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -720,7 +720,7 @@ Tree<Payload>::Tree( Payload it_default_payload, Payload it_root_payload )
 template <class Payload>
 Tree<Payload>::~Tree( void )
 {
-    DENTER_ARG("This: %p", &(*this));   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)));   //Trace Enter
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -743,7 +743,7 @@ template <class Payload>
 Payload& Tree<Payload>::operator []( size_t in_index )
 {
     //Trace Enter
-    DENTER_ARG("Object: %p, Index: %d", &(*this), (int)in_index );
+    DENTER_ARG("Object: %p, Index: %d", (void*)(&(*this)), (int)in_index );
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -751,7 +751,7 @@ Payload& Tree<Payload>::operator []( size_t in_index )
     //The user is trying to access a node outside the range
     if (in_index >= this->gast_nodes.size())
     {
-        DRETURN_ARG("Index OOB: %d of %d", in_index, this->gast_nodes.size() );
+        DRETURN_ARG("Index OOB: %d of %d", int(in_index), int(this->gast_nodes.size()) );
         //Return a reference to the dummy payload
         return this->gt_dummy;
     }
@@ -803,7 +803,7 @@ size_t Tree<Payload>::create_child( Payload it_payload )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Child Index: %d", n_child_index ); //Trace Return
+    DRETURN_ARG("Child Index: %d", int(n_child_index) ); //Trace Return
     return n_child_index;	//OK
 }   //Public Setter: create_leaf | Payload
 
@@ -833,7 +833,7 @@ size_t Tree<Payload>::create_child( size_t in_father_index, Payload it_payload )
     //If I'm searching for a node OOB
     if (in_father_index >= this->gast_nodes.size())
     {
-        DRETURN_ARG("ERR:%d | OOB %d of %d | %s", __LINE__, in_father_index, this->gast_nodes.size(),this->gps8_error_code );
+        DRETURN_ARG("ERR:%d | OOB %d of %d | %s", __LINE__, int(in_father_index), int(this->gast_nodes.size()),this->gps8_error_code );
         this->report_error( Error_code::CPS8_ERR_OOB );
         return true;
     }
@@ -869,14 +869,14 @@ size_t Tree<Payload>::create_child( size_t in_father_index, Payload it_payload )
     if (st_node.n_own_index != this->gast_nodes.size() -1)
     {
         this->report_error( Error_code::CPS8_ERR );
-        DRETURN_ARG("ERR%d: push_back seemingly did not create a new node | %d of %d", __LINE__, st_node.n_own_index, this->gast_nodes.size() );
+        DRETURN_ARG("ERR%d: push_back seemingly did not create a new node | %d of %d", __LINE__, int(st_node.n_own_index), int(this->gast_nodes.size()) );
         return true;
     }
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Father Index: %d | Own Index: %d | Nodes under Father: %d", st_node.n_index_father, st_node.n_own_index, n_num_children +1 ); //Trace Return
+    DRETURN_ARG("Father Index: %d | Own Index: %d | Nodes under Father: %d", int(st_node.n_index_father), int(st_node.n_own_index), int(n_num_children) +1 ); //Trace Return
     return st_node.n_own_index;	//OK
 }   //Public Setter: create_child | size_t | Payload
 
@@ -1351,7 +1351,7 @@ Payload &Tree<Payload>::root( bool &oru1_fail )
 template <class Payload>
 bool Tree<Payload>::show( void )
 {
-    DENTER_ARG("Nodes: %d", this->gast_nodes.size()); //Trace Enter
+    DENTER_ARG("Nodes: %d", int(this->gast_nodes.size())) ; //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1394,7 +1394,7 @@ bool Tree<Payload>::show( void )
 template <class Payload>
 bool Tree<Payload>::show( size_t in_index )
 {
-    DENTER_ARG("Index: %d", in_index ); //Trace Enter
+    DENTER_ARG("Index: %d", int(in_index) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1545,7 +1545,7 @@ bool Tree<Payload>::is_descendant(size_t in_lhs, size_t in_rhs)
 template <class Payload>
 bool Tree<Payload>::flush( void )
 {
-    DENTER_ARG( "Nodes inside the tree: %d", this->gast_nodes.size() ); //Trace Enter
+    DENTER_ARG( "Nodes inside the tree: %d", int(this->gast_nodes.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -1563,7 +1563,7 @@ bool Tree<Payload>::flush( void )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Nodes inside the tree: %d", this->gast_nodes.size() ); //Trace Return
+    DRETURN_ARG("Nodes inside the tree: %d", int(this->gast_nodes.size()) ); //Trace Return
     return x_ret;	//OK
 } 	//Public Method: report_error | Error_code
 
@@ -1587,7 +1587,7 @@ bool Tree<Payload>::flush( void )
 template <class Payload>
 bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &iran_children_indexes )
 {
-    DENTER_ARG("Father: %d", in_father_index); //Trace Enter
+    DENTER_ARG("Father: %d", int(in_father_index)); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1596,7 +1596,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
     if (in_father_index > this->gast_nodes.size())
     {
         this->report_error(Error_code::CPS8_ERR_OOB);
-        DRETURN_ARG("ERR: OOB trying to access index %d (father) when max size is %d", in_father_index, this->gast_nodes.size() );
+        DRETURN_ARG("ERR: OOB trying to access index %d (father) when max size is %d", int(in_father_index), int(this->gast_nodes.size()) );
         return true;
     }
     //If input array is not empty
@@ -1622,7 +1622,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
     iran_children_indexes.resize( n_num_expected_children );
     if ((Config::CU1_INTERNAL_CHECKS == true) && (iran_children_indexes.size() != n_num_expected_children))
     {
-        DRETURN_ARG("ERR%d: Failed to resize array expected %d | actual %d", __LINE__, n_num_expected_children, iran_children_indexes.size() );
+        DRETURN_ARG("ERR%d: Failed to resize array expected %d | actual %d", __LINE__, int(n_num_expected_children), int(iran_children_indexes.size()) );
         return true;
     }
     if (Config::CU1_INTERNAL_CHECKS == true)
@@ -1644,12 +1644,12 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
             //Pedantic check that the priority of the node is consistent with the number of children of the father
             if ( (Config::CU1_INTERNAL_CHECKS == true) && (n_priority >= n_num_expected_children))
             {
-                DRETURN_ARG("ERR%d: Priority %d of %d | Found child (index %d) whose priority exceed the number of children of the father...", __LINE__, n_priority, n_num_expected_children, n_children_index );
+                DRETURN_ARG("ERR%d: Priority %d of %d | Found child (index %d) whose priority exceed the number of children of the father...", __LINE__, int(n_priority), int(n_num_expected_children), int(n_children_index) );
                 return true;
             }
             //I can presort the array by using the priority as index to the preallocated chidlren array, saving lots of work
             iran_children_indexes[n_priority] = n_children_index;
-            DPRINT("Found children || Index %d | %s\n", n_children_index, this->to_string( this->gast_nodes[n_children_index] ).c_str() );
+            DPRINT("Found children || Index %d | %s\n", int(n_children_index), this->to_string( this->gast_nodes[n_children_index] ).c_str() );
             //I just found a child
             n_num_found_children++;
             //If I found ALL the children of this node
@@ -1664,7 +1664,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
         if (n_children_index > this->gast_nodes.size())
         {
             iran_children_indexes.clear();
-            DRETURN_ARG("ERR%d: Search for child reached the end of the array without finding one... Found %d of %d expected children...", __LINE__, n_num_found_children, n_num_expected_children );
+            DRETURN_ARG("ERR%d: Search for child reached the end of the array without finding one... Found %d of %d expected children...", __LINE__, int(n_num_found_children), int(n_num_expected_children) );
             return true;
         }
     }	//while authorized to scan for children
@@ -1681,7 +1681,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
 		{
 			if ((*cl_iter_children) == this->gast_nodes.size())
 			{
-				DRETURN_ARG("ERR%d: priority %d of %d wasn't found after searching for children. priority of children is mangled...", __LINE__, cl_iter_children- iran_children_indexes.begin(), n_num_expected_children );
+				DRETURN_ARG("ERR%d: priority %d of %d wasn't found after searching for children. priority of children is mangled...", __LINE__, int(cl_iter_children- iran_children_indexes.begin()), int(n_num_expected_children) );
 				return true;
 			}
 		}
@@ -1690,18 +1690,18 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
     if (n_num_found_children != n_num_expected_children)
     {
         iran_children_indexes.clear();
-        DRETURN_ARG("ERR%d: Father is supposed to have %d children, but %d children have been found...", __LINE__, n_num_expected_children, n_num_found_children );
+        DRETURN_ARG("ERR%d: Father is supposed to have %d children, but %d children have been found...", __LINE__, int(n_num_expected_children), int(n_num_found_children) );
         return true;
     }
     //if the vector failed to record all the expected indexes it was supposed to record
     if (n_num_found_children != iran_children_indexes.size())
     {
         iran_children_indexes.clear();
-        DRETURN_ARG("ERR%d: Array size %d | Expected: %d | Array of children indexes isn't holding the correct number of children indexes ...", __LINE__, iran_children_indexes.size(), n_num_expected_children  );
+        DRETURN_ARG("ERR%d: Array size %d | Expected: %d | Array of children indexes isn't holding the correct number of children indexes ...", __LINE__, int(iran_children_indexes.size()), int(n_num_expected_children) );
         return true;
     }
 
-    DRETURN_ARG("Found %d | %d children", n_num_found_children, iran_children_indexes.size() ); //Trace Return
+    DRETURN_ARG("Found %d | %d children", int(n_num_found_children), int(iran_children_indexes.size()) ); //Trace Return
     return false;
 }	//Protected Getter | find_children | size_t | std::vector<size_t> &
 
@@ -1754,7 +1754,7 @@ bool Tree<Payload>::init_class_vars( Payload it_payload )
     {
         //! @todo: Undo initialization
         this->report_error( Error_code::CPS8_ERR );
-        DRETURN_ARG("ERR%d: There should be exactly one node (Root) after initialization, there are %d instead", __LINE__, this->gast_nodes.size() );
+        DRETURN_ARG("ERR%d: There should be exactly one node (Root) after initialization, there are %d instead", __LINE__, int(this->gast_nodes.size()) );
         return true;
     }
     //Initialize error code
@@ -2097,7 +2097,7 @@ bool Tree<Payload>::report_error( const char *ips8_error_code )
     else
     {
         //Class was already in error. Could not
-        DRETURN_ARG("ERR: Class is already in error: %p | culd not report error: %p", &this->gps8_error_code, ips8_error_code );
+        DRETURN_ARG("ERR: Class is already in error: %p | culd not report error: %p", (void*)(&(*this->gps8_error_code)), ips8_error_code );
         return true;
     }
 

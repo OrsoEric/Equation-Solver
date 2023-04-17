@@ -117,7 +117,7 @@ namespace User
 
 Equation_parser::Equation_parser( void )
 {
-    DENTER_ARG("This: %p", this);   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)));   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -149,7 +149,7 @@ Equation_parser::Equation_parser( void )
 
 Equation_parser::~Equation_parser( void )
 {
-    DENTER_ARG("This: %p", this);   //Trace Enter
+    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
     //--------------------------------------------------------------------------
     //	INIT
     //--------------------------------------------------------------------------
@@ -277,7 +277,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 
 bool Equation_parser::parse( std::string is_equation )
 {
-    DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), is_equation.size() ); //Trace Enter
+    DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	LINEAR PARSER
     //--------------------------------------------------------------------------
@@ -289,7 +289,7 @@ bool Equation_parser::parse( std::string is_equation )
     bool x_fail = this->equation_to_token_array( is_equation, this->gclacl_tokens, clast_tokens );
 	if (x_fail == true)
 	{
-		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n" );
+		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n", __LINE__ );
 		return true;
 	}
 
@@ -333,7 +333,7 @@ bool Equation_parser::parse( std::string is_equation )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG( "Token array size: %d | Token tree size: %d", this->gclacl_tokens.size(), this->gcl_token_tree.size() ); //Trace Return
+    DRETURN_ARG( "Token array size: %d | Token tree size: %d", int(this->gclacl_tokens.size()), int(this->gcl_token_tree.size()) ); //Trace Return
     return false; //OK
 } //Public Setter: parse | const char * |
 
@@ -365,7 +365,7 @@ std::string Equation_parser::tree_to_equation( void )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG( "<%s> | %d", cl_str.c_str(), cl_str.size() ); //Trace Return
+    DRETURN_ARG( "<%s> | %d", cl_str.c_str(), int(cl_str.size()) ); //Trace Return
     return cl_str; //OK
 }   //Public Getter: tree_to_equation | void |
 
@@ -598,7 +598,7 @@ bool Equation_parser::is_symbol( char is8_digit )
 
 bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token )
 {
-    DENTER_ARG("Tokens: %d", irclacl_token_array.size() ); //Trace Enter
+    DENTER_ARG("Tokens: %d", int(irclacl_token_array.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	INIT
     //--------------------------------------------------------------------------
@@ -640,7 +640,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//If: I have more close tokens than open tokens
 			if (s32_open_close_priority <= 0)
 			{
-				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, (cl_token_iterator -irclacl_token_array.begin()) );
+				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
 			//Open, decrease priority of what comes after
@@ -713,7 +713,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//Redundant "Priority" open token
 			if ((cl_token_iterator->e_type == Token_type::BASE_OPEN) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", (cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -721,7 +721,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//"Priority" close
 			else if ((cl_token_iterator->e_type == Token_type::BASE_CLOSE) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", (cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -739,7 +739,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				}
 			}
 		}	//While: scan is not complete
-		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", irclacl_token_array.size() );
+		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", int(irclacl_token_array.size()) );
 		//DEBUG
 		std::cout << irclacl_token_array << "\n";
 	}	//If: I have redundant priority tokens
@@ -773,7 +773,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//If: I have more close tokens than open tokens
 			if (s32_open_close_priority <= 0)
 			{
-				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, (cl_token_iterator -irclacl_token_array.begin()) );
+				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
 			//Open, decrease priority of what comes after
@@ -786,7 +786,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//There is an algorithmic error, symbol priority is uninitialized
 			if ((Config::CU1_INTERNAL_CHECKS == true) && (cl_token_iterator->s32_symbol_priority == -1))
 			{
-				DRETURN_ARG("ERR:%d | Symbol has uninitialized priority... | Index: %d ", __LINE__, (cl_token_iterator -irclacl_token_array.begin()) );
+				DRETURN_ARG("ERR:%d | Symbol has uninitialized priority... | Index: %d ", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
 			//No best token has been found yet
@@ -833,7 +833,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Tokens: %d | Highest Priority Token: <%s> | %d %d", irclacl_token_array.size(), cl_best_iterator->cl_str.c_str(), cl_best_iterator->s32_open_close_priority, cl_best_iterator->s32_symbol_priority ); //Trace Return
+    DRETURN_ARG("Tokens: %d | Highest Priority Token: <%s> | %d %d", int(irclacl_token_array.size()), cl_best_iterator->cl_str.c_str(), cl_best_iterator->s32_open_close_priority, cl_best_iterator->s32_symbol_priority ); //Trace Return
     return false;	//OK
 }   //Private Static Method: compute_token_array_priority | std::vector<Token> & | std::vector<Token>::iterator & |
 
@@ -848,7 +848,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 
 bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 {
-    DENTER_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "Token type: %d | Token size: %d", irst_token.e_type, irst_token.cl_str.size() ); //Trace Enter
+    DENTER_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "Token type: %d | Token size: %d", irst_token.e_type, int(irst_token.cl_str.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -938,7 +938,7 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 
 bool Equation_parser::equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation_parser::Token> &orast_token_array )
 {
-	DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), is_equation.size() ); //Trace Enter
+	DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1162,7 +1162,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 
 			//Unknown state
 			default:
-				DPRINT("ERR%d: Unknown FSM state >>%d<<... Reset FSM\n", e_fsm_state );
+				DPRINT("ERR%d: Unknown FSM state >>%d<<... Reset FSM\n", __LINE__, int(e_fsm_state) );
 				//Reset FSM State
 				e_fsm_state = Fsm_state::SEEK_NEXT_TOKEN;
 				//Initialize the token
@@ -1199,8 +1199,8 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 				oras_token_array.push_back( cl_token.cl_str );
 				//Append the decoded string to the token vector (structure)
 				orast_token_array.push_back( cl_token );
-				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %c%s | type: %d | size: %d\n", (cl_token.u1_negative)?('-'):(' '),cl_token.cl_str.c_str(), cl_token.e_type, cl_token.cl_str.size() );
-				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Tokens decoded: %d\n", orast_token_array.size() );
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Token fully decoded: %c%s | type: %d | size: %d\n", (cl_token.u1_negative)?('-'):(' '),cl_token.cl_str.c_str(), int(cl_token.e_type), int(cl_token.cl_str.size()) );
+				DPRINT_CONDITIONAL( Config::CU1_PARSER_EXTENDED_DEBUG, "Tokens decoded: %d\n", int(orast_token_array.size()) );
 				//Initialize the token
 				reset_token( cl_token );
 			}
@@ -1241,16 +1241,16 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
     //
     //--------------------------------------------------------------------------
 	//
-	DPRINT("Equations decoded into %d tokens\n", orast_token_array.size() );
+	DPRINT("Equations decoded into %d tokens\n", int(orast_token_array.size()) );
 	for (std::vector<Token>::iterator cl_token_iter = orast_token_array.begin();cl_token_iter != orast_token_array.end();cl_token_iter++)
 	{
-		DPRINT("Token: >>%s<< | Type: %d | Size: %d\n", cl_token_iter->cl_str.c_str(), cl_token_iter->e_type, cl_token_iter->cl_str.size() );
+		DPRINT("Token: >>%s<< | Type: %d | Size: %d\n", cl_token_iter->cl_str.c_str(), int(cl_token_iter->e_type), int(cl_token_iter->cl_str.size()) );
 	}
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Decoded %d tokens", oras_token_array.size() );
+    DRETURN_ARG("Decoded %d tokens", int(oras_token_array.size()) );
     return false;
 }   //Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation_parser::Token> &
 
@@ -1268,7 +1268,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 
 bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father )
 {
-    DENTER_ARG("Token Array Size: %d | Father %d", irclacl_token_array.size(), in_index_father ); //Trace Enter
+    DENTER_ARG("Token Array Size: %d | Father %d", int(irclacl_token_array.size()), int(in_index_father) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	Search CORE token
     //--------------------------------------------------------------------------
@@ -1287,7 +1287,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		DRETURN_ARG("ERR:%d | Priority computation failed", __LINE__);
 		return true;
     }
-    DPRINT("Core Token: >%s< | Size: %d | Open/Close Priority: %d | Symbol Priority: %d\n", cl_core_iterator->cl_str.c_str(), cl_core_iterator->cl_str.size(), cl_core_iterator->s32_open_close_priority, cl_core_iterator->s32_symbol_priority );
+    DPRINT("Core Token: >%s< | Size: %d | Open/Close Priority: %d | Symbol Priority: %d\n", cl_core_iterator->cl_str.c_str(), int(cl_core_iterator->cl_str.size()), cl_core_iterator->s32_open_close_priority, cl_core_iterator->s32_symbol_priority );
 
 	//--------------------------------------------------------------------------
     //	LHS | CORE | RHS
@@ -1322,7 +1322,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 			//Do nothing
 		}
 	}
-	DPRINT("LHS Tokens: %d | RHS Tokens: %d\n", clast_lhs.size(), clast_rhs.size() );
+	DPRINT("LHS Tokens: %d | RHS Tokens: %d\n", int(clast_lhs.size()), int(clast_rhs.size()) );
 
 	//--------------------------------------------------------------------------
     //	Sanity Check
@@ -1354,7 +1354,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		size_t n_child_index = orcl_token_tree.create_child( in_index_father, *cl_core_iterator );
 		if (n_child_index >= orcl_token_tree.size() )
 		{
-			DRETURN_ARG("ERR:%d | Failed to add branch to tree | index: %d", __LINE__, n_child_index);
+			DRETURN_ARG("ERR:%d | Failed to add branch to tree | index: %d", __LINE__, int(n_child_index));
 			return true;
 		}
 		n_next_father = n_child_index;
@@ -1569,7 +1569,7 @@ bool Equation_parser::flush( void )
     this->gclacl_tokens.clear();
     if (this->gclacl_tokens.size() != 0)
     {
-		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT CLEAR VECTOR %d", this->gclacl_tokens.size() );
+		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT CLEAR VECTOR", int(this->gclacl_tokens.size()) );
 		return true;
     }
 
@@ -1577,7 +1577,7 @@ bool Equation_parser::flush( void )
     this->gcl_token_tree.flush();
     if (this->gcl_token_tree.size() != 1)
     {
-		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT FLUSH TREE %d", this->gclacl_tokens.size() );
+		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT FLUSH TREE", int(this->gclacl_tokens.size()) );
 		return true;
     }
 

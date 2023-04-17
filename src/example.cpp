@@ -232,8 +232,6 @@ bool test_bench( void )
 	//Tree operation: merge sum operation, turn all diffs into sums.
 	//cl_equation.parse( "y=(-1+2+3+4-5-6-7+8)" );
 
-
-
 	//----------------------------------------------------------------
 	//	RETURN
 	//----------------------------------------------------------------
@@ -271,90 +269,64 @@ int unit_test_parse_token_array( void )
 
 	//count the test patterns that failed the check
 	int n_cnt_fail = 0;
-	//Test patterns
-	const char *as_test_equations[] =
+	struct St_test_pattern
 	{
-		//Empty string, FAIL
-		"",
-
-		//Unbalanced brackets, FAIL
-		"(1",
-		"((1",
-		"(1))",
-		"(((((1)))))",
-
-		//Regular equation, SUCCESS
-		"1=1",
-		"5=2+3",
-		"1+4=2+3",
-
+	    const char *s_equation;
+	    bool x_fail;
+	    std::vector<std::string> as_token_vector;
 	};
-	size_t n_num_test_equations = sizeof( as_test_equations )/ sizeof(const char *);
+    //Create the test patterns with validation patterns
+	St_test_pattern ast_test_pattern[] =
+	{
+	    //Empty string
+	    St_test_pattern{ "", false, std::vector<std::string>() },
+	    //Unbalanced brackets
+	    St_test_pattern{ "(1", true, std::vector<std::string>() },
+	    St_test_pattern{ "((1)", true, std::vector<std::string>() },
+	    St_test_pattern{ "(1))", true, std::vector<std::string>() },
+	    //Balanced bracket
+	    St_test_pattern{ "((((((1))))))", false, std::vector<std::string>( { std::string("1") } ) },
+	    //Sum, Equations equation
+        St_test_pattern{ "1=1", false, std::vector<std::string>( { std::string("1"), std::string("="), std::string("1") } ) },
+        St_test_pattern{ "5=2+3", false, std::vector<std::string>( { std::string("5"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ) },
+        St_test_pattern{ "1+4=2+3", false, std::vector<std::string>( { std::string("1"), std::string("+"), std::string("4"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ) },
+	};
+    //
+	size_t n_num_test_equations = sizeof( ast_test_pattern )/ sizeof(St_test_pattern);
 	std::cout << "Test patterns: " << n_num_test_equations << "\n";
-	//Test pattern expected fail
-	bool ax_fail_pattern[] =
-	{
-		//Empty string
-		true,
-
-		//Unbalanced brackets
-		true,
-		true,
-		true,
-		false,
-
-		//Regular equation
-		false,
-		false,
-		false,
-
-	};
-	//Vector of Token (string form) that should represent the matching equation of the test case
-	std::vector<std::string> as_token_vector[] =
-	{
-		//Empty string
-		std::vector<std::string>(),
-
-		//Unbalanced brackets
-		std::vector<std::string>(),
-		std::vector<std::string>(),
-		std::vector<std::string>(),
-		std::vector<std::string>( { std::string("1") } ),
-
-		//Regular equation
-		std::vector<std::string>( { std::string("1"), std::string("="), std::string("1") } ),
-		std::vector<std::string>( { std::string("5"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ),
-		std::vector<std::string>( { std::string("1"), std::string("+"), std::string("4"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ),
-
-	};
-
-	//Tree of Token that represent the equation
-
-
-
+	DPRINT("Number of test patterns %d\n", int(n_num_test_equations) );
 
 	//----------------------------------------------------------------
 	//	BODY
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
+	//For all test patterns
 	for (size_t n_test_pattern_index = 0; n_test_pattern_index < n_num_test_equations;n_test_pattern_index++)
 	{
+	    DPRINT("PATTERN%d\n", int(n_test_pattern_index) );
 		//Feed the test pattern
-		bool x_fail = cl_equation_parser.parse( as_test_equations[n_test_pattern_index] );
+		bool x_fail = cl_equation_parser.parse( ast_test_pattern[n_test_pattern_index].s_equation );
 		//If expected fail state
-		if (x_fail == ax_fail_pattern[n_test_pattern_index])
+		if (x_fail == ast_test_pattern[n_test_pattern_index].x_fail)
 		{
 			//Get the array of string tokens
 			std::vector<std::string> ras_array_token = cl_equation_parser.get_array_of_token();
 
 			size_t n_num_tokens = ras_array_token.size();
 			//if not
-			if (n_num_tokens == as_token_vector[n_test_pattern_index].size())
+			if (n_num_tokens == ast_test_pattern[n_test_pattern_index].as_token_vector.size())
 			{
 				for (size_t n_array_token_index = 0;n_array_token_index < n_num_tokens;n_array_token_index++)
 				{
-
+				    DPRINT("TOKEN%d\n", int(n_array_token_index) );
+                    if (ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index] != ras_array_token[n_array_token_index])
+                    {
+                        DPRINT("ERR: Pattern: %d | Token %d | WRONG TOKEN expected >%s< got >%s<\n", int(n_test_pattern_index), int(n_array_token_index), ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str(), ras_array_token[n_array_token_index].c_str() );
+                        n_cnt_fail++;
+                        //Stop
+                        n_array_token_index = n_num_tokens;
+                    }
 
 				}
 			}
@@ -373,9 +345,7 @@ int unit_test_parse_token_array( void )
 			DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
 			n_cnt_fail++;
 		}
-
-
-	}
+	}   //For all test patterns
 
 	//----------------------------------------------------------------
 	//	RETURN
