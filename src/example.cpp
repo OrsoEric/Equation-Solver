@@ -360,6 +360,8 @@ int unit_test_parse_token_array( void )
 			}
 			else
 			{
+
+				std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Inconsistent token count\n";
 				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, as_token_vector[n_test_pattern_index].size(), n_num_tokens );
 				n_cnt_fail++;
 			}
@@ -367,6 +369,7 @@ int unit_test_parse_token_array( void )
 		//if expected fail state
 		else
 		{
+			std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Inconsistent fail\n";
 			DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
 			n_cnt_fail++;
 		}

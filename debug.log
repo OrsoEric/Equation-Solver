@@ -14,8 +14,8 @@ Start Debug!
 			<<-- "User::Equation_parser::Equation_parser()" |
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse:  | Size: 0
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse:  | Size: 0
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR:944 | Bad input string
-			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5036704 | failed to parse an equation into an array of string tokens...
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR:948 | Bad input string
+			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1 | Size: 2
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | Parse: (1 | Size: 2
@@ -30,8 +30,8 @@ Start Debug!
 					SEEK_NEXT_TOKEN | Decode: >>1<<
 					Token fully decoded:  1 | type: 0 | size: 1
 					Tokens decoded: 2
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1232 | Unbalanced brackets | Open 1 | Close 0
-			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5036704 | failed to parse an equation into an array of string tokens...
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1236 | Unbalanced brackets | Open 1 | Close 0
+			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			ERR: Pattern: 1 | TOKEN COUNT expected 0 | measured 2
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: ((1 | Size: 3
@@ -55,8 +55,8 @@ Start Debug!
 					SEEK_NEXT_TOKEN | Decode: >>1<<
 					Token fully decoded:  1 | type: 0 | size: 1
 					Tokens decoded: 3
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1232 | Unbalanced brackets | Open 2 | Close 0
-			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5036704 | failed to parse an equation into an array of string tokens...
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1236 | Unbalanced brackets | Open 2 | Close 0
+			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			ERR: Pattern: 2 | TOKEN COUNT expected 0 | measured 3
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (1)) | Size: 4
@@ -93,9 +93,9 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1089: Invalid Digit >> <<
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1232 | Unbalanced brackets | Open 1 | Close 2
-			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5036704 | failed to parse an equation into an array of string tokens...
+					ERR1093: Invalid Digit >> <<
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::_Token>&)" | ERR1236 | Unbalanced brackets | Open 1 | Close 2
+			<<-- "bool User::Equation_parser::parse(std::__cxx11::string)" | ERR5040896 | failed to parse an equation into an array of string tokens...
 
 			ERR: Pattern: 3 | TOKEN COUNT expected 0 | measured 4
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse: (((((1))))) | Size: 11
@@ -188,7 +188,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1089: Invalid Digit >> <<
+					ERR1093: Invalid Digit >> <<
 					Equations decoded into 11 tokens
 					Token: >>(<< | Type: 3 | Size: 1
 					Token: >>(<< | Type: 3 | Size: 1

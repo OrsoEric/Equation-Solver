@@ -308,6 +308,10 @@ bool Equation_parser::parse( std::string is_equation )
 	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree, 0 );
 	if (u1_ret == true)
 	{
+		//Flush the token equation
+		this->gclacl_tokens.clear();
+		//Flush partial result inside the tree
+		this->gcl_token_tree.flush();
 		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
 		return true;
 	}
