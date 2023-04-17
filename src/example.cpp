@@ -352,7 +352,7 @@ int unit_test_parse_token_array( void )
 			//if not
 			if (n_num_tokens == as_token_vector[n_test_pattern_index].size())
 			{
-				for (size_t n_array_token_index = 0;n_array_token_index < n_num_tokens;n_num_tokens++)
+				for (size_t n_array_token_index = 0;n_array_token_index < n_num_tokens;n_array_token_index++)
 				{
 
 

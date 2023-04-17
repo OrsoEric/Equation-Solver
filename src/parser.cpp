@@ -298,7 +298,12 @@ bool Equation_parser::parse( std::string is_equation )
 	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str; };
 	//Link the provided decorator to replace the default decorator
 	this->gcl_token_tree.link_decorator( f_my_decorator );
-
+	//Tree must be empty before conversion of token array to token tree
+	if (this->gcl_token_tree.size() > 1)
+	{
+		DPRINT("Tree wasn't empty: %d | FLUSH\n", this->gcl_token_tree.size() );
+		this->gcl_token_tree.flush();
+	}
 	//Recursively translate an array of token into a tree of tokens, starting from the root
 	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree, 0 );
 	if (u1_ret == true)
@@ -309,7 +314,6 @@ bool Equation_parser::parse( std::string is_equation )
 	std::cout << "Array->Tree\n";
 	this->gcl_token_tree.print();
 	std::cout << "--------------------------------------\n";
-
 
 	//Recursively
 	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
@@ -1300,11 +1304,13 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		if (cl_token_iterator < cl_core_iterator)
 		{
 			clast_lhs.emplace_back( *cl_token_iterator );
+			DPRINT("LHS: >%s<\n", cl_token_iterator->cl_str.c_str() );
 		}
 		//If: RHS token
 		else if (cl_token_iterator > cl_core_iterator)
 		{
 			clast_rhs.emplace_back( *cl_token_iterator );
+			DPRINT("RHS: >%s<\n", cl_token_iterator->cl_str.c_str() );
 		}
 		//Core or End
 		else
@@ -1318,6 +1324,8 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //	Sanity Check
     //--------------------------------------------------------------------------
 
+    //Father under which the tokens are tiled
+    size_t n_next_father = 0;
 	//Binary Operators must have both RHS and LHS
 	if ((cl_core_iterator->e_type == Token_type::BASE_OPERATOR) && ( (clast_lhs.size() == 0) || (clast_rhs.size() == 0) ))
 	{
@@ -1327,13 +1335,14 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	//Equal is special, it's the first simbol that becomes the root of the tree
 	if ((cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL) && (in_index_father == 0))
 	{
+		DPRINT("ROOT: >%s<\n", cl_core_iterator->cl_str.c_str() );
 		//Write the payload on the root
 		orcl_token_tree[0] = *cl_core_iterator;
 		//Show the tree
 		orcl_token_tree.print();
-		//Execute the search on the LHS and RHS sides of the equation, root is the father
-		token_array_to_tree( clast_lhs, orcl_token_tree, 0 );
-		token_array_to_tree( clast_rhs, orcl_token_tree, 0 );
+
+		n_next_father = in_index_father;
+		DPRINT("LHS: >%s<\n", cl_core_iterator->cl_str.c_str() );
 	}
 	else
 	{
@@ -1344,22 +1353,23 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 			DRETURN_ARG("ERR:%d | Failed to add branch to tree | index: %d", __LINE__, n_child_index);
 			return true;
 		}
+		n_next_father = n_child_index;
 		//Show the tree
 		orcl_token_tree.print();
 		std::cout << "--------------------------------------\n";
-		//Execute the search on the LHS and RHS sides of the equation
-		if (clast_lhs.size() > 0)
-		{
-			token_array_to_tree( clast_lhs, orcl_token_tree, n_child_index );
-		}
-		if (clast_rhs.size() > 0)
-		{
-			token_array_to_tree( clast_rhs, orcl_token_tree, n_child_index );
-		}
 	}
 
-	//Set the payload of the branch to the tiling token found
-	//
+	//Execute the search on the LHS and RHS sides of the equation
+	if (clast_lhs.size() > 0)
+	{
+		token_array_to_tree( clast_lhs, orcl_token_tree, n_next_father );
+		DPRINT("LHS of size %d under father %d\n", clast_lhs.size(), n_next_father );
+	}
+	if (clast_rhs.size() > 0)
+	{
+		token_array_to_tree( clast_rhs, orcl_token_tree, n_next_father );
+		DPRINT("RHS of size %d under father %d\n", clast_rhs.size(), n_next_father );
+	}
 
     //--------------------------------------------------------------------------
     //	RETURN
