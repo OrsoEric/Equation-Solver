@@ -73,6 +73,23 @@ class Tree_interface
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief Node of the tree
+        struct Node
+        {
+            //Payload inside the node
+            Payload t_payload;
+            //Index of this node. Needed when trying to extract an index from an iterator, a very common operation
+            size_t n_own_index;
+            //Index of the father. using father means that there is no variable number of children index to maintain. all nodes have exactly one father except the root. It also makes it impossible to make loops. Root is the only node that has itself as father.
+            size_t n_index_father;
+            //Priority, defines the order of this node compared to its siblings, 0 is the highest priority node under the given father. It checks against n_children_max_priority of the father of this node
+            size_t n_own_priority;
+            //Max Priority, it's the number of children of this node. It also serves as maximum priority of children
+            size_t n_children_max_priority;
+            //Distance from root of this node, computed by create_child
+            size_t n_distance_from_root;
+        };
+
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **  CONSTRUCTORS

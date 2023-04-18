@@ -1330,12 +1330,14 @@ Payload &Tree<Payload>::root( bool &oru1_fail )
     if (this->gast_nodes.size() <= 0)
     {
         this->report_error(Error_code::CPS8_ERR);
+        oru1_fail = true;
         return this->gt_dummy;
     }
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
+    oru1_fail = false;
     DRETURN(); //Trace Return
     return this->gast_nodes[0].t_payload;
 }   //Public getter: root | bool & |

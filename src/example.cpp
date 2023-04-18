@@ -196,7 +196,9 @@ bool test_bench( void )
     //unit test the token array parser
 	int n_fail = unit_test_parse_token_array();
 	DPRINT("Failed test patterns: %d\n", n_fail );
-	std::cout << "Unit Test: parser token array |:" << n_fail << "\n";
+	std::cout << "----------------------------------------------------------------\n";
+	std::cout << "Unit Test: Failed patterns:" << n_fail << "\n";
+	std::cout << "----------------------------------------------------------------\n";
 
 	//User::Equation_parser cl_equation;
 
@@ -271,21 +273,81 @@ int unit_test_parse_token_array( void )
 	int n_cnt_fail = 0;
 	struct St_test_pattern
 	{
+		//Equation fed to the parser
 	    const char *s_equation;
+	    //Expected result of the parser. true=FAIL | false=PASS
 	    bool x_fail;
+	    //Expected string tokens after a successful parse
 	    std::vector<std::string> as_token_vector;
+	    //Expected tree structure after a successful parse
+	    std::vector<User::Tree<User::Equation_parser::Token>::Node> ast_tree;
 	};
-    //Create the test patterns with validation patterns
+    //Create the test patterns alongside the expected result of the pattern. Can detect a misbehaviour of the parser
 	St_test_pattern ast_test_pattern[] =
 	{
 	    //Empty string
-	    St_test_pattern{ "", false, std::vector<std::string>() },
+	    St_test_pattern{ "", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    //Lack of equal sign
+	    St_test_pattern{ "1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
 	    //Unbalanced brackets
-	    St_test_pattern{ "(1", true, std::vector<std::string>() },
-	    St_test_pattern{ "((1)", true, std::vector<std::string>() },
-	    St_test_pattern{ "(1))", true, std::vector<std::string>() },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    //Two equal signs
+	    St_test_pattern{ "1=1=1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
 	    //Balanced bracket
-	    St_test_pattern{ "((((((1))))))", false, std::vector<std::string>( { std::string("1") } ) },
+	    St_test_pattern
+	    {
+			"1=((((((1))))))",
+			false,
+			std::vector<std::string>
+			(
+				{
+					std::string("1"),
+					std::string("="),
+					std::string("("),
+					std::string("("),
+					std::string("("),
+					std::string("("),
+					std::string("("),
+					std::string("("),
+					std::string("1"),
+					std::string(")"),
+					std::string(")"),
+					std::string(")"),
+					std::string(")"),
+					std::string(")"),
+					std::string(")")
+				}
+			),
+			std::vector<User::Tree<User::Equation_parser::Token>::Node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::Node
+					{
+						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
+						User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, },
+						//n_own_index, n_index_father, n_own_priority, n_children_max_priority, n_distance_from_root
+						0, 0, 0, 2, 0,
+					},
+					User::Tree<User::Equation_parser::Token>::Node
+					{
+						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
+						User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, },
+						//n_own_index, n_index_father, n_own_priority, n_children_max_priority, n_distance_from_root
+						1, 0, 0, 0, 1,
+					},
+					User::Tree<User::Equation_parser::Token>::Node
+					{
+						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
+						User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, },
+						2, 0, 1, 0, 1,
+					},
+				}
+			),
+
+
+		},
 	    //Sum, Equations equation
         St_test_pattern{ "1=1", false, std::vector<std::string>( { std::string("1"), std::string("="), std::string("1") } ) },
         St_test_pattern{ "5=2+3", false, std::vector<std::string>( { std::string("5"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ) },
@@ -304,7 +366,7 @@ int unit_test_parse_token_array( void )
 	//For all test patterns
 	for (size_t n_test_pattern_index = 0; n_test_pattern_index < n_num_test_equations;n_test_pattern_index++)
 	{
-	    DPRINT("PATTERN%d\n", int(n_test_pattern_index) );
+	    DPRINT("PATTERN%d >%s<\n", int(n_test_pattern_index), ast_test_pattern[n_test_pattern_index].s_equation );
 		//Feed the test pattern
 		bool x_fail = cl_equation_parser.parse( ast_test_pattern[n_test_pattern_index].s_equation );
 		//If expected fail state
@@ -322,19 +384,18 @@ int unit_test_parse_token_array( void )
 				    DPRINT("TOKEN%d\n", int(n_array_token_index) );
                     if (ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index] != ras_array_token[n_array_token_index])
                     {
+						std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Wrong token | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str() << " | got: " << ras_array_token[n_array_token_index].c_str() << "\n";
                         DPRINT("ERR: Pattern: %d | Token %d | WRONG TOKEN expected >%s< got >%s<\n", int(n_test_pattern_index), int(n_array_token_index), ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str(), ras_array_token[n_array_token_index].c_str() );
                         n_cnt_fail++;
                         //Stop
                         n_array_token_index = n_num_tokens;
                     }
-
 				}
 			}
 			else
 			{
-
-				std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Inconsistent token count\n";
-				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, as_token_vector[n_test_pattern_index].size(), n_num_tokens );
+				std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Inconsistent token count | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector.size() << " | got: " << n_num_tokens << "\n";
+				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, ast_test_pattern[n_test_pattern_index].as_token_vector.size(), n_num_tokens );
 				n_cnt_fail++;
 			}
 		}

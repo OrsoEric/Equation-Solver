@@ -289,6 +289,8 @@ bool Equation_parser::parse( std::string is_equation )
     bool x_fail = this->equation_to_token_array( is_equation, this->gclacl_tokens, clast_tokens );
 	if (x_fail == true)
 	{
+		//Clear partial results
+		this->flush();
 		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n", __LINE__ );
 		return true;
 	}
@@ -308,10 +310,8 @@ bool Equation_parser::parse( std::string is_equation )
 	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree, 0 );
 	if (u1_ret == true)
 	{
-		//Flush the token equation
-		this->gclacl_tokens.clear();
-		//Flush partial result inside the tree
-		this->gcl_token_tree.flush();
+		//Clear partial results
+		this->flush();
 		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
 		return true;
 	}
@@ -323,6 +323,8 @@ bool Equation_parser::parse( std::string is_equation )
 	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
 	if (s32_ret < 0)
 	{
+		//Clear partial results
+		this->flush();
 		DRETURN_ARG("ERR:%d | Could not aggregate sum/diff operators into wide sum operators...", __LINE__ );
 		return true;
 	}
@@ -1337,8 +1339,14 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		return true;
 	}
 	//Equal is special, it's the first simbol that becomes the root of the tree
-	if ((cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL) && (in_index_father == 0))
+	if (cl_core_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
 	{
+		//If I get an equal operator that is not the root of the tree
+		if ((in_index_father != 0) || (orcl_token_tree.size() != 1))
+		{
+			DRETURN_ARG("ERR:%d | Equal not as root of the tree! Father: %d | Tree size: %d", __LINE__, in_index_father, orcl_token_tree.size() );
+			return true;
+		}
 		DPRINT("ROOT: >%s<\n", cl_core_iterator->cl_str.c_str() );
 		//Write the payload on the root
 		orcl_token_tree[0] = *cl_core_iterator;
@@ -1350,6 +1358,12 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 	}
 	else
 	{
+		//If the root hasn't been assigned yet
+		if ((orcl_token_tree.size() == 1) && (in_index_father == 0) && (orcl_token_tree[0].cl_str[0] != Token_legend::CS8_OPERATOR_EQUAL))
+		{
+			DRETURN_ARG("ERR:%d | Root is not equal operator!", __LINE__ );
+			return true;
+		}
 		//Add a child to the current branch holding the Payload of the core token found
 		size_t n_child_index = orcl_token_tree.create_child( in_index_father, *cl_core_iterator );
 		if (n_child_index >= orcl_token_tree.size() )
@@ -1362,24 +1376,27 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		orcl_token_tree.print();
 		std::cout << "--------------------------------------\n";
 	}
-
-	//Execute the search on the LHS and RHS sides of the equation
+	//Propagate failure state of recursive calls
+	bool x_fail = false;
+	//Execute a recursive tree construction on the LHS and RHS sides of the equation
 	if (clast_lhs.size() > 0)
 	{
-		token_array_to_tree( clast_lhs, orcl_token_tree, n_next_father );
+		//Recursive tree construction on LHS
+		x_fail |= token_array_to_tree( clast_lhs, orcl_token_tree, n_next_father );
 		DPRINT("LHS of size %d under father %d\n", clast_lhs.size(), n_next_father );
 	}
 	if (clast_rhs.size() > 0)
 	{
-		token_array_to_tree( clast_rhs, orcl_token_tree, n_next_father );
+		//Recursive tree construction on RHS
+		x_fail |= token_array_to_tree( clast_rhs, orcl_token_tree, n_next_father );
 		DPRINT("RHS of size %d under father %d\n", clast_rhs.size(), n_next_father );
 	}
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN(); //Trace Return
-    return false;	//OK
+    DRETURN_ARG("%s", (x_fail)?("FAIL"):("PASS") ); //Trace Return
+    return x_fail;	//Propagate failure
 }   //Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
 
 /***************************************************************************/
