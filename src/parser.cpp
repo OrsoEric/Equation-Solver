@@ -677,7 +677,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		}
 	}	//Scan the given array of token and compute the open/clsoe priority
 	//DEBUG
-	std::cout << irclacl_token_array << "\n";
+	//std::cout << irclacl_token_array << "\n";
 
 	//--------------------------------------------------------------------------
     //	SANITY CHECK
@@ -742,7 +742,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 		}	//While: scan is not complete
 		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", int(irclacl_token_array.size()) );
 		//DEBUG
-		std::cout << irclacl_token_array << "\n";
+		//std::cout << irclacl_token_array << "\n";
 	}	//If: I have redundant priority tokens
 
 	//--------------------------------------------------------------------------
@@ -1350,7 +1350,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		//Write the payload on the root
 		orcl_token_tree[0] = *cl_core_iterator;
 		//Show the tree
-		orcl_token_tree.print();
+		//orcl_token_tree.print();
 
 		n_next_father = in_index_father;
 		DPRINT("LHS: >%s<\n", cl_core_iterator->cl_str.c_str() );
@@ -1372,8 +1372,8 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 		}
 		n_next_father = n_child_index;
 		//Show the tree
-		orcl_token_tree.print();
-		std::cout << "--------------------------------------\n";
+		//orcl_token_tree.print();
+		//std::cout << "--------------------------------------\n";
 	}
 	//Propagate failure state of recursive calls
 	bool x_fail = false;

@@ -420,8 +420,6 @@ class Equation_parser
 		//Within a tree of tokens, search for sum and diff operators, and use only sum operators with a greater number of leaves | -1 fail | return number of tokens merged
         static int aggregate_tree_token_sum_diff( Tree<Token> &ircl_token_tree );
 
-
-
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **	PRIVATE METHODS
