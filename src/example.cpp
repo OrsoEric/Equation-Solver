@@ -271,6 +271,7 @@ int unit_test_parse_token_array( void )
 
 	//count the test patterns that failed the check
 	int n_cnt_fail = 0;
+	//structure holding the test patterns. I have the source, and the expected outputs, and they have to match.
 	struct St_test_pattern
 	{
 		//User adds a note to the test pattern explaining what it's testing
@@ -353,6 +354,32 @@ int unit_test_parse_token_array( void )
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				}
+			),
+		},
+		St_test_pattern
+        {
+			"Floating Point Equation (PASS)",
+			"3/2=1.5000000000",
+			false,
+			std::vector<std::string>
+			(
+				{
+					std::string("3"),
+					std::string("/"),
+					std::string("2"),
+					std::string("="),
+					std::string("1.5000000000")
+				}
+			),
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("/"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1.5000000000"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 1, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 1, },
 				}
 			),
 		},
@@ -483,7 +510,70 @@ int unit_test_parse_token_array( void )
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("C"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 2, },
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("5"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 5, },
 					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Y"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 5, },
-
+				}
+			),
+		},
+		//long symbols
+		St_test_pattern
+        {
+			"Long Symbol Equation (PASS)",
+			//Source equation string to be fed
+			"Pippo=Pluto+self_awareness",
+			//Expected failure state
+			false,
+			//Expected output of the tokenizer
+			std::vector<std::string>
+			(
+				{
+					std::string("Pippo"),
+					std::string("="),
+					std::string("Pluto"),
+					std::string("+"),
+					std::string("self_awareness"),
+				}
+			),
+			//Expected output of the treeficator
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Pippo"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Pluto"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 2, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("self_awareness"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 2, },
+				}
+			),
+		},
+		//
+		St_test_pattern
+        {
+			"Sum aggregator (PASS)",
+			//Source equation string to be fed
+			"3=1+1+1",
+			//Expected failure state
+			false,
+			//Expected output of the tokenizer
+			std::vector<std::string>
+			(
+				{
+					std::string("3"),
+					std::string("="),
+					std::string("1"),
+					std::string("+"),
+					std::string("1"),
+					std::string("+"),
+					std::string("1"),
+				}
+			),
+			//Expected output of the treeficator
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Pippo"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Pluto"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 2, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("self_awareness"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 2, },
 				}
 			),
 		},

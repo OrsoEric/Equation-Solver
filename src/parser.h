@@ -401,6 +401,22 @@ class Equation_parser
 		//returns true if the digit is a symbol digit
 		static bool is_symbol( char is8_digit );
 
+		//! @brief true = token is a plus operator
+		static bool is_operator_sum( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_SUM));
+		}
+		//! @brief true = token is a difference operator
+		static bool is_operator_diff( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_DIFF));
+		}
+		//! @brief true = token is a either a sum or a difference operator
+		static bool is_operator_sum_diff( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && ((irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_SUM) || (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_DIFF)) );
+		}
+
 		/*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **	PRIVATE STATIC METHODS

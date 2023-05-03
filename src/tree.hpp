@@ -262,6 +262,17 @@ class Tree : public Tree_interface<Payload>
         {
 			return this->gf_lambda_decorator;
         }
+        //! @brief get the index of the father
+        size_t get_index_father( size_t in_index )
+        {
+			//OOB
+			if ((Config::CU1_INTERNAL_CHECKS == true) && (in_index > this->gast_nodes.size()))
+			{
+				return this->gast_nodes.size();
+			}
+			return this->gast_nodes[in_index].n_index_father;
+        }
+
         //Find the children of a node of a given index, and push their indexes inside a vector
         bool find_children( size_t in_father_index, std::vector<size_t> &ira_children_indexes );
         //Overloads used when a ector has to be created.
@@ -1141,7 +1152,7 @@ bool Tree<Payload>::erease( size_t in_index_erease, Erease_mode ie_delete_mode )
     //	CHECK&INIT
     //--------------------------------------------------------------------------
     //if class is in error
-    if (this->gps8_error_code != Error_code::CPS8_OK)
+    if (this->is_invalid())
     {
         DRETURN_ARG("ERR:%d Tree is in error: %s | Cannot destroy node", __LINE__, this->gps8_error_code );
         return true;
@@ -1459,9 +1470,9 @@ bool Tree<Payload>::move( size_t in_index_node_target, size_t in_index_new_fathe
     //--------------------------------------------------------------------------
 
     //if class is in error
-    if (this->gps8_error_code != Error_code::CPS8_OK)
+    if (this->is_invalid())
     {
-		DRETURN();
+		DRETURN_ARG("ERR%d | Already in error...", __LINE__ );
 		return true;
     }
     //if source OOB
@@ -1507,7 +1518,7 @@ bool Tree<Payload>::move( size_t in_index_node_target, size_t in_index_new_fathe
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN(); //Trace Return
+    DRETURN_ARG("Success: %s", x_fail?"FAIL":"OK"); //Trace Return
     return x_fail;
 }   //Public getter: root | bool & |
 

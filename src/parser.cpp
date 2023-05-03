@@ -294,7 +294,6 @@ bool Equation_parser::parse( std::string is_equation )
 		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n", __LINE__ );
 		return true;
 	}
-
 	//Link the decorator for the tree to print out the token
 	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str +std::string(" | ") +std::to_string(ist_token.e_type); };
 	//Link the provided decorator to replace the default decorator
@@ -1432,10 +1431,11 @@ bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vec
 //! @param ircl_token_tree | tree of tokens
 //! @return int | -1 fail | return number of tokens merged
 //! @details
-//! \n Within a tree of tokens, search for sum and diff operators, aggregate them in sum operators with a greater number of leaves
-//! \n Navigate the tree
-//! \n if the root is a sum operator
-//! \n search for sum operators in the leaves. That leaf's leaves are added to the root and the leaf is destroyed
+//! \n	Within a tree of tokens, search for sum and diff operators, aggregate them in sum operators with a greater number of leaves
+//! \n	Navigate the tree
+//! \n	search for a node whose children are ALL numbers/symbols and whose father, is a sum/diff operator
+//! \n	the children are promoted as children of the father, if diff, apply negation.
+//! \n	the node is destroyed when it has no more children
 //! \n	e.g.
 //! \n	Before					After
 //! \n	=						=
@@ -1460,18 +1460,78 @@ bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vec
 
 int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
 {
-	/*
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
 
-
     bool u1_ret;
     int s32_cnt_destroyed = 0;
     int s32_cnt_moved = 0;
 
-    unsigned int u32_ret;
+    //unsigned int u32_num_leaves = ;
+    //Start from the node after the root, as the root cannot be aggregated as the root has no father
+    size_t n_index_token = 1;
+    //While scan is not complete
+	while (n_index_token < ircl_tree_root.size())
+	{
+		//Get the index of the father of the current token
+		size_t n_index_father = ircl_tree_root.get_index_father( n_index_token );
+		if (n_index_father >= ircl_tree_root.size())
+		{
+			DRETURN_ARG("ERR%d | Failed to get father index %d\n", __LINE__, n_index_father );
+			return -1;
+		}
+		//The node is an aggregation candidate
+		if
+		(
+			//The node is a sum/diff operator
+			(Equation_parser::is_operator_sum_diff( ircl_tree_root[n_index_token] ) == true) &&
+			//It's father is a sum/diff operator
+			(Equation_parser::is_operator_sum_diff( ircl_tree_root[n_index_father] ) == true)
+		)
+		{
+			//This token is a candidate for aggregation.
+			//To be selected it needs to have ONLY symbols/numbers as children? NO. I can promote the subtrees upward
+			DPRINT("Candidate %d\n", n_index_token );
+
+			std::vector<size_t> an_index_children;
+
+			do
+			{
+				//get an array filled with all the children of this node
+				an_index_children = ircl_tree_root.get_children( n_index_token );
+				if (an_index_children.size() > 0)
+				{
+					DPRINT("Children: %d\n", an_index_children.size() );
+					//promote the children by moving the child with all its children upward
+					bool x_fail = ircl_tree_root.move( an_index_children[0], n_index_father, Tree<Token>::Move_mode::SUBTREE );
+					if (x_fail == true)
+					{
+						DRETURN_ARG("ERR%d | Failed to move node %d under new father %d\n", an_index_children[0], n_index_father );
+						return -1;
+					}
+				}
+				//This may have scrambled the indexes, I need to rescan the tree
+			}
+			//while the node has children
+			while (an_index_children.size() > 0);
+			//Here I moved all children of candidate under the father
+			//Delete the now useless childless node
+			bool x_fail = ircl_tree_root.erease( n_index_token, Tree<Token>::Erease_mode::NODE );
+			if (x_fail == true)
+			{
+				DRETURN_ARG("ERR%d | Failed to erease node %d", n_index_token );
+				return -1;
+			}
+		}
+		//Next candidate
+		n_index_token++;
+	}
+
+
+
+    /*
 	//Root token
     Token &rst_token_root = ircl_tree_root[0];
 	//If the token is a SUM and there is at least one leaf
@@ -1555,14 +1615,12 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 			}
 		}
 	}
-
-
+	*/
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
     DRETURN_ARG("Destroyed: %d | Moved: %d", s32_cnt_destroyed, s32_cnt_moved ); //Trace Return
-    */
     return 0;	//OK
 }   //Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
 
