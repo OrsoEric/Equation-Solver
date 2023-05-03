@@ -295,9 +295,8 @@ bool Equation_parser::parse( std::string is_equation )
 		return true;
 	}
 
-
 	//Link the decorator for the tree to print out the token
-	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str; };
+	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str +std::string(" | ") +std::to_string(ist_token.e_type); };
 	//Link the provided decorator to replace the default decorator
 	this->gcl_token_tree.link_decorator( f_my_decorator );
 	//Tree must be empty before conversion of token array to token tree
@@ -316,7 +315,7 @@ bool Equation_parser::parse( std::string is_equation )
 		return true;
 	}
 	std::cout << "Array->Tree\n";
-	this->gcl_token_tree.print();
+	this->gcl_token_tree.show(0);
 	std::cout << "--------------------------------------\n";
 
 	//Recursively
@@ -329,7 +328,7 @@ bool Equation_parser::parse( std::string is_equation )
 		return true;
 	}
 	std::cout << "Aggregate\n";
-	this->gcl_token_tree.print();
+	this->gcl_token_tree.show(0);
 	std::cout << "--------------------------------------\n";
 
     //--------------------------------------------------------------------------

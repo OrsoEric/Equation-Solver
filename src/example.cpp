@@ -280,21 +280,27 @@ int unit_test_parse_token_array( void )
 	    //Expected string tokens after a successful parse
 	    std::vector<std::string> as_token_vector;
 	    //Expected tree structure after a successful parse
-	    std::vector<User::Tree<User::Equation_parser::Token>::Node> ast_tree;
+	    std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node> ast_minimal_node;
 	};
+	// conversion from 'User::Tree<User::Equation_parser::Token>::St_minimal_node' to non-scalar type 'std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node, std::allocator<User::Tree<User::Equation_parser::Token>::St_minimal_node> >' requested|
+	const User::Tree<User::Equation_parser::Token>::St_minimal_node cst_default_equal =
+	{
+		User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+	};
+
     //Create the test patterns alongside the expected result of the pattern. Can detect a misbehaviour of the parser
 	St_test_pattern ast_test_pattern[] =
 	{
 	    //Empty string
-	    St_test_pattern{ "", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
 	    //Lack of equal sign
-	    St_test_pattern{ "1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
 	    //Unbalanced brackets
-	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
-	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
-	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
+	    St_test_pattern{ "(1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
 	    //Two equal signs
-	    St_test_pattern{ "1=1=1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::Node>() },
+	    St_test_pattern{ "1=1=1", true, std::vector<std::string>(), std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>( { cst_default_equal, } ) },
 	    //Balanced bracket
 	    St_test_pattern
 	    {
@@ -320,39 +326,98 @@ int unit_test_parse_token_array( void )
 					std::string(")")
 				}
 			),
-			std::vector<User::Tree<User::Equation_parser::Token>::Node>
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
 			(
 				{
-					User::Tree<User::Equation_parser::Token>::Node
-					{
-						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
-						User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, },
-						//n_own_index, n_index_father, n_own_priority, n_children_max_priority, n_distance_from_root
-						0, 0, 0, 2, 0,
-					},
-					User::Tree<User::Equation_parser::Token>::Node
-					{
-						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
-						User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, },
-						//n_own_index, n_index_father, n_own_priority, n_children_max_priority, n_distance_from_root
-						1, 0, 0, 0, 1,
-					},
-					User::Tree<User::Equation_parser::Token>::Node
-					{
-						//cl_str, e_type, s32_open_close_priority, s32_symbol_priority, u1_negative
-						User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, },
-						2, 0, 1, 0, 1,
-					},
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 				}
 			),
 
-
 		},
 	    //Sum, Equations equation
-        St_test_pattern{ "1=1", false, std::vector<std::string>( { std::string("1"), std::string("="), std::string("1") } ) },
-        St_test_pattern{ "5=2+3", false, std::vector<std::string>( { std::string("5"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ) },
-        St_test_pattern{ "1+4=2+3", false, std::vector<std::string>( { std::string("1"), std::string("+"), std::string("4"), std::string("="), std::string("2"), std::string("+"), std::string("3") } ) },
-	};
+        St_test_pattern
+        {
+			"1=1",
+			false,
+			std::vector<std::string>
+			(
+				{
+					std::string("1"),
+					std::string("="),
+					std::string("1")
+				}
+			),
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				}
+			),
+		},
+		St_test_pattern
+        {
+			"5=2+3",
+			false,
+			std::vector<std::string>
+			(
+				{
+					std::string("5"),
+					std::string("="),
+					std::string("2"),
+					std::string("+"),
+					std::string("3"),
+				}
+			),
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("5"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				}
+			),
+		},
+
+		St_test_pattern
+        {
+			//Source equation string to be fed
+			"1+4=2+3",
+			//Expected failure state
+			false,
+			//Expected output of the tokenizer
+			std::vector<std::string>
+			(
+				{
+					std::string("1"),
+					std::string("+"),
+					std::string("4"),
+					std::string("="),
+					std::string("2"),
+					std::string("+"),
+					std::string("3"),
+				}
+			),
+			//Expected output of the treeficator
+			std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+			(
+				{
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 1, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("4"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 1, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+					User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				}
+			),
+		},
+	};	//Test pattern array
     //
 	size_t n_num_test_equations = sizeof( ast_test_pattern )/ sizeof(St_test_pattern);
 	std::cout << "Test patterns: " << n_num_test_equations << "\n";
@@ -374,7 +439,6 @@ int unit_test_parse_token_array( void )
 		{
 			//Get the array of string tokens
 			std::vector<std::string> ras_array_token = cl_equation_parser.get_array_of_token();
-
 			size_t n_num_tokens = ras_array_token.size();
 			//if not
 			if (n_num_tokens == ast_test_pattern[n_test_pattern_index].as_token_vector.size())
@@ -398,7 +462,49 @@ int unit_test_parse_token_array( void )
 				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, ast_test_pattern[n_test_pattern_index].as_token_vector.size(), n_num_tokens );
 				n_cnt_fail++;
 			}
-		}
+			//Get the tree representation of the equation
+			User::Tree<User::Equation_parser::Token> cl_tree_from_equation = cl_equation_parser.get_tree_of_token();
+			//if the parser passed, I should have a tree
+			if (x_fail == false)
+			{
+
+				std::cout << "parsed equation in tree form:\n";
+				cl_tree_from_equation.show(0);
+				//Construct a tree from the test pattern
+				std::cout << "tree constructed from test pattern:\n";
+				User::Tree<User::Equation_parser::Token> cl_tree_from_test_pattern = User::Tree<User::Equation_parser::Token>( ast_test_pattern[n_test_pattern_index].ast_minimal_node );
+				cl_tree_from_test_pattern.link_decorator( cl_tree_from_equation.get_decorator() );
+				cl_tree_from_test_pattern.show(0);
+				//tree from parsing is the same as tree from test pattern
+				if (cl_tree_from_equation == cl_tree_from_test_pattern)
+				{
+					//Do nothing
+					std::cout << "PASS pattern: "  << n_test_pattern_index << "\n";
+					DPRINT("PASS pattern: %d\n", n_test_pattern_index );
+				}
+				else
+				{
+					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Tree from parsing is not the same as tree from test pattern\n";
+					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+					n_cnt_fail++;
+				}
+			}
+			//if parser failed and I have a tree
+			else
+			{
+				if (cl_tree_from_equation.size() <= 1)
+				{
+					std::cout << "PASS pattern: "  << n_test_pattern_index << "\n";
+					DPRINT("PASS pattern: %d\n", n_test_pattern_index );
+				}
+				else
+				{
+					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | A failed parsing has a tree\n";
+					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+					n_cnt_fail++;
+				}
+			}
+		}	//If expected fail state
 		//if expected fail state
 		else
 		{

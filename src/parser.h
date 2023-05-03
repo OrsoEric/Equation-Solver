@@ -123,7 +123,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
 		//! @brief Describe the token type
-		typedef enum _Token_type
+		enum Token_type
         {
 				//Base symbols. Decoded by the linear parser first step
 			//Generic Number
@@ -150,9 +150,9 @@ class Equation_parser
 
 			//Unknown type
 			UNKNOWN,
-        } Token_type;
+        };
         //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
-        typedef struct _Token
+        struct Token
         {
 			//String containing the token
 			std::string cl_str;
@@ -164,7 +164,43 @@ class Equation_parser
 			int s32_symbol_priority;
 			//true = the token is applied with negative sign, it's addictive to diff and sum operators
 			bool u1_negative;
-        } Token;
+			//Define equal operator between tokens
+			friend bool operator==(const Token& lhs, const Token& rhs)
+			{
+				if (lhs.cl_str != rhs.cl_str)
+				{
+					DPRINT("Unequal string | LHS: %s | RHS: %s\n", lhs.cl_str.c_str(), rhs.cl_str.c_str() );
+					return false;
+				}
+				if (lhs.e_type != rhs.e_type)
+				{
+					DPRINT("Unequal type | LHS: %d | RHS: %d\n", lhs.e_type, rhs.e_type );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal open close | LHS: %d | RHS: %d\n", lhs.s32_open_close_priority, rhs.s32_open_close_priority );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal priority | LHS: %d | RHS: %d\n", lhs.s32_symbol_priority, rhs.s32_symbol_priority );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal negation | LHS: %s | RHS: %s\n", lhs.s32_symbol_priority?"-":"+", rhs.s32_symbol_priority?"-":"+" );
+					return false;
+				}
+				return true;
+			}
+			//Defiene unequal operator
+			friend bool operator!=(const Token& lhs, const Token& rhs)
+			{
+				return (!(lhs == rhs));
+			}
+
+        };
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -213,6 +249,11 @@ class Equation_parser
         std::vector<std::string> get_array_of_token( void )
         {
 			return this->gclacl_tokens;
+        }
+        //! @brief return the tree of token that represent the equation
+        User::Tree<Token> get_tree_of_token( void )
+        {
+			return this->gcl_token_tree;
         }
         //Get current error state of the library
         const char *get_error( void );

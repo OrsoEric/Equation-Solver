@@ -19,7 +19,7 @@
 //Used to get a lambda to stringfy a node
 #include <functional>
 
-//Interface of the class
+//Interface of the class.
 #include "Tree_interface.h"
 
 /**********************************************************************************
@@ -158,6 +158,14 @@ class Tree : public Tree_interface<Payload>
             //Distance from root of this node, computed by create_child
             size_t n_distance_from_root;
         };
+		//! @brief this structure is meant to allow fast save/load/reconstruction of a Tree class, it's a recused set of Node as it's not functional.
+        struct St_minimal_node
+        {
+			//Payload inside the node
+            Payload t_payload;
+            //Index of the father. using father means that there is no variable number of children index to maintain. all nodes have exactly one father except the root. It also makes it impossible to make loops. Root is the only node that has itself as father.
+            size_t n_index_father;
+        };
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -171,6 +179,15 @@ class Tree : public Tree_interface<Payload>
         Tree( Payload it_default_payload );
         //Default payload and root Constructor
         Tree( Payload it_default_payload, Payload it_root_payload );
+        //Constructor that can construct a full tree. Ideally I just want to provide a list of Payload that inserted sequentially results in the original tree
+        Tree( std::vector<St_minimal_node> iast_node );
+        Tree( size_t in_size, St_minimal_node *ipst_node );
+
+        //Construct a Tree from a Tree. It's an hard copy as long as the payload doesn't have pointers
+        //Tree( Tree ic_source_tree );
+
+        //Construct a tree from a subtree
+		//Tree( Tree ic_source_tree, size_t n_index )
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -189,6 +206,13 @@ class Tree : public Tree_interface<Payload>
 
         //Overload the square bracket operator to do an index search and return a RHS/LHS reference to the payload
         Payload& operator []( size_t in_index );
+        //Equal operator between two trees
+		bool operator == ( User::Tree<Payload> &ircl_rhs );
+		//Unequal operator. Wrapper of equal operator
+		bool operator != ( User::Tree<Payload> &ircl_rhs )
+		{
+			return !(*this == ircl_rhs);
+		}
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -221,18 +245,22 @@ class Tree : public Tree_interface<Payload>
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-		//! @brief return the size of the tree, counting the root
-        size_t size( void )
-        {
-			return this->gast_nodes.size();
-        }
-
         //Reference to Payload of the root node, overload available to discard success
         Payload &root( bool &orx_fail );
         Payload &root( void )
         {
             bool x_fail;
             return this->root( x_fail );
+        }
+        //! @brief return the numbers of nodes in the tree. Should always have at least root to be valid
+        size_t size( void )
+        {
+			return this->gast_nodes.size();
+        }
+        //! @brief return the decorator used by this class.
+        std::function<std::string(Payload)> get_decorator( void )
+        {
+			return this->gf_lambda_decorator;
         }
         //Find the children of a node of a given index, and push their indexes inside a vector
         bool find_children( size_t in_father_index, std::vector<size_t> &ira_children_indexes );
@@ -243,17 +271,15 @@ class Tree : public Tree_interface<Payload>
 			find_children( in_father_index, an_children );
 			return an_children;
         }
+        //From the tree extract a vector of payload, that can be reinserted sequentially to form an identical tree
+        bool get_sorted_payload( std::vector<St_minimal_node>& irast_sorted_node );
         //Show the nodes stored inside the vector and their links
         bool show( void );
         bool show( size_t in_index );
-
         bool print( void )
         {
-			std::cout << "List of nodes:\n";
-			show();
-			std::cout << "Tree representation:\n";
-			show(0);
-			return false;
+			bool x_fail = this->show();
+			return x_fail | this->show(0);
         }
 
         /*********************************************************************************************************************************************************
@@ -262,6 +288,14 @@ class Tree : public Tree_interface<Payload>
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //false = VALID | true = valid
+        bool is_invalid( void )
+        {
+			//invalid if no root or if class is in error
+			//return ((this->gast_nodes.size() < 1) || (this->gps8_error_code != Error_code::CPS8_OK));
+			//! @bug broken error reporting!!!
+			return false;
+        }
         //! @brief check if two nodes are direct relatives
         bool is_descendant( size_t in_lhs, size_t in_rhs );
 
@@ -406,7 +440,7 @@ class Tree : public Tree_interface<Payload>
             private:
 				bool init( Tree<Payload>& ircl_parent_tree, bool ix_begin, size_t in_begin_index )
 				{
-					DENTER_ARG("Parent tree: %p | Begin: %d | Index: %d", (void*)(&(*this)), ix_begin, int(in_begin_index) );
+					DENTER_ARG("Parent tree: %p | Begin: %d | Index: %d", &(*this), ix_begin, int(in_begin_index) );
                     //Constructing a begin iterator
                     if (ix_begin == true)
                     {
@@ -447,7 +481,7 @@ class Tree : public Tree_interface<Payload>
                         this->gcl_pseudorecursive_stack.pop();
                         if ((Config::CU1_INTERNAL_CHECKS) && (n_current_index >= this->grcl_tree.gast_nodes.size()))
                         {
-                            DRETURN_ARG("ERR%d: Wrong index popped from stack. This should NEVER happen. Popped index: %d of %d", __LINE__, int(n_current_index), int(this->grcl_tree.gast_nodes.size()));
+                            DRETURN_ARG("ERR%d: Wrong index popped from stack. This should NEVER happen. Popped index: %d of %d", __LINE__, int(n_current_index), int(this->grcl_tree.gast_nodes.size()) );
                             return true;
                         }
                         //I find all the children of the node I just popped, and push them
@@ -596,6 +630,10 @@ class Tree : public Tree_interface<Payload>
         }
         //Count the children of a node
         bool count_children( typename std::vector<Node>::iterator st_father, size_t &orn_num_children );
+        //sort the tree according to the depth.
+        //The idea is to get a node array that can be filled without changing indexes. But needs to recompute father indexes as things move
+        //bool sort_tree( void );
+
         //! @brief updates the indexes used by the iterator to make a deep expolration of the tree
         //bool compute_deep_exploration_indexes( size_t ign_index, size_t in_depth );
         //Report an error. return false: OK | true: Unknown error code
@@ -632,7 +670,7 @@ class Tree : public Tree_interface<Payload>
 template <class Payload>
 Tree<Payload>::Tree( void )
 {
-    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
+    DENTER_ARG("This: %p", &(*this));   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -659,7 +697,7 @@ Tree<Payload>::Tree( void )
 template <class Payload>
 Tree<Payload>::Tree( Payload it_default_payload )
 {
-    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
+    DENTER_ARG("This: %p", &(*this));   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -687,7 +725,7 @@ Tree<Payload>::Tree( Payload it_default_payload )
 template <class Payload>
 Tree<Payload>::Tree( Payload it_default_payload, Payload it_root_payload )
 {
-    DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
+    DENTER_ARG("This: %p", &(*this));   //Trace Enter
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -702,6 +740,94 @@ Tree<Payload>::Tree( Payload it_default_payload, Payload it_root_payload )
     DRETURN();  //Trace Return
     return;
 }   //Constructor: Tree | Payload | Payload |
+
+/***************************************************************************/
+//! @brief Constructor: Tree | std::vector<St_minimal_node>
+/***************************************************************************/
+//! @param iast_minimal_node | vector filled with minimal nodes
+//! @return no return
+//! @details
+//! \n Constructor that can construct a full tree
+//! \n construction is order dependent, pushing the same minimal nodes in a different order will yield a different tree
+/***************************************************************************/
+
+template <class Payload>
+Tree<Payload>::Tree( std::vector<St_minimal_node> iast_minimal_node )
+{
+	size_t n_num_nodes = iast_minimal_node.size();
+	DENTER_ARG("This: %p | Nodes: %d", &(*this), n_num_nodes );   //Trace Enter
+	//--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+	//Input has no root
+	if (n_num_nodes < 1)
+	{
+		DRETURN_ARG("ERR:%d | Input vector of minimal nodes too small...", __LINE__ );
+		return;
+	}
+	//--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    //Start from root
+    typename std::vector<St_minimal_node>::iterator cl_iter_node = iast_minimal_node.begin();
+    //The default payload is the root
+    this->set_default_payload( cl_iter_node->t_payload );
+    this->init_class_vars( cl_iter_node->t_payload );
+    //root has been pushed
+    cl_iter_node++;
+    //Push the remaining nodes
+	while( cl_iter_node != iast_minimal_node.end() )
+	{
+		//Add the node to the tree
+		this->create_child( cl_iter_node->n_index_father, cl_iter_node->t_payload );
+		//Next node
+		cl_iter_node++;
+	}
+
+	return;
+}	//Constructor: Tree | std::vector<St_minimal_node>
+
+/***************************************************************************/
+//! @brief Constructor: Tree | std::vector<St_minimal_node>
+/***************************************************************************/
+//! @param in_size | number of nodes in the given array. will also be the number of nodes of the tree.
+//! @param ipst_node | array filled with minimal nodes
+//! @return no return
+//! @details
+//! \n Constructor that can construct a full tree
+//! \n construction is order dependent, pushing the same minimal nodes in a different order will yield a different tree
+//! \n Same as constructor above, but works from an array
+/***************************************************************************/
+
+template <class Payload>
+Tree<Payload>::Tree( size_t in_size, St_minimal_node *ipst_node )
+{
+	DENTER_ARG("This: %p | Nodes: %d", &(*this), in_size );   //Trace Enter
+	//--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+	//Input has no root
+	if (in_size < 1)
+	{
+		DRETURN_ARG("ERR:%d | Input vector of minimal nodes too small...", __LINE__ );
+		return;
+	}
+	//--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    //The default payload is the root
+    this->set_default_payload( ipst_node[0].t_payload );
+    this->init_class_vars( ipst_node[0].t_payload );
+    for (size_t n_index_node = 1; n_index_node < in_size;n_index_node++)
+    {
+		//Add the node to the tree
+		this->create_child( ipst_node[n_index_node].n_index_father, ipst_node[n_index_node].t_payload );
+    }
+
+	return;
+}	//Constructor: Tree | std::vector<St_minimal_node>
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -720,7 +846,7 @@ Tree<Payload>::Tree( Payload it_default_payload, Payload it_root_payload )
 template <class Payload>
 Tree<Payload>::~Tree( void )
 {
-    DENTER_ARG("This: %p", (void*)(&(*this)));   //Trace Enter
+    DENTER_ARG("This: %p", &(*this));   //Trace Enter
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -743,7 +869,7 @@ template <class Payload>
 Payload& Tree<Payload>::operator []( size_t in_index )
 {
     //Trace Enter
-    DENTER_ARG("Object: %p, Index: %d", (void*)(&(*this)), (int)in_index );
+    DENTER_ARG("Object: %p, Index: %d", &(*this), (int)in_index );
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -763,6 +889,86 @@ Payload& Tree<Payload>::operator []( size_t in_index )
     DRETURN();
     return this->gast_nodes[in_index].t_payload;
 }	//end method: operator & | int |
+
+/***************************************************************************/
+//!	@brief operator == | User::Tree<Payload> &
+/***************************************************************************/
+//!	@param ign_index | Numeric index of the node
+//! @return Payload & | Reference to content of the node
+//!	@details
+//! Equal operator between two trees
+//!	this == rhs
+/***************************************************************************/
+
+template <class Payload>
+bool Tree<Payload>::operator == ( User::Tree<Payload> &ircl_rhs )
+{
+    DENTER();
+    //--------------------------------------------------------------------------
+    //	CHECK
+    //--------------------------------------------------------------------------
+
+    if (this->is_invalid() == true)
+    {
+		DRETURN_ARG("ERR:%d | Invalid LHS\n", __LINE__ );
+		return false;
+    }
+    if (ircl_rhs.is_invalid() == true)
+    {
+		DRETURN_ARG("ERR:%d | Invalid LHS\n", __LINE__ );
+		return false;
+    }
+	//Different number of nodes
+    if (this->size() != ircl_rhs.size())
+    {
+		DRETURN_ARG("Unequal size %d | %d", this->size(), ircl_rhs.size() );
+		return false;
+    }
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+    //	Explore the tree. If the exploration only has same payloads, than trees are the same
+    //	NOTE: The indexes of the node can be different, but the tree still resolve to the same tree
+	//	That's why a linear scan of the nodes will not always work
+	//Start to
+	bool x_continue = true;
+	//Start LHS  and RHS iterators
+    User::Tree<Payload>::iterator<User::Tree<Payload>::Node> cl_lhs_node = this->begin();
+    User::Tree<Payload>::iterator<User::Tree<Payload>::Node> cl_rhs_node = ircl_rhs.begin();
+	//While equality check not complete
+	while (x_continue == true)
+	{
+		//Compute end condition
+		bool x_lhs_end = (cl_lhs_node == this->end());
+		bool x_rhs_end = (cl_lhs_node == ircl_rhs.end());
+		//Uniqual end
+		if (x_lhs_end != x_rhs_end)
+		{
+			DRETURN_ARG("ERR:%d | Unequal end! I checked length, but still didn't end the same node. Something weird!", __LINE__ );
+			return false;
+		}
+		else if ((x_lhs_end == true) || (x_rhs_end == true))
+		{
+			DRETURN_ARG("Same");
+			return true;
+		}
+		//If payloads are different
+		if ((*cl_lhs_node).t_payload != (*cl_rhs_node).t_payload)
+		{
+			DRETURN_ARG("Different payloads: LHS >%s< | RHS >%s<", this->gf_lambda_decorator((*cl_lhs_node).t_payload).c_str(), this->gf_lambda_decorator((*cl_rhs_node).t_payload).c_str() );
+			return false;
+		}
+		//next
+		cl_lhs_node++;
+		cl_rhs_node++;
+	} //While equality check not complete
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN();
+    return false;
+}	//operator == | User::Tree<Payload> &
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -825,9 +1031,10 @@ size_t Tree<Payload>::create_child( size_t in_father_index, Payload it_payload )
     //	CHECK&INIT
     //--------------------------------------------------------------------------
     //if class is in error, leaf cannot be created
-    if (this->gps8_error_code != Error_code::CPS8_OK)
+
+    if (this->is_invalid())
     {
-        DRETURN_ARG("ERR:%d | Tree is in error: %s | Cannot create leaf", __LINE__, this->gps8_error_code );
+		DRETURN_ARG("ERR:%d | Tree is in error: %s | Cannot create leaf", __LINE__, this->gps8_error_code );
         return true;
     }
     //If I'm searching for a node OOB
@@ -876,7 +1083,7 @@ size_t Tree<Payload>::create_child( size_t in_father_index, Payload it_payload )
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Father Index: %d | Own Index: %d | Nodes under Father: %d", int(st_node.n_index_father), int(st_node.n_own_index), int(n_num_children) +1 ); //Trace Return
+    DRETURN_ARG("Father Index: %d | Own Index: %d | Nodes under Father: %d", int(st_node.n_index_father), int(st_node.n_own_index), int(n_num_children +1) ); //Trace Return
     return st_node.n_own_index;	//OK
 }   //Public Setter: create_child | size_t | Payload
 
@@ -942,7 +1149,7 @@ bool Tree<Payload>::erease( size_t in_index_erease, Erease_mode ie_delete_mode )
 	//If user tries to erease a node that is OOB
     if ((Config::CU1_EXTERNAL_CHECKS) && (in_index_erease >= this->gast_nodes.size()))
     {
-		DRETURN_ARG("ERR%d | index %d of %d | OOB erease index", __LINE__, in_index_erease, this->gast_nodes.size() );
+		DRETURN_ARG("ERR%d | index %d of %d | OOB erease index", __LINE__, int(in_index_erease), int(this->gast_nodes.size()) );
 		return true;
     }
     //If user tries to erease the ROOT
@@ -967,14 +1174,14 @@ bool Tree<Payload>::erease( size_t in_index_erease, Erease_mode ie_delete_mode )
 			bool x_fail = this->bump_children( in_index_erease );
 			if (x_fail == true)
 			{
-				DRETURN_ARG("ERR%d | couldn't bump children of %d", __LINE__, in_index_erease );
+				DRETURN_ARG("ERR%d | couldn't bump children of %d", __LINE__, int(in_index_erease) );
 				return true;
 			}
 			//Erease a node, only works if node has no children
 			x_fail = this->erease_single_node( in_index_erease );
 			if (x_fail == true)
 			{
-				DRETURN_ARG("ERR%d | couldn't erease node %d", __LINE__, in_index_erease );
+				DRETURN_ARG("ERR%d | couldn't erease node %d", __LINE__, int(in_index_erease) );
 				return true;
 			}
 
@@ -1110,7 +1317,7 @@ bool Tree<Payload>::swap( size_t in_lhs, size_t in_rhs, Swap_mode ie_swap_mode )
     if ((in_lhs >= this->gast_nodes.size()) || (in_rhs >= this->gast_nodes.size()))
     {
         this->report_error(Error_code::CPS8_ERR_OOB);
-        DRETURN_ARG("ERR%d: Node indexes (%d %d) out of range %d...", __LINE__, in_lhs, in_rhs, this->gast_nodes.size() );
+        DRETURN_ARG("ERR%d: Node indexes (%d %d) out of range %d...", __LINE__, int(in_lhs), int(in_rhs), int(this->gast_nodes.size()) );
         return true;
     }
     //if nothing to do
@@ -1153,7 +1360,7 @@ bool Tree<Payload>::swap( size_t in_lhs, size_t in_rhs, Swap_mode ie_swap_mode )
 			//if not siblings
             if (this->gast_nodes[in_lhs].n_index_father != this->gast_nodes[in_rhs].n_index_father)
             {
-                DRETURN_ARG("ERR%d | Priority Swap is only defined for siblings. LHS%d.father is %d | RHS%d.father is %d", __LINE__, in_lhs, this->gast_nodes[in_lhs].n_index_father, in_rhs, this->gast_nodes[in_rhs].n_index_father );
+                DRETURN_ARG("ERR%d | Priority Swap is only defined for siblings. LHS%d.father is %d | RHS%d.father is %d", __LINE__, int(in_lhs), int(this->gast_nodes[in_lhs].n_index_father), int(in_rhs), int(this->gast_nodes[in_rhs].n_index_father) );
                 return true;
             }
             std::swap( this->gast_nodes[in_lhs].n_own_priority, this->gast_nodes[in_rhs].n_own_priority );
@@ -1260,13 +1467,13 @@ bool Tree<Payload>::move( size_t in_index_node_target, size_t in_index_new_fathe
     //if source OOB
     if ((in_index_node_target == 0) || (in_index_node_target >= this->gast_nodes.size()))
     {
-		DRETURN_ARG("ERR%d | OOB source index %d of %d", __LINE__, in_index_node_target, this->gast_nodes.size() );
+		DRETURN_ARG("ERR%d | OOB source index %d of %d", __LINE__, int(in_index_node_target), int(this->gast_nodes.size()) );
 		return true;
     }
     //if new father OOB
 	if (in_index_new_father >= this->gast_nodes.size())
     {
-		DRETURN_ARG("ERR%d | OOB new father index %d of %d", __LINE__, in_index_new_father, this->gast_nodes.size() );
+		DRETURN_ARG("ERR%d | OOB new father index %d of %d", __LINE__, int(in_index_new_father), int(this->gast_nodes.size()) );
 		return true;
     }
     //Remember previous father
@@ -1274,7 +1481,7 @@ bool Tree<Payload>::move( size_t in_index_node_target, size_t in_index_new_fathe
     //if new father is same as old father there is nothing to do
     if (in_index_new_father == n_index_target_old_father)
     {
-		DRETURN_ARG("Nothing to do. Target is already under father %d", n_index_target_old_father );
+		DRETURN_ARG("Nothing to do. Target is already under father %d", int(n_index_target_old_father) );
 		return false;
     }
 
@@ -1290,7 +1497,7 @@ bool Tree<Payload>::move( size_t in_index_node_target, size_t in_index_new_fathe
 		x_fail = this->bump_children( in_index_node_target );
 		if (x_fail == true)
 		{
-			DRETURN_ARG("ERR%d | couldn't bump children of node %d...", __LINE__, in_index_node_target );
+			DRETURN_ARG("ERR%d | couldn't bump children of node %d...", __LINE__, int(in_index_node_target) );
 			return x_fail;
 		}
 	}
@@ -1330,14 +1537,12 @@ Payload &Tree<Payload>::root( bool &oru1_fail )
     if (this->gast_nodes.size() <= 0)
     {
         this->report_error(Error_code::CPS8_ERR);
-        oru1_fail = true;
         return this->gt_dummy;
     }
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    oru1_fail = false;
     DRETURN(); //Trace Return
     return this->gast_nodes[0].t_payload;
 }   //Public getter: root | bool & |
@@ -1353,7 +1558,7 @@ Payload &Tree<Payload>::root( bool &oru1_fail )
 template <class Payload>
 bool Tree<Payload>::show( void )
 {
-    DENTER_ARG("Nodes: %d", int(this->gast_nodes.size())) ; //Trace Enter
+    DENTER_ARG("Nodes: %d", int(this->gast_nodes.size())); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1439,6 +1644,91 @@ bool Tree<Payload>::show( size_t in_index )
     return false;
 }   //Public getter: show | void |
 
+/***************************************************************************/
+//! @brief Public Getter: get_sorted_payload | std::vector<Payload>&
+/***************************************************************************/
+//! @param irast_sorted_node | feed to a provided vector a sorted list of payloads
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n From the tree extract a vector of payload, that can be reinserted sequentially to form an identical tree
+//! \n I need to add a father remapping because nodes are drawn out of order, which is fine.
+//!	\n	E.g. n_own_index - payload
+//!	\n	0-100
+//!	\n		3-101
+//!	\n			1-201
+//!	\n		4-102
+//!	\n			2-201
+//!	\n	Is reconstructed as:
+//!	\n	0-100
+//!	\n		1-101
+//!	\n			3-201
+//!	\n		2-102
+//!	\n			4-201
+//!	\n	Would cause problem because 101 is drawn first and injected as index 1 instead of 3
+//!	\n	Remaps the father indexes
+//!	\n	0 |	1 |	2 |	3 |	4 | old n_index_father
+//!	\n	0 |	3 |	4 |	1 |	2 | remaps to new n_index_father
+/***************************************************************************/
+
+template <class Payload>
+bool Tree<Payload>::get_sorted_payload( std::vector<St_minimal_node>& irast_sorted_node )
+{
+	size_t n_size = irast_sorted_node.size();
+	size_t n_num_nodes = this->gast_nodes.size();
+    DENTER_ARG("Tree size: %d | Destination size: %d", n_size, n_num_nodes );
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    //Initialize a father index remapping vector[old index] = new index, initialized to all invalid elements
+	std::vector<size_t> an_index_remap( n_num_nodes, n_num_nodes );
+	//Scan the tree with the tree exploration iterator
+    for (auto cl_node = this->begin();cl_node != this->end();cl_node++)
+    {
+		//Fill the minimal structure that can reconstruct a tree
+		St_minimal_node st_minimal_node;
+		st_minimal_node.n_index_father = (*cl_node).n_index_father;
+		st_minimal_node.t_payload = (*cl_node).t_payload;
+		//Push inside the vector
+		irast_sorted_node.emplace_back( st_minimal_node );
+
+		size_t n_old_own_index = (*cl_node).n_own_index;
+		if ( (Config::CU1_INTERNAL_CHECKS == true) && (n_old_own_index >= an_index_remap.size()) )
+		{
+			irast_sorted_node.clear();
+			DRETURN_ARG("ERR:%d | OOB | n_own_index %d is OOB of the index remap vector with size %d...", __LINE__, n_old_own_index, an_index_remap.size() );
+			return true;
+		}
+		//Register the remapping. I placed item at the end of the remapping vetor
+        an_index_remap[ n_old_own_index ] = irast_sorted_node.size() -1;
+
+		DPRINT("Payload: %s | Index %d remaps to Index: %d | \n", this->gf_lambda_decorator( (*cl_node).t_payload ).c_str(), (*cl_node).n_own_index, irast_sorted_node.size() -1 );
+    }
+    //Execute the remapping
+    for (size_t n_index = 0;n_index < irast_sorted_node.size();n_index++)
+    {
+		size_t n_old_index_father = irast_sorted_node[n_index].n_index_father;
+		size_t n_new_index_father = an_index_remap[ n_old_index_father ];
+		DPRINT("Index %d | Father %d -> %d\n", n_index, n_old_index_father, n_new_index_father );
+		irast_sorted_node[n_index].n_index_father = n_new_index_father;
+    }
+
+	//Check that I added to correct number of payloads
+	if (n_size +this->gast_nodes.size() != irast_sorted_node.size())
+	{
+		//Flush the vector
+		irast_sorted_node.clear();
+		DRETURN_ARG("ERR:%d | Inconsistent vector size. Expected: %d | Got: %d", __LINE__, n_size +this->gast_nodes.size(), irast_sorted_node.size() );
+		return true;
+	}
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("Nodes: %d | Expected: %d", this->gast_nodes.size(), irast_sorted_node.size() );
+    return false;	//OK
+} 	//Public Getter: get_sorted_payload | std::vector<St_minimal_node>&
+
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
 **	PUBLIC TESTER
@@ -1460,7 +1750,7 @@ bool Tree<Payload>::show( size_t in_index )
 template <class Payload>
 bool Tree<Payload>::is_descendant(size_t in_lhs, size_t in_rhs)
 {
-    DENTER_ARG("LHS: %d | RHS: %d", in_lhs, in_rhs ); //Trace Enter
+    DENTER_ARG("LHS: %d | RHS: %d", int(in_lhs), int(in_rhs) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1468,7 +1758,7 @@ bool Tree<Payload>::is_descendant(size_t in_lhs, size_t in_rhs)
     if ((Config::CU1_INTERNAL_CHECKS == true) && ((in_lhs >= this->gast_nodes.size()) || (in_rhs >= this->gast_nodes.size())) )
     {
 		//this->report_error( Error_code::CPS8_ERR_OOB );
-        DRETURN_ARG("ERR%d: OOB size: %d", __LINE__, this->gast_nodes.size() );
+        DRETURN_ARG("ERR%d: OOB size: %d", __LINE__, int(this->gast_nodes.size()) );
         return true;
     }
 
@@ -1502,22 +1792,22 @@ bool Tree<Payload>::is_descendant(size_t in_lhs, size_t in_rhs)
     //Scan all the descendence of LHS
 	for (User::Tree<Payload>::iterator<User::Tree<Payload>::Node> cl_lhs_iterator=this->begin( in_lhs );cl_lhs_iterator!=this->end();cl_lhs_iterator++)
 	{
-		DPRINT("LHS scan: %d\n", cl_lhs_iterator.get_index() );
+		DPRINT("LHS scan: %d\n", int(cl_lhs_iterator.get_index()) );
 		//if RHS is a descendant of LHS
 		if (cl_lhs_iterator.get_index() == in_rhs)
 		{
-			DRETURN_ARG("RHS is a descendent of LHS through node: %d", cl_lhs_iterator.get_index() );
+			DRETURN_ARG("RHS is a descendent of LHS through node: %d", int(cl_lhs_iterator.get_index()) );
 			return true;
 		}
 	}
 	//Scan all the descendence of RHS
 	for (User::Tree<Payload>::iterator<User::Tree<Payload>::Node> cl_rhs_iterator=this->begin( in_rhs );cl_rhs_iterator!=this->end();cl_rhs_iterator++)
 	{
-		DPRINT("RHS scan: %d\n", cl_rhs_iterator.get_index() );
+		DPRINT("RHS scan: %d\n", int(cl_rhs_iterator.get_index()) );
 		//if RHS is a descendant of LHS
 		if (cl_rhs_iterator.get_index() == in_lhs)
 		{
-			DRETURN_ARG("LHS is a descendent of RHS through node: %d", cl_rhs_iterator.get_index() );
+			DRETURN_ARG("LHS is a descendent of RHS through node: %d", int(cl_rhs_iterator.get_index()) );
 			return true;
 		}
 	}
@@ -1589,7 +1879,7 @@ bool Tree<Payload>::flush( void )
 template <class Payload>
 bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &iran_children_indexes )
 {
-    DENTER_ARG("Father: %d", int(in_father_index)); //Trace Enter
+    DENTER_ARG("Father: %d", int(in_father_index) ); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -1699,7 +1989,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
     if (n_num_found_children != iran_children_indexes.size())
     {
         iran_children_indexes.clear();
-        DRETURN_ARG("ERR%d: Array size %d | Expected: %d | Array of children indexes isn't holding the correct number of children indexes ...", __LINE__, int(iran_children_indexes.size()), int(n_num_expected_children) );
+        DRETURN_ARG("ERR%d: Array size %d | Expected: %d | Array of children indexes isn't holding the correct number of children indexes ...", __LINE__, int(iran_children_indexes.size()), int(n_num_expected_children)  );
         return true;
     }
 
@@ -1851,7 +2141,7 @@ bool Tree<Payload>::bump_children( size_t in_index_node )
     }
     else if (in_index_node >= this->gast_nodes.size() )
     {
-		DRETURN_ARG("ERR%d | OOB | Index %d of %d", __LINE__, in_index_node, this->gast_nodes.size() );
+		DRETURN_ARG("ERR%d | OOB | Index %d of %d", __LINE__, int(in_index_node), int(this->gast_nodes.size()) );
 		return true;
     }
 
@@ -1859,7 +2149,7 @@ bool Tree<Payload>::bump_children( size_t in_index_node )
 	auto an_children = this->get_children( in_index_node );
 	if (an_children.size() <= 0)
 	{
-		DRETURN_ARG("target node has %d children to be bumped as siblings", an_children.size() );
+		DRETURN_ARG("target node has %d children to be bumped as siblings", int(an_children.size()) );
 		return false;
 	}
 
@@ -1889,12 +2179,12 @@ bool Tree<Payload>::bump_children( size_t in_index_node )
 			//Relinks children of target to be children of father of target, also, sibling of target
 			//now have the father of the ereased node as father
 			cl_iterator->n_index_father = n_index_father_of_target_node;
-			DPRINT("Relinked node: %d as child of node: %d\n", this->gast_nodes.end() -cl_iterator, cl_iterator->n_index_father);
+			DPRINT("Relinked node: %d as child of node: %d\n", int(this->gast_nodes.end() -cl_iterator), int(cl_iterator->n_index_father) );
 			//priority needs to be updated, they are inserted as newborn children
 			cl_iterator->n_own_priority = this->gast_nodes[n_index_father_of_target_node].n_children_max_priority;
 			this->gast_nodes[n_index_father_of_target_node].n_children_max_priority++;
-			DPRINT("Updated priority of child index: %d of ereased node: %d\n", this->gast_nodes.end() -cl_iterator, cl_iterator->n_own_priority );
-			DPRINT("Updated number of children/max priority of node %d that is father of ereased node: %d\n", n_index_father_of_target_node, this->gast_nodes[n_index_father_of_target_node].n_children_max_priority );
+			DPRINT("Updated priority of child index: %d of ereased node: %d\n", int(this->gast_nodes.end() -cl_iterator), int(cl_iterator->n_own_priority) );
+			DPRINT("Updated number of children/max priority of node %d that is father of ereased node: %d\n", int(n_index_father_of_target_node), int(this->gast_nodes[n_index_father_of_target_node].n_children_max_priority) );
 			//Adjust depth since I'm bumping them up by one (adjust depth of their children as well)
 			cl_iterator->n_distance_from_root--;
 			//! @TODO: adjust depth of every node that is child of this node
@@ -1937,7 +2227,7 @@ bool Tree<Payload>::bump_children( size_t in_index_node )
 template <class Payload>
 bool Tree<Payload>::relink_node_nocheck( size_t in_index_target_node, size_t in_index_new_father )
 {
-    DENTER_ARG("Target Index: %d | New Father: %d", in_index_target_node, in_index_new_father );
+    DENTER_ARG("Target Index: %d | New Father: %d", int(in_index_target_node), int(in_index_new_father) );
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -1947,16 +2237,16 @@ bool Tree<Payload>::relink_node_nocheck( size_t in_index_target_node, size_t in_
     size_t n_old_priority_target = this->gast_nodes[in_index_target_node].n_own_priority;
     //Relink node to new father
 	this->gast_nodes[in_index_target_node].n_index_father = in_index_new_father;
-	DPRINT("Relink Node %d as child of %d\n", in_index_target_node, in_index_new_father );
+	DPRINT("Relink Node %d as child of %d\n", int(in_index_target_node), int(in_index_new_father) );
 	//Recompute priority of taget and new father
 	this->gast_nodes[in_index_target_node].n_own_priority = this->gast_nodes[in_index_new_father].n_children_max_priority;
 	this->gast_nodes[in_index_new_father].n_children_max_priority++;
-	DPRINT("With priority %d of %d\n",this->gast_nodes[in_index_target_node].n_own_priority ,this->gast_nodes[in_index_new_father].n_children_max_priority );
+	DPRINT("With priority %d of %d\n", int(this->gast_nodes[in_index_target_node].n_own_priority) ,int(this->gast_nodes[in_index_new_father].n_children_max_priority) );
 	//Recompute depth of target
 	this->gast_nodes[in_index_target_node].n_distance_from_root = this->gast_nodes[in_index_new_father].n_distance_from_root +1;
 	//Recompute number of children of old father
 	this->gast_nodes[n_index_target_old_father].n_children_max_priority--;
-	DPRINT("Old father %d now has %d children\n", n_index_target_old_father, this->gast_nodes[n_index_target_old_father].n_children_max_priority );
+	DPRINT("Old father %d now has %d children\n", int(n_index_target_old_father), int(this->gast_nodes[n_index_target_old_father].n_children_max_priority) );
 	//if old father has more children, and
 	//!@todo if there is priority to be adjusted
 	if (this->gast_nodes[n_index_target_old_father].n_children_max_priority >= 1)
@@ -1977,7 +2267,7 @@ bool Tree<Payload>::relink_node_nocheck( size_t in_index_target_node, size_t in_
 				{
 					//Increase the priority/decrease priority number
 					cl_iterator_node->n_own_priority--;
-					DPRINT("Previous sibling %d now has priority %d of %d\n", cl_iterator_node -this->gast_nodes.begin(), cl_iterator_node->n_own_priority, this->gast_nodes[n_index_target_old_father].n_children_max_priority );
+					DPRINT("Previous sibling %d now has priority %d of %d\n", int(cl_iterator_node -this->gast_nodes.begin()), int(cl_iterator_node->n_own_priority), int(this->gast_nodes[n_index_target_old_father].n_children_max_priority) );
 				}
 			}
 		}
@@ -2002,7 +2292,7 @@ bool Tree<Payload>::relink_node_nocheck( size_t in_index_target_node, size_t in_
 template <class Payload>
 bool Tree<Payload>::erease_single_node( size_t in_index_erease )
 {
-    DENTER_ARG("Erease index %d", in_index_erease );
+    DENTER_ARG("Erease index %d", int(in_index_erease) );
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
@@ -2015,17 +2305,17 @@ bool Tree<Payload>::erease_single_node( size_t in_index_erease )
 	size_t n_priority_of_ereased_node = this->gast_nodes[in_index_erease].n_own_priority;
 	//Erease the node, this invalidates the iterator
 	this->gast_nodes.erase( this->gast_nodes.begin() +in_index_erease );
-	DPRINT("Erease node: %d\n", this->gast_nodes[in_index_erease].n_own_index );
+	DPRINT("Erease node: %d\n", int(this->gast_nodes[in_index_erease].n_own_index) );
 	//TRICKY: children priority 0 1 2 3. Erease 1. I need to change priority 0 DEL1 2-> 3->2
 	//If vector erease does't have the expected result
 	if ( (n_size_before_erease -1) != this->gast_nodes.size() )
 	{
-		DRETURN_ARG("ERR%d | Size: %d->%d | ERR Vector!!! I expected the vector to have size reduced by one...", __LINE__, n_size_before_erease, this->gast_nodes.size() );
+		DRETURN_ARG("ERR%d | Size: %d->%d | ERR Vector!!! I expected the vector to have size reduced by one...", __LINE__, int(n_size_before_erease), int(this->gast_nodes.size()) );
 		return true;
 	}
 	//The father of ereased node has one fewer child
 	this->gast_nodes[n_index_father_of_ereased_node].n_children_max_priority--;
-	DPRINT("Father %d now has %d children\n", n_index_father_of_ereased_node, this->gast_nodes[n_index_father_of_ereased_node].n_children_max_priority);
+	DPRINT("Father %d now has %d children\n", int(n_index_father_of_ereased_node), int(this->gast_nodes[n_index_father_of_ereased_node].n_children_max_priority) );
 	//I scan the whole tree and update all node indexes
 	for (auto cl_iterator = this->gast_nodes.begin(); cl_iterator != this->gast_nodes.end(); cl_iterator++)
 	{
@@ -2043,26 +2333,26 @@ bool Tree<Payload>::erease_single_node( size_t in_index_erease )
 			if (cl_iterator->n_own_priority > n_priority_of_ereased_node)
 			{
 				cl_iterator->n_own_priority--;
-				DPRINT("Adjust priority of node %d to %d\n", cl_iterator->n_own_index, cl_iterator->n_own_priority );
+				DPRINT("Adjust priority of node %d to %d\n", int(cl_iterator->n_own_index), int(cl_iterator->n_own_priority) );
 			}
 		}
 		//The node that have the ereased node as father
 		if (cl_iterator->n_index_father == in_index_erease)
 		{
-			DRETURN_ARG("ERR%d | node to be ereased has a child %d!!!", __LINE__, cl_iterator->n_own_index );
+			DRETURN_ARG("ERR%d | node to be ereased has a child %d!!!", __LINE__, int(cl_iterator->n_own_index) );
 			return true;
 		} //The node that have the ereased node as father
 		//If own index has to be realigned
 		if (cl_iterator->n_own_index >= in_index_erease)
 		{
 			cl_iterator->n_own_index--;
-			DPRINT("Adjusted own index of node %d\n", cl_iterator->n_own_index);
+			DPRINT("Adjusted own index of node %d\n", int(cl_iterator->n_own_index) );
 		}
 		//Fix the father index of later index nodes
 		if (cl_iterator->n_index_father > in_index_erease )
 		{
 			cl_iterator->n_index_father--;
-			DPRINT("Adjusted father of node %d to %d\n", cl_iterator->n_own_index, cl_iterator->n_index_father );
+			DPRINT("Adjusted father of node %d to %d\n", int(cl_iterator->n_own_index), int(cl_iterator->n_index_father) );
 		}
 	}	//I scan the whole tree and update all node indexes
 
@@ -2099,7 +2389,7 @@ bool Tree<Payload>::report_error( const char *ips8_error_code )
     else
     {
         //Class was already in error. Could not
-        DRETURN_ARG("ERR: Class is already in error: %p | culd not report error: %p", (void*)(&(*this->gps8_error_code)), ips8_error_code );
+        DRETURN_ARG("ERR: Class is already in error: %s | culd not report error: %s", this->gps8_error_code, ips8_error_code );
         return true;
     }
 
