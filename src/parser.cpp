@@ -1465,11 +1465,13 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
     //	BODY
     //--------------------------------------------------------------------------
 
-    bool u1_ret;
-    int s32_cnt_destroyed = 0;
-    int s32_cnt_moved = 0;
-
-    //unsigned int u32_num_leaves = ;
+    //Performance counters
+    size_t n_cnt_ereased = 0;
+    size_t n_cnt_moved = 0;
+    //List of children of target node, no need to deallocate
+	std::vector<size_t> an_index_children;
+	//Remember the tree size. Used for loop protection
+    size_t n_mem_num_nodes = ircl_tree_root.size();
     //Start from the node after the root, as the root cannot be aggregated as the root has no father
     size_t n_index_token = 1;
     //While scan is not complete
@@ -1492,15 +1494,13 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 		)
 		{
 			//This token is a candidate for aggregation.
-			//To be selected it needs to have ONLY symbols/numbers as children? NO. I can promote the subtrees upward
+			//To be selected it needs to have ONLY symbols/numbers as children? NO. I can promote the subtrees upward!
 			DPRINT("Candidate %d\n", n_index_token );
-
-			std::vector<size_t> an_index_children;
-
+			//While the target node has children
 			do
 			{
 				//get an array filled with all the children of this node
-				an_index_children = ircl_tree_root.get_children( n_index_token );
+				bool x_fail = ircl_tree_root.find_children( n_index_token, an_index_children );
 				if (an_index_children.size() > 0)
 				{
 					DPRINT("Children: %d\n", an_index_children.size() );
@@ -1511,8 +1511,11 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 						DRETURN_ARG("ERR%d | Failed to move node %d under new father %d\n", an_index_children[0], n_index_father );
 						return -1;
 					}
+					else
+					{
+						n_cnt_moved++;
+					}
 				}
-				//This may have scrambled the indexes, I need to rescan the tree
 			}
 			//while the node has children
 			while (an_index_children.size() > 0);
@@ -1524,103 +1527,38 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 				DRETURN_ARG("ERR%d | Failed to erease node %d", n_index_token );
 				return -1;
 			}
-		}
-		//Next candidate
-		n_index_token++;
-	}
-
-
-
-    /*
-	//Root token
-    Token &rst_token_root = ircl_tree_root[0];
-	//If the token is a SUM and there is at least one leaf
-    if ((rst_token_root.e_type == Token_type::BASE_OPERATOR) && (rst_token_root.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
-    {
-		//An operator MUST have at least two operands under it
-		if (ircl_tree_root.size() < 2)
-		{
-			DRETURN_ARG("ERR:%d | Root Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_root.cl_str[0], ircl_tree_root.size() );
-			return -1;
-		}
-		//Save the number of leaves to search for. the leaves might increase in number after merging
-		unsigned int u32_num_leaves = ircl_tree_root.size();
-		//For each leaf already there before starting, the number may reduce when deleting a leaf
-		unsigned int u32_index = 0;
-		while (u32_index < u32_num_leaves)
-        {
-			//Fetch Token
-			Token &rst_token_leaf = rst_tree_leaf.payload();
-			//If leaf is a SUM/DIFF operator
-			if ((rst_token_leaf.e_type == Token_type::BASE_OPERATOR) && (rst_token_leaf.cl_str[0] == Token_legend::CS8_OPERATOR_SUM))
-			{
-				//An operator MUST have at least two operands under it
-				if (ircl_tree_root.get_children(u32_index) < 2)
-				{
-					DRETURN_ARG("ERR:%d | Leaf Operator %c has %d leaves. It should have at least 2 leaves...", __LINE__, rst_token_leaf.cl_str[0], ircl_tree_root.get_children(u32_index) );
-					return -1;
-				}
-				//For there are leaflets remaining under the leaf
-				while (rst_tree_leaf.get_num_leaves() > 0)
-				{
-					//move the leaflet
-					u1_ret = rst_tree_leaf.move_leaf( 0, ircl_tree_root, u32_ret );
-					if (u1_ret == true)
-					{
-						DRETURN_ARG("ERR:%d | failed to move leaflet %d of leaf %p %d to root %p...\n", __LINE__, 0, rst_tree_leaf, ircl_tree_root );
-						return -1;
-					}
-                    DPRINT("%d | Added leaf %d to root with now %d leaves\n", __LINE__, u32_ret, ircl_tree_root);
-                    //Count the moved leaves
-					s32_cnt_destroyed++;
-				}
-				//I now need to remove the leaf
-				u1_ret = ircl_tree_root.destroy_leaf( u32_index );
-				if (u1_ret == true)
-				{
-					DRETURN_ARG("ERR:%d | Failed to destroy leaf %d...\n", __LINE__, u32_index );
-					return -1;
-				}
-				//Count the destroyed leaves
-				s32_cnt_destroyed++;
-				DPRINT("%d | Destroyed leaf %d\n", __LINE__, u32_index);
-				//This now requires updating the indexes, I have one fewer leaves to search for
-				if (u32_num_leaves <= 0)
-				{
-					DRETURN_ARG("ERR:%d | Not enough maximum leaves remaining %d...\n", __LINE__, u32_num_leaves );
-					return -1;
-				}
-				u32_num_leaves--;
-			}
-			//If: not a SUM/DIFF
 			else
 			{
-				//Advance
-				u32_index++;
+				n_cnt_ereased++;
 			}
-        }	//For each leaf
-
-    }
-    if (ircl_tree_root.size() > 0)
-    {
-
-		//For each leaf after the merge, I now have to call recursively the merge process
-		for (unsigned int u32_index = 0;u32_index < ircl_tree_root.get_num_leaves();u32_index++)
-		{
-			u32_ret = aggregate_tree_token_sum_diff( ircl_tree_root[u32_index] );
-			if (u32_ret < 0)
+			//This may have scrambled the indexes, I need to rescan the tree
+			//! @todo I should restart the scan from the earliest modified node, but right now from outside the tree I can't see this information. It's safer to just invalidate the scan and restart
+			n_index_token = 1;
+			//Loop protection: The tree now has one fewer nodes
+			if ( n_mem_num_nodes != (ircl_tree_root.size() +1) )
 			{
-				DRETURN_ARG("ERR:%d | failed to recursively aggregate...\n", __LINE__ );
+				DRETURN_ARG("ERR:%d | Aggregate operation should have resulted in one fewer nodes in the tree. Before: %d | After: %d", __LINE__, n_mem_num_nodes, ircl_tree_root.size() );
 				return -1;
 			}
+			else
+			{
+				//Update memory
+				n_mem_num_nodes = ircl_tree_root.size();
+			}
+
+		}	//is an aggregation candidate
+		//Not an aggregation candidate
+		else
+		{
+			//Next candidate
+			n_index_token++;
 		}
-	}
-	*/
+	}	//While scan is not complete
 
     //--------------------------------------------------------------------------
     //	RETURN
     //--------------------------------------------------------------------------
-    DRETURN_ARG("Destroyed: %d | Moved: %d", s32_cnt_destroyed, s32_cnt_moved ); //Trace Return
+    DRETURN_ARG("Ereased: %d | Moved: %d", n_cnt_ereased, n_cnt_moved ); //Trace Return
     return 0;	//OK
 }   //Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
 

@@ -102,7 +102,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //! @brief Error codes of the class
-        typedef union _Error_code
+        union Error_code
         {
 			//No error
 			static constexpr const char *CPS8_OK = "OK";
@@ -114,7 +114,7 @@ class Equation_parser
 			static constexpr const char *CPS8_ERR_USER_DIGIT = "ERR:FORBIDDEN DIGIT";
 			//Unbalanced Brackets
 			static constexpr const char *CPS8_ERR_UNBALANCED_BRACKETS = "ERR:Unbalanced Brackets";
-        } Error_code;
+        };
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -149,7 +149,22 @@ class Equation_parser
 			SYMBOL_CONST,
 
 			//Unknown type
-			UNKNOWN,
+			UNKNOWN
+			/*
+			//! @brief stringify a token type
+			friend const char *to_string( Token_type &ire_source )
+			{
+				switch(ire_source)
+				{
+					case BASE_NUMBER:
+					{
+						return "number"
+						break;
+					}
+
+				}
+			};
+			*/
         };
         //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
         struct Token
