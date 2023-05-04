@@ -44,6 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 
 #include "tree.hpp"
+//#include "tree_interface.h"
 
 /**********************************************************************************
 **  DEFINES
@@ -86,6 +87,8 @@ namespace User
 //! @copyright  BSD 3-Clause License Copyright (c) 2020, Orso Eric
 //! @details
 //! \n This class translates an equation in string form into an equation in tree form
+//! \n 2022-08-09 Implements Unary +/- Operators
+//! \n 2022-08-09 Functions work out of the box. It's a symbol with leaves. It's parsed correctly.
 /************************************************************************************/
 
 class Equation_parser
@@ -98,9 +101,8 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
-
         //! @brief Error codes of the class
-        typedef union _Error_code
+        union Error_code
         {
 			//No error
 			static constexpr const char *CPS8_OK = "OK";
@@ -112,7 +114,7 @@ class Equation_parser
 			static constexpr const char *CPS8_ERR_USER_DIGIT = "ERR:FORBIDDEN DIGIT";
 			//Unbalanced Brackets
 			static constexpr const char *CPS8_ERR_UNBALANCED_BRACKETS = "ERR:Unbalanced Brackets";
-        } Error_code;
+        };
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -121,7 +123,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
 		//! @brief Describe the token type
-		typedef enum _Token_type
+		enum Token_type
         {
 				//Base symbols. Decoded by the linear parser first step
 			//Generic Number
@@ -147,11 +149,25 @@ class Equation_parser
 			SYMBOL_CONST,
 
 			//Unknown type
-			UNKNOWN,
-        } Token_type;
+			UNKNOWN
+			/*
+			//! @brief stringify a token type
+			friend const char *to_string( Token_type &ire_source )
+			{
+				switch(ire_source)
+				{
+					case BASE_NUMBER:
+					{
+						return "number"
+						break;
+					}
 
+				}
+			};
+			*/
+        };
         //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
-        typedef struct _Token
+        struct Token
         {
 			//String containing the token
 			std::string cl_str;
@@ -161,7 +177,45 @@ class Equation_parser
 			int s32_open_close_priority;
 			//Token priority. Piriority due to the symbol itself. e.g. = is higher priority than *
 			int s32_symbol_priority;
-        } Token;
+			//true = the token is applied with negative sign, it's addictive to diff and sum operators
+			bool u1_negative;
+			//Define equal operator between tokens
+			friend bool operator==(const Token& lhs, const Token& rhs)
+			{
+				if (lhs.cl_str != rhs.cl_str)
+				{
+					DPRINT("Unequal string | LHS: %s | RHS: %s\n", lhs.cl_str.c_str(), rhs.cl_str.c_str() );
+					return false;
+				}
+				if (lhs.e_type != rhs.e_type)
+				{
+					DPRINT("Unequal type | LHS: %d | RHS: %d\n", lhs.e_type, rhs.e_type );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal open close | LHS: %d | RHS: %d\n", lhs.s32_open_close_priority, rhs.s32_open_close_priority );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal priority | LHS: %d | RHS: %d\n", lhs.s32_symbol_priority, rhs.s32_symbol_priority );
+					return false;
+				}
+				if (lhs.s32_open_close_priority != rhs.s32_open_close_priority)
+				{
+					DPRINT("Unequal negation | LHS: %s | RHS: %s\n", lhs.s32_symbol_priority?"-":"+", rhs.s32_symbol_priority?"-":"+" );
+					return false;
+				}
+				return true;
+			}
+			//Defiene unequal operator
+			friend bool operator!=(const Token& lhs, const Token& rhs)
+			{
+				return (!(lhs == rhs));
+			}
+
+        };
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -194,7 +248,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //Parse a string as an equation
-        bool parse( std::string icl_equation_string );
+        bool parse( std::string is_equation );
         bool parse( const char *ipcs8_equation_string )
         {
 			return parse( std::string( ipcs8_equation_string ) );
@@ -206,6 +260,16 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief return reference to the array of tokens
+        std::vector<std::string> get_array_of_token( void )
+        {
+			return this->gclacl_tokens;
+        }
+        //! @brief return the tree of token that represent the equation
+        User::Tree<Token> get_tree_of_token( void )
+        {
+			return this->gcl_token_tree;
+        }
         //Get current error state of the library
         const char *get_error( void );
 
@@ -269,7 +333,6 @@ class Equation_parser
 			static const bool CU1_INTERNAL_CHECKS = true;
 			//Show extended parser debug strings on log
 			static const bool CU1_PARSER_EXTENDED_DEBUG = true;
-
             //Enable the detailed debug of individual functions
 			static const bool CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY = false;
         } Config;
@@ -327,29 +390,47 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //! @brief true = digit is a number
-        bool is_number( char is8_digit )
+        static bool is_number( char is8_digit )
         {
 			return ((is8_digit >= '0') && (is8_digit <= '9'));
         }
         //! @brief true = digit is a lower case letter
-        bool is_letter_lower_case( char is8_digit )
+        static bool is_letter_lower_case( char is8_digit )
         {
 			return ((is8_digit >= 'a') && (is8_digit <= 'z'));
         }
         //! @brief true = digit is an upper case letter
-        bool is_letter_upper_case( char is8_digit )
+        static bool is_letter_upper_case( char is8_digit )
         {
 			return ((is8_digit >= 'A') && (is8_digit <= 'Z'));
         }
         //! @brief true = digit is a letter
-        bool is_letter( char is8_digit )
+        static bool is_letter( char is8_digit )
         {
-			return ((this->is_letter_lower_case( is8_digit )) || (this->is_letter_upper_case( is8_digit )));
+			return ((Equation_parser::is_letter_lower_case( is8_digit )) || (Equation_parser::is_letter_upper_case( is8_digit )));
         }
         //returns true if the digit is an operator token
-		bool is_operator( char is8_digit );
+		static bool is_operator( char is8_digit );
+		//Return true if a token is of the type under test
+		//bool is_operator( Token &irst_token, Token_legend ie_token_type );
 		//returns true if the digit is a symbol digit
-		bool is_symbol( char is8_digit );
+		static bool is_symbol( char is8_digit );
+
+		//! @brief true = token is a plus operator
+		static bool is_operator_sum( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_SUM));
+		}
+		//! @brief true = token is a difference operator
+		static bool is_operator_diff( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_DIFF));
+		}
+		//! @brief true = token is a either a sum or a difference operator
+		static bool is_operator_sum_diff( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && ((irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_SUM) || (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_DIFF)) );
+		}
 
 		/*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -357,8 +438,10 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+        static bool equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Token> &orast_token_array );
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
-        static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree );
+        static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father );
         //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
         static bool token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
         //Takes a vector of tokens, and compute priority
@@ -366,7 +449,7 @@ class Equation_parser
 		//Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
         static bool compute_token_symbol_priority( Token &irst_token );
 		//Within a tree of tokens, search for sum and diff operators, and use only sum operators with a greater number of leaves | -1 fail | return number of tokens merged
-        //static int compress_tree_token_sum_diff( void );
+        static int aggregate_tree_token_sum_diff( Tree<Token> &ircl_token_tree );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -374,6 +457,8 @@ class Equation_parser
         **********************************************************************************************************************************************************
         *********************************************************************************************************************************************************/
 
+        //! @brief flush the token array and the token tree
+        bool flush( void );
         //Report an error. return false: OK | true: Unknown error code
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail

@@ -66,6 +66,8 @@
 
 //#include "tokenizer.h"
 #include "parser.h"
+//Header with the test pattern arrays to be fed to the unit tests
+#include "test_patterns.h"
 
 /****************************************************************
 **	NAMESPACES
@@ -88,6 +90,8 @@ using std::endl;
 ****************************************************************/
 
 extern bool test_bench( void );
+
+extern int unit_test_parse_token_array( void );
 
 /****************************************************************
 **	GLOBAL VARIABILES
@@ -191,24 +195,12 @@ bool test_bench( void )
     cl_my_equation.gpcl_root = pcl_token;
     */
 
-	User::Equation_parser cl_equation;
-
-	//Empty equation
-	//cl_equation.parse( "" );
-	//Unbalanced Open
-	//cl_equation.parse( "((1)" );
-	//Unbalanced Close
-	//cl_equation.parse( "(1))" );
-	//redundant priority token
-	//cl_equation.parse( "(1)" );
-	//cl_equation.parse( "(((((1)))))" );
-	//Equation Simple (OK)
-	//cl_equation.parse( "x*1.000=y*2" );
-	//Equation Harder (OK)
-	//cl_equation.parse( "x*1.000=((pippo+1.2)+(y+.233)*2)*0.001" );
-	//Test unary operators
-	cl_equation.parse( "x*(-1.000)=(-y+.233)*2" );
-    //Equation with function
+    //unit test the token array parser
+	int n_fail = unit_test_parse_token_array();
+	DPRINT("Failed test patterns: %d\n", n_fail );
+	std::cout << "----------------------------------------------------------------\n";
+	std::cout << "Unit Test: Failed patterns:" << n_fail << "\n";
+	std::cout << "----------------------------------------------------------------\n";
 
 	//----------------------------------------------------------------
 	//	RETURN
@@ -226,10 +218,11 @@ bool test_bench( void )
 //! @param f bool
 //! @return bool |
 //! @details
-//! dummy method to copy the code
+//! runs a number of unit tests on the equation solver
+//! feed a string, manually create a token array, and checks that the two are the same.
 /***************************************************************************/
 
-bool f( bool f )
+int unit_test_parse_token_array( void )
 {
 	//Trace Enter with arguments
 	DENTER_ARG("in: %d\n", 0);
@@ -238,20 +231,119 @@ bool f( bool f )
 	//	VARS
 	//----------------------------------------------------------------
 
+	User::Equation_parser cl_equation_parser;
+
 	//----------------------------------------------------------------
 	//	INIT
 	//----------------------------------------------------------------
+
+	//count the test patterns that failed the check
+	int n_cnt_fail = 0;
+
+    //
+	size_t n_num_test_equations = sizeof( ast_test_pattern )/ sizeof(St_test_pattern);
+	std::cout << "Test patterns: " << n_num_test_equations << "\n";
+	DPRINT("Number of test patterns %d\n", int(n_num_test_equations) );
 
 	//----------------------------------------------------------------
 	//	BODY
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
+	//For all test patterns
+	for (size_t n_test_pattern_index = 0; n_test_pattern_index < n_num_test_equations;n_test_pattern_index++)
+	{
+		std::cout << "----------------------------------------------------------------\n";
+		std::cout << "PATTERN: " << int(n_test_pattern_index) << " | " << ast_test_pattern[n_test_pattern_index].s_user_note << "\n";
+		std::cout << "Equation: "<< ast_test_pattern[n_test_pattern_index].s_equation << "\n";
+	    DPRINT("PATTERN%d >%s<\n", int(n_test_pattern_index), ast_test_pattern[n_test_pattern_index].s_equation );
+		//Feed the test pattern
+		bool x_fail = cl_equation_parser.parse( ast_test_pattern[n_test_pattern_index].s_equation );
+		//If expected fail state
+		if (x_fail == ast_test_pattern[n_test_pattern_index].x_fail)
+		{
+			//Get the array of string tokens
+			std::vector<std::string> ras_array_token = cl_equation_parser.get_array_of_token();
+			size_t n_num_tokens = ras_array_token.size();
+			//if not
+			if (n_num_tokens == ast_test_pattern[n_test_pattern_index].as_token_vector.size())
+			{
+				for (size_t n_array_token_index = 0;n_array_token_index < n_num_tokens;n_array_token_index++)
+				{
+				    DPRINT("TOKEN%d\n", int(n_array_token_index) );
+                    if (ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index] != ras_array_token[n_array_token_index])
+                    {
+						std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Wrong token | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str() << " | got: " << ras_array_token[n_array_token_index].c_str() << "\n";
+                        DPRINT("ERR: Pattern: %d | Token %d | WRONG TOKEN expected >%s< got >%s<\n", int(n_test_pattern_index), int(n_array_token_index), ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str(), ras_array_token[n_array_token_index].c_str() );
+                        n_cnt_fail++;
+                        //Stop
+                        n_array_token_index = n_num_tokens;
+                    }
+				}
+			}
+			else
+			{
+				std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Inconsistent token count | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector.size() << " | got: " << n_num_tokens << "\n";
+				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, ast_test_pattern[n_test_pattern_index].as_token_vector.size(), n_num_tokens );
+				n_cnt_fail++;
+			}
+			//Get the tree representation of the equation
+			User::Tree<User::Equation_parser::Token> cl_tree_from_equation = cl_equation_parser.get_tree_of_token();
+			//if the parser passed, I should have a tree
+			if (x_fail == false)
+			{
+
+				std::cout << "parsed equation in tree form:\n";
+				cl_tree_from_equation.show(0);
+				//Construct a tree from the test pattern
+				std::cout << "tree constructed from test pattern:\n";
+				User::Tree<User::Equation_parser::Token> cl_tree_from_test_pattern = User::Tree<User::Equation_parser::Token>( ast_test_pattern[n_test_pattern_index].ast_minimal_node );
+				cl_tree_from_test_pattern.link_decorator( cl_tree_from_equation.get_decorator() );
+				cl_tree_from_test_pattern.show(0);
+				//tree from parsing is the same as tree from test pattern
+				if (cl_tree_from_equation == cl_tree_from_test_pattern)
+				{
+					//Do nothing
+					std::cout << "PASS pattern: "  << n_test_pattern_index << "\n";
+					DPRINT("PASS pattern: %d\n", n_test_pattern_index );
+				}
+				else
+				{
+					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Tree from parsing is not the same as tree from test pattern\n";
+					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+					n_cnt_fail++;
+				}
+			}
+			//if parser failed and I have a tree
+			else
+			{
+				if (cl_tree_from_equation.size() <= 1)
+				{
+					std::cout << "PASS pattern: "  << n_test_pattern_index << "\n";
+					DPRINT("PASS pattern: %d\n", n_test_pattern_index );
+				}
+				else
+				{
+					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | A failed parsing has a tree\n";
+					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+					n_cnt_fail++;
+				}
+			}
+		}	//If expected fail state
+		//if expected fail state
+		else
+		{
+			std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Inconsistent fail\n";
+			DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+			n_cnt_fail++;
+		}
+	}   //For all test patterns
+
 	//----------------------------------------------------------------
 	//	RETURN
 	//----------------------------------------------------------------
 
 	//Trace Return vith return value
-	DRETURN_ARG("out: %d\n", 0);
-	return false; //OK
+	DRETURN_ARG("Failed test patterns: %d", n_cnt_fail);
+	return n_cnt_fail; //OK
 }	//end function: Dummy | bool

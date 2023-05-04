@@ -12,6 +12,10 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-pedantic" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -42,12 +46,18 @@
 		<Unit filename="src/parser.h" />
 		<Unit filename="src/rules.json" />
 		<Unit filename="src/saved_equation.json" />
+		<Unit filename="src/test_patterns.h" />
 		<Unit filename="src/tokenizer.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
 		<Unit filename="src/tokenizer.h" />
-		<Unit filename="src/tree.hpp" />
+		<Unit filename="src/tree.hpp">
+			<Option compile="1" />
+			<Option link="1" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/tree_interface.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
