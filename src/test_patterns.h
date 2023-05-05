@@ -322,7 +322,7 @@ St_test_pattern ast_test_pattern[] =
 			}
 		),
 	},
-	//TEST PATTERN 15
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	St_test_pattern
 	{
 		"Deep sum aggregator (PASS)",
@@ -368,13 +368,76 @@ St_test_pattern ast_test_pattern[] =
 			}
 		),
 	},
-
-	//TEST PATTERN 16
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	St_test_pattern
 	{
 		"Complex sum aggregator (PASS)",
 		//Source equation string to be fed
 		"Y=1+(3*X)+2+(5*sephiroth +100 +101)+4",
+		//Expected failure state
+		false,
+		//Expected output of the tokenizer
+		std::vector<std::string>
+		(
+			{
+				std::string("Y"),
+				std::string("="),
+				std::string("1"),
+				std::string("+"),
+				std::string("("),
+				std::string("3"),
+				std::string("*"),
+				std::string("X"),
+				std::string(")"),
+				std::string("+"),
+				std::string("2"),
+				std::string("+"),
+				std::string("("),
+				std::string("5"),
+				std::string("*"),
+				std::string("sephiroth"),
+				std::string("+"),
+				std::string("100"),
+				std::string("+"),
+				std::string("101"),
+				std::string(")"),
+				std::string("+"),
+				std::string("4"),
+			}
+		),
+		//Expected output of the treeficator
+		std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+		(
+			{
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("Y"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("*"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("*"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("4"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("X"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 4, },
+
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("5"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("sephiroth"), User::Equation_parser::Token_type::BASE_SYMBOL, 0, 0, false, }, 11, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("100"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("101"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+
+			}
+		),
+	},
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	St_test_pattern
+	{
+		"Deep sum diff aggregator (PASS)",
+		//Source equation string to be fed
+		"28=1+2+3+4+5+6+7",
 		//Expected failure state
 		false,
 		//Expected output of the tokenizer
@@ -406,6 +469,52 @@ St_test_pattern ast_test_pattern[] =
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("28"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("4"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("5"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("6"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("7"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+			}
+		),
+	},
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	St_test_pattern
+	{
+		"Deep sum diff aggregator (PASS)",
+		//Source equation string to be fed
+		"4=1-2+3-4+5-6+7",
+		//Expected failure state
+		false,
+		//Expected output of the tokenizer
+		std::vector<std::string>
+		(
+			{
+				std::string("4"),
+				std::string("="),
+				std::string("1"),
+				std::string("-"),
+				std::string("2"),
+				std::string("+"),
+				std::string("3"),
+				std::string("-"),
+				std::string("4"),
+				std::string("+"),
+				std::string("5"),
+				std::string("-"),
+				std::string("6"),
+				std::string("+"),
+				std::string("7"),
+			}
+		),
+		//Expected output of the treeficator
+		std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+		(
+			{
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("28"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
 				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("4"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
@@ -415,4 +524,53 @@ St_test_pattern ast_test_pattern[] =
 			}
 		),
 	},
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	St_test_pattern
+	{
+		"Forced deep sum diff aggregator (PASS)",
+		//Source equation string to be fed
+		"4=((((((1-2)+3)-4)+5)-6)+7)",
+		//Expected failure state
+		false,
+		//Expected output of the tokenizer
+		std::vector<std::string>
+		(
+			{
+				std::string("4"),
+				std::string("="),
+				std::string("1"),
+				std::string("-"),
+				std::string("2"),
+				std::string("+"),
+				std::string("3"),
+				std::string("-"),
+				std::string("4"),
+				std::string("+"),
+				std::string("5"),
+				std::string("-"),
+				std::string("6"),
+				std::string("+"),
+				std::string("7"),
+			}
+		),
+		//Expected output of the treeficator
+		std::vector<User::Tree<User::Equation_parser::Token>::St_minimal_node>
+		(
+			{
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("="), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("28"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("+"), User::Equation_parser::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("1"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("2"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("3"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("4"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("5"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("6"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation_parser::Token>::St_minimal_node{ User::Equation_parser::Token{ std::string("7"), User::Equation_parser::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+			}
+		),
+	},
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 };	//Test pattern array

@@ -295,7 +295,7 @@ bool Equation_parser::parse( std::string is_equation )
 		return true;
 	}
 	//Link the decorator for the tree to print out the token
-	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str +std::string(" | ") +std::to_string(ist_token.e_type); };
+	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str +std::string(" | ") +Equation_parser::get_token_type_string(ist_token.e_type); };
 	//Link the provided decorator to replace the default decorator
 	this->gcl_token_tree.link_decorator( f_my_decorator );
 	//Tree must be empty before conversion of token array to token tree
@@ -401,6 +401,46 @@ const char *Equation_parser::get_error( void )
     DRETURN(); //Trace Return
     return err_code; //OK
 }   //Public Getter: get_error | void |
+
+/***************************************************************************/
+//! @brief Public Getter: get_error | void |
+/***************************************************************************/
+//! @return Error_code
+//! @details
+//! \n Get current error state of the library
+//! \n Try to recover from errors
+/***************************************************************************/
+
+const char* Equation_parser::get_token_type_string(Token_type &ire_type)
+{
+    switch (ire_type)
+    {
+        case BASE_NUMBER:
+            return "BASE_NUMBER";
+        case BASE_SYMBOL:
+            return "BASE_SYMBOL";
+        case BASE_OPERATOR:
+            return "BASE_OPERATOR";
+        case BASE_OPEN:
+            return "BASE_OPEN";
+        case BASE_CLOSE:
+            return "BASE_CLOSE";
+        case SYMBOL_FUNCTION:
+            return "SYMBOL_FUNCTION";
+        case SYMBOL_INPUT:
+            return "SYMBOL_INPUT";
+        case SYMBOL_OUTPUT:
+            return "SYMBOL_OUTPUT";
+        case SYMBOL_VAR:
+            return "SYMBOL_VAR";
+        case SYMBOL_CONST:
+            return "SYMBOL_CONST";
+        default:
+			break;
+    }
+
+    return "UNKNOWN";
+}
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************

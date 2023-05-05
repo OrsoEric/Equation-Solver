@@ -174,27 +174,6 @@ bool test_bench( void )
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
-	/*
-    User::Tokenizer cl_my_instance;
-	std::cout << cl_my_instance.get_error();
-
-    cl_my_instance.parse( "4Y=3X" );
-
-	std::cout << "Create a Binary Operator token\n";
-    User::Token *pcl_token = new User::Binary_operator();
-
-
-	std::cout << "Destroy a Binary Operator token\n";
-	//This only calls the Token Destructor
-	//delete pcl_token;
-	//This calls also the destructor of Binary Operator
-    delete (User::Binary_operator *)pcl_token;
-
-
-    User::Equation cl_my_equation;
-    cl_my_equation.gpcl_root = pcl_token;
-    */
-
     //unit test the token array parser
 	int n_fail = unit_test_parse_token_array();
 	DPRINT("Failed test patterns: %d\n", n_fail );

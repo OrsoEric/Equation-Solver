@@ -1,12 +1,12 @@
 # depslib dependency file v1.0
-1681552877 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
+1683183636 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
 	<cstdio>
 	"debug.h"
 
-1681552877 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
+1683183636 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1683179691 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1683188406 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
@@ -24,11 +24,11 @@
 	<iostream>
 	"tokenizer.h"
 
-1683180424 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
+1683185521 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
 	<vector>
 	"tree.hpp"
 
-1683181467 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
+1683187976 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -36,7 +36,7 @@
 	<string>
 	"parser.h"
 
-1683134999 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+1683183636 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
 	<string>
 	<vector>
 	<stack>
@@ -44,7 +44,7 @@
 	<functional>
 	"Tree_interface.h"
 
-1681835193 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
+1683183636 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
 	<vector>
 
 1653285491 source:f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
@@ -83,5 +83,5 @@
 	"debug.h"
 	"parser.h"
 
-1683180605 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+1683265915 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
 

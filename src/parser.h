@@ -150,21 +150,6 @@ class Equation_parser
 
 			//Unknown type
 			UNKNOWN
-			/*
-			//! @brief stringify a token type
-			friend const char *to_string( Token_type &ire_source )
-			{
-				switch(ire_source)
-				{
-					case BASE_NUMBER:
-					{
-						return "number"
-						break;
-					}
-
-				}
-			};
-			*/
         };
         //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
         struct Token
@@ -215,6 +200,10 @@ class Equation_parser
 				return (!(lhs == rhs));
 			}
 
+			const char *get_token_type()
+			{
+				return Equation_parser::get_token_type_string( this->e_type );
+			}
         };
 
         /*********************************************************************************************************************************************************
@@ -272,6 +261,9 @@ class Equation_parser
         }
         //Get current error state of the library
         const char *get_error( void );
+
+        // Convert Token_type to string
+		static const char *get_token_type_string(Token_type &ire_type);
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
