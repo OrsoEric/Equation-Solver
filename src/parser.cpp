@@ -634,6 +634,16 @@ bool Equation_parser::is_symbol( char is8_digit )
 //! \n		e.g. lowest = 1 "redundant priority token deletion" kicks in deleting all "priority" tokens of priority 1 or lower
 //! \n	Tokens:		(((((1)))))	"redundant priority token deletion" -> 1
 //! \n	Priority: 	12345554321	                                    -> 0
+//! \n	-------------------------------------------------------------------
+//! \n	2023-05-05 BUG pattern 19
+//! \n	4=((((((1-2)+3)-4)+5)-6)+7)
+//! \n                       ^
+//! \n	- and + are both candidates, whish is the real problem?
+//! \n	detecting the last symbol fixes it, but inverts all operands in chain operations
+//! \n	I think it's a miscalculation of the min that lets the - pass throguh when it shoudln't
+//! \n
+//! \n
+//! \n
 /***************************************************************************/
 
 bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token )
@@ -712,7 +722,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			{
 				//Do nothing
 			}
-			DPRINT("Token%4d | >%s< | Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , s32_open_close_priority );
+			DPRINT("Token%4d | >%s< | Open Close Priority: %d | Symbol Priority %d \n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , s32_open_close_priority, cl_token_iterator->s32_symbol_priority );
 		}
 	}	//Scan the given array of token and compute the open/clsoe priority
 	//DEBUG
@@ -739,6 +749,8 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	//--------------------------------------------------------------------------
     //	REMOVE REDUNDANT PRIORITY TOKENS
     //--------------------------------------------------------------------------
+    //	s32_min_priority tells you the priority of the first non open non close token.
+	//	when s32_min_priority is not zero, that's the number of open/close you can safely remove
 	//	Remove extra parenthesis that are not needed
 	//	Update the priority of what remains to avoid recomputing the priority
 
@@ -779,9 +791,15 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				}
 			}
 		}	//While: scan is not complete
-		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", int(irclacl_token_array.size()) );
-		//DEBUG
-		//std::cout << irclacl_token_array << "\n";
+		//BUGFIX: This was super tricky
+		//I'm done deleting redundant brackets and updating priority, now the minimum open close is by definition non redundant
+		s32_min_priority = 0;
+		//DEBUG show the tokens after deleting the redundant tokens
+		DPRINT("Deleted redundant priority tokens | Tokens: %d | Min Open Close Priority: %d\n", int(irclacl_token_array.size()), s32_min_priority);
+		for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
+		{
+			DPRINT("Token%4d | >%s< | Open Close Priority: %d | Symbol Priority %d \n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority );
+		}
 	}	//If: I have redundant priority tokens
 
 	//--------------------------------------------------------------------------
@@ -835,21 +853,22 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
-				DPRINT("Candidate%4d | >%s< | Priority %d | Min Priority %d | Default\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority );
+				DPRINT("Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d | Default\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
-			//Current symbol has stronger priority then best symbol
-			else if (cl_token_iterator->s32_symbol_priority <= s32_best_priority)
+			//Current symbol has stronger priority then best symbol.
+			//TIP: using <= instead of < inverts the order of children in same priority chains, but the result is still correct
+			else if (cl_token_iterator->s32_symbol_priority < s32_best_priority)
 			{
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
-				DPRINT("Candidate%4d | >%s< | Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority );
+				DPRINT("Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
 			//Current symbol has weaker priority then best symbol
 			else
 			{
 				//Ignore it
-				DPRINT("Ignore%4d | >%s< | Priority %d | Min Priority %d | Best Priority %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority, s32_best_priority );
+				DPRINT("Ignore%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d | Best Priority %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority, s32_best_priority );
 			}
 		}
 		//If token has higher open/close priority
