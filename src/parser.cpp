@@ -757,6 +757,8 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	//If: I have redundant priority tokens
 	if (s32_min_priority > 0)
 	{
+		//Remember what's the highest priority bracket deleted
+		int n_highest_priority_open_deleted = -1;
 		//Initialize scan
 		cl_token_iterator = irclacl_token_array.begin();
 		//While: scan is not complete
@@ -766,6 +768,11 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			if ((cl_token_iterator->e_type == Token_type::BASE_OPEN) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
 				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", size_t(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				//Is the highest priority deleted bracket?
+				if ((n_highest_priority_open_deleted == -1) || (cl_token_iterator->s32_open_close_priority > n_highest_priority_open_deleted))
+				{
+					n_highest_priority_open_deleted = cl_token_iterator->s32_open_close_priority;
+				}
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -791,9 +798,15 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				}
 			}
 		}	//While: scan is not complete
+		//If: algorithmic delition error
+		if (n_highest_priority_open_deleted != s32_min_priority)
+		{
+			DRETURN_ARG("ERR: I was expected to delete open brackets up to %d open close priority but only deleted %d priority\n", s32_min_priority, n_highest_priority_open_deleted );
+			return true;
+		}
 		//BUGFIX: This was super tricky
 		//I'm done deleting redundant brackets and updating priority, now the minimum open close is by definition non redundant
-		s32_min_priority = 0;
+		s32_min_priority -= n_highest_priority_open_deleted;
 		//DEBUG show the tokens after deleting the redundant tokens
 		DPRINT("Deleted redundant priority tokens | Tokens: %d | Min Open Close Priority: %d\n", int(irclacl_token_array.size()), s32_min_priority);
 		for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
@@ -838,6 +851,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
 			s32_open_close_priority--;
 		}
+		//! @todo s32_min_priority should ALWAYS be zero here?
 		//If the token has the lowest open/close priority
 		else if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
 		{

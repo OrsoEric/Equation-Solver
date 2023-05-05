@@ -16,7 +16,7 @@ Start Debug!
 			PATTERN0 ><
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse:  | Size: 0
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | Parse:  | Size: 0
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR:1019 | Bad input string
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR:1033 | Bad input string
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -47,7 +47,7 @@ Start Debug!
 					LHS Tokens: 0 | RHS Tokens: 0
 					-->> "Payload& User::Tree<Payload>::operator[](size_t) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Object: 007afe20, Index: 0
 					<<-- "Payload& User::Tree<Payload>::operator[](size_t) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" |
-				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1433 | Root is not equal operator!
+				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1447 | Root is not equal operator!
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -72,7 +72,7 @@ Start Debug!
 					SEEK_NEXT_TOKEN | Decode: >>1<<
 					Token fully decoded:  1 | type: 0 | size: 1
 					Tokens decoded: 2
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1307 | Unbalanced brackets | Open 1 | Close 0
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1321 | Unbalanced brackets | Open 1 | Close 0
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -103,8 +103,8 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1307 | Unbalanced brackets | Open 1 | Close 0
+					ERR1178: Invalid Digit >> <<
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1321 | Unbalanced brackets | Open 1 | Close 0
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -151,8 +151,8 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1307 | Unbalanced brackets | Open 2 | Close 1
+					ERR1178: Invalid Digit >> <<
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1321 | Unbalanced brackets | Open 2 | Close 1
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -253,7 +253,7 @@ Start Debug!
 						LHS: >1<
 						RHS: >1<
 						LHS Tokens: 1 | RHS Tokens: 1
-					<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1416 | Equal not as root of the tree! Father: 0 | Tree size: 2
+					<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1430 | Equal not as root of the tree! Father: 0 | Tree size: 2
 					RHS of size 3 under father 0
 				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | FAIL
 				-->> "bool User::Equation_parser::flush()" |
@@ -385,7 +385,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
+					ERR1178: Invalid Digit >> <<
 					Equations decoded into 15 tokens
 					Token: >>1<< | Type: 0 | Size: 1
 					Token: >>=<< | Type: 2 | Size: 1
@@ -5763,7 +5763,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
+					ERR1178: Invalid Digit >> <<
 					SEEK_NEXT_TOKEN | Decode: >>+<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -5783,7 +5783,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
+					ERR1178: Invalid Digit >> <<
 					SEEK_NEXT_TOKEN | Decode: >>+<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -10151,7 +10151,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1164: Invalid Digit >> <<
+					ERR1178: Invalid Digit >> <<
 					Equations decoded into 27 tokens
 					Token: >>4<< | Type: 0 | Size: 1
 					Token: >>=<< | Type: 2 | Size: 1
