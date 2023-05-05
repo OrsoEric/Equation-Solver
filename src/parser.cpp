@@ -796,7 +796,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //Reset open close priority
     s32_open_close_priority = 0;
 	//Scan all tokens
-    for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
+    for (cl_token_iterator = irclacl_token_array.begin();cl_token_iterator != irclacl_token_array.end();cl_token_iterator++)
     {
 			//Check forbracket balance
 		//!@todo I can do better than repeating this code. Look to make a lambda or split hierarch and add incapsulate priority computation
@@ -816,7 +816,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
-			//Open, decrease priority of what comes after
+			//Close, decrease priority of what comes after
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
 			s32_open_close_priority--;
 		}
@@ -835,18 +835,21 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+				DPRINT("Candidate%4d | >%s< | Priority %d | Min Priority %d | Default\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
 			//Current symbol has stronger priority then best symbol
-			else if (s32_best_priority > cl_token_iterator->s32_symbol_priority)
+			else if (cl_token_iterator->s32_symbol_priority <= s32_best_priority)
 			{
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+				DPRINT("Candidate%4d | >%s< | Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
 			//Current symbol has weaker priority then best symbol
 			else
 			{
 				//Ignore it
+				DPRINT("Ignore%4d | >%s< | Priority %d | Min Priority %d | Best Priority %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str(), cl_token_iterator->s32_symbol_priority, s32_min_priority, s32_best_priority );
 			}
 		}
 		//If token has higher open/close priority
@@ -871,6 +874,13 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	orclacl_highest_priority_token = cl_best_iterator;
 	//Having deleted the open, what comes after is index +1 to be consistent with original input
 	DPRINT("Token%4d | >%s< | Highest priority token\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str() );
+	/*
+	if (( size_t(cl_best_iterator -irclacl_token_array.begin()) == 18 ) && (cl_best_iterator->cl_str[0] == '-'))
+	{
+		return false;
+	}
+	*/
+
 
     //--------------------------------------------------------------------------
     //	RETURN
