@@ -672,7 +672,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//Open, increase priority of what comes after
 			s32_open_close_priority++;
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
-			DPRINT("Open | Priority: %d\n", s32_open_close_priority );
+			DPRINT("Token%4d | Open | Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), s32_open_close_priority );
 		}
 		//"Priority" close
 		else if (cl_token_iterator->e_type == Token_type::BASE_CLOSE)
@@ -680,12 +680,12 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//If: I have more close tokens than open tokens
 			if (s32_open_close_priority <= 0)
 			{
-				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
+				DRETURN_ARG("ERR:%3d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
 			//Open, decrease priority of what comes after
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
-			DPRINT("Close| Priority: %d\n", s32_open_close_priority );
+			DPRINT("Token%4d | Close| Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), s32_open_close_priority );
 			s32_open_close_priority--;
 		}
 		//"Non Priority"
@@ -712,7 +712,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			{
 				//Do nothing
 			}
-			DPRINT("Token: %s | Priority: %d\n", cl_token_iterator->cl_str.c_str() , s32_open_close_priority );
+			DPRINT("Token%4d | >%s< | Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , s32_open_close_priority );
 		}
 	}	//Scan the given array of token and compute the open/clsoe priority
 	//DEBUG
@@ -753,7 +753,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//Redundant "Priority" open token
 			if ((cl_token_iterator->e_type == Token_type::BASE_OPEN) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", size_t(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -761,7 +761,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//"Priority" close
 			else if ((cl_token_iterator->e_type == Token_type::BASE_CLOSE) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", size_t(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -869,6 +869,8 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	}
 	//Return highest priority token
 	orclacl_highest_priority_token = cl_best_iterator;
+	//Having deleted the open, what comes after is index +1 to be consistent with original input
+	DPRINT("Token%4d | >%s< | Highest priority token\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str() );
 
     //--------------------------------------------------------------------------
     //	RETURN

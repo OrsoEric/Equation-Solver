@@ -16,7 +16,7 @@ Start Debug!
 			PATTERN0 ><
 			-->> "bool User::Equation_parser::parse(std::__cxx11::string)" | Parse:  | Size: 0
 				-->> "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | Parse:  | Size: 0
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR:988 | Bad input string
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR:990 | Bad input string
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -39,13 +39,14 @@ Start Debug!
 				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | Decoded 1 tokens
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-						Token: 1 | Priority: 0
+						Token   0 | >1< | Priority: 0
+						Token   0 | >1< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 					Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 					LHS Tokens: 0 | RHS Tokens: 0
 					-->> "Payload& User::Tree<Payload>::operator[](size_t) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Object: 007afe20, Index: 0
 					<<-- "Payload& User::Tree<Payload>::operator[](size_t) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" |
-				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1402 | Root is not equal operator!
+				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1404 | Root is not equal operator!
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -70,7 +71,7 @@ Start Debug!
 					SEEK_NEXT_TOKEN | Decode: >>1<<
 					Token fully decoded:  1 | type: 0 | size: 1
 					Tokens decoded: 2
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1276 | Unbalanced brackets | Open 1 | Close 0
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1278 | Unbalanced brackets | Open 1 | Close 0
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -101,8 +102,8 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1276 | Unbalanced brackets | Open 1 | Close 0
+					ERR1135: Invalid Digit >> <<
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1278 | Unbalanced brackets | Open 1 | Close 0
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -149,8 +150,8 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
-				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1276 | Unbalanced brackets | Open 2 | Close 1
+					ERR1135: Invalid Digit >> <<
+				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | ERR1278 | Unbalanced brackets | Open 2 | Close 1
 				-->> "bool User::Equation_parser::flush()" |
 					-->> "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "bool User::Tree<Payload>::init_root() [with Payload = User::Equation_parser::Token]" |
@@ -201,11 +202,12 @@ Start Debug!
 				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | Decoded 5 tokens
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-						Token: 1 | Priority: 0
-						Token: = | Priority: 0
-						Token: 1 | Priority: 0
-						Token: = | Priority: 0
-						Token: 1 | Priority: 0
+						Token   0 | >1< | Priority: 0
+						Token   1 | >=< | Priority: 0
+						Token   2 | >1< | Priority: 0
+						Token   3 | >=< | Priority: 0
+						Token   4 | >1< | Priority: 0
+						Token   1 | >=< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <=> | 0 0
 					Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 					LHS: >1<
@@ -219,7 +221,8 @@ Start Debug!
 					LHS: >=<
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: 1 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   0 | >1< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 						Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -231,15 +234,16 @@ Start Debug!
 					LHS of size 1 under father 0
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-							Token: 1 | Priority: 0
-							Token: = | Priority: 0
-							Token: 1 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   1 | >=< | Priority: 0
+							Token   2 | >1< | Priority: 0
+							Token   1 | >=< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <=> | 0 0
 						Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 						LHS: >1<
 						RHS: >1<
 						LHS Tokens: 1 | RHS Tokens: 1
-					<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1385 | Equal not as root of the tree! Father: 0 | Tree size: 2
+					<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1387 | Equal not as root of the tree! Father: 0 | Tree size: 2
 					RHS of size 3 under father 0
 				<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | FAIL
 				-->> "bool User::Equation_parser::flush()" |
@@ -371,7 +375,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
+					ERR1135: Invalid Digit >> <<
 					Equations decoded into 15 tokens
 					Token: >>1<< | Type: 0 | Size: 1
 					Token: >>=<< | Type: 2 | Size: 1
@@ -391,21 +395,22 @@ Start Debug!
 				<<-- "static bool User::Equation_parser::equation_to_token_array(std::__cxx11::string, std::vector<std::__cxx11::basic_string<char> >&, std::vector<User::Equation_parser::Token>&)" | Decoded 15 tokens
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 15 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15
-						Token: 1 | Priority: 0
-						Token: = | Priority: 0
-						Open | Priority: 1
-						Open | Priority: 2
-						Open | Priority: 3
-						Open | Priority: 4
-						Open | Priority: 5
-						Open | Priority: 6
-						Token: 1 | Priority: 6
-						Close| Priority: 6
-						Close| Priority: 5
-						Close| Priority: 4
-						Close| Priority: 3
-						Close| Priority: 2
-						Close| Priority: 1
+						Token   0 | >1< | Priority: 0
+						Token   1 | >=< | Priority: 0
+						Token   2 | Open | Priority: 1
+						Token   3 | Open | Priority: 2
+						Token   4 | Open | Priority: 3
+						Token   5 | Open | Priority: 4
+						Token   6 | Open | Priority: 5
+						Token   7 | Open | Priority: 6
+						Token   8 | >1< | Priority: 6
+						Token   9 | Close| Priority: 6
+						Token  10 | Close| Priority: 5
+						Token  11 | Close| Priority: 4
+						Token  12 | Close| Priority: 3
+						Token  13 | Close| Priority: 2
+						Token  14 | Close| Priority: 1
+						Token   1 | >=< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15 | Highest Priority Token: <=> | 0 0
 					Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 					LHS: >1<
@@ -429,7 +434,8 @@ Start Debug!
 					LHS: >=<
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: 1 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   0 | >1< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 						Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -441,19 +447,19 @@ Start Debug!
 					LHS of size 1 under father 0
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 13 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13
-							Open | Priority: 1
-							Open | Priority: 2
-							Open | Priority: 3
-							Open | Priority: 4
-							Open | Priority: 5
-							Open | Priority: 6
-							Token: 1 | Priority: 6
-							Close| Priority: 6
-							Close| Priority: 5
-							Close| Priority: 4
-							Close| Priority: 3
-							Close| Priority: 2
-							Close| Priority: 1
+							Token   0 | Open | Priority: 1
+							Token   1 | Open | Priority: 2
+							Token   2 | Open | Priority: 3
+							Token   3 | Open | Priority: 4
+							Token   4 | Open | Priority: 5
+							Token   5 | Open | Priority: 6
+							Token   6 | >1< | Priority: 6
+							Token   7 | Close| Priority: 6
+							Token   8 | Close| Priority: 5
+							Token   9 | Close| Priority: 4
+							Token  10 | Close| Priority: 3
+							Token  11 | Close| Priority: 2
+							Token  12 | Close| Priority: 1
 							Delete Open 0 | Priority: 1 | Min Priority: 6 
 							Delete Open 0 | Priority: 2 | Min Priority: 6 
 							Delete Open 0 | Priority: 3 | Min Priority: 6 
@@ -467,6 +473,7 @@ Start Debug!
 							Delete Close 1 | Priority: 2 | Min Priority: 6 
 							Delete Close 1 | Priority: 1 | Min Priority: 6 
 							Deleted redundant priority tokens | Tokens: 1
+							Token   0 | >1< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 						Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -693,9 +700,10 @@ Start Debug!
 					<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-							Token: 1 | Priority: 0
-							Token: = | Priority: 0
-							Token: 1 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   1 | >=< | Priority: 0
+							Token   2 | >1< | Priority: 0
+							Token   1 | >=< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <=> | 0 0
 						Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 						LHS: >1<
@@ -707,7 +715,8 @@ Start Debug!
 						LHS: >=<
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-								Token: 1 | Priority: 0
+								Token   0 | >1< | Priority: 0
+								Token   0 | >1< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 							Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -719,7 +728,8 @@ Start Debug!
 						LHS of size 1 under father 0
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-								Token: 1 | Priority: 0
+								Token   0 | >1< | Priority: 0
+								Token   0 | >1< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 							Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -959,11 +969,12 @@ Start Debug!
 						<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 0
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-								Token: 3 | Priority: 0
-								Token: / | Priority: 0
-								Token: 2 | Priority: 0
-								Token: = | Priority: 0
-								Token: 1.5000000000 | Priority: 0
+								Token   0 | >3< | Priority: 0
+								Token   1 | >/< | Priority: 0
+								Token   2 | >2< | Priority: 0
+								Token   3 | >=< | Priority: 0
+								Token   4 | >1.5000000000< | Priority: 0
+								Token   3 | >=< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <=> | 0 0
 							Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 							LHS: >3<
@@ -977,9 +988,10 @@ Start Debug!
 							LHS: >=<
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-									Token: 3 | Priority: 0
-									Token: / | Priority: 0
-									Token: 2 | Priority: 0
+									Token   0 | >3< | Priority: 0
+									Token   1 | >/< | Priority: 0
+									Token   2 | >2< | Priority: 0
+									Token   1 | >/< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: </> | 0 2
 								Core Token: >/< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 2
 								LHS: >3<
@@ -991,7 +1003,8 @@ Start Debug!
 								<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 1 | Nodes under Father: 2
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 3 | Priority: 0
+										Token   0 | >3< | Priority: 0
+										Token   0 | >3< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 									Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -1001,7 +1014,8 @@ Start Debug!
 								LHS of size 1 under father 1
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 2 | Priority: 0
+										Token   0 | >2< | Priority: 0
+										Token   0 | >2< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 									Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -1013,7 +1027,8 @@ Start Debug!
 							LHS of size 3 under father 0
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-									Token: 1.5000000000 | Priority: 0
+									Token   0 | >1.5000000000< | Priority: 0
+									Token   0 | >1.5000000000< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1.5000000000> | 0 5
 								Core Token: >1.5000000000< | Size: 12 | Open/Close Priority: 0 | Symbol Priority: 5
 								LHS Tokens: 0 | RHS Tokens: 0
@@ -1336,11 +1351,12 @@ Start Debug!
 							<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 0
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-									Token: 5 | Priority: 0
-									Token: = | Priority: 0
-									Token: 2 | Priority: 0
-									Token: + | Priority: 0
-									Token: 3 | Priority: 0
+									Token   0 | >5< | Priority: 0
+									Token   1 | >=< | Priority: 0
+									Token   2 | >2< | Priority: 0
+									Token   3 | >+< | Priority: 0
+									Token   4 | >3< | Priority: 0
+									Token   1 | >=< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <=> | 0 0
 								Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 								LHS: >5<
@@ -1354,7 +1370,8 @@ Start Debug!
 								LHS: >=<
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 5 | Priority: 0
+										Token   0 | >5< | Priority: 0
+										Token   0 | >5< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 									Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -1366,9 +1383,10 @@ Start Debug!
 								LHS of size 1 under father 0
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-										Token: 2 | Priority: 0
-										Token: + | Priority: 0
-										Token: 3 | Priority: 0
+										Token   0 | >2< | Priority: 0
+										Token   1 | >+< | Priority: 0
+										Token   2 | >3< | Priority: 0
+										Token   1 | >+< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 									Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 									LHS: >2<
@@ -1378,7 +1396,8 @@ Start Debug!
 									<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: 2 | Priority: 0
+											Token   0 | >2< | Priority: 0
+											Token   0 | >2< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 										Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -1388,7 +1407,8 @@ Start Debug!
 									LHS of size 1 under father 2
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: 3 | Priority: 0
+											Token   0 | >3< | Priority: 0
+											Token   0 | >3< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 										Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -1729,13 +1749,14 @@ Start Debug!
 								<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 0
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-										Token: 1 | Priority: 0
-										Token: + | Priority: 0
-										Token: 4 | Priority: 0
-										Token: = | Priority: 0
-										Token: 2 | Priority: 0
-										Token: + | Priority: 0
-										Token: 3 | Priority: 0
+										Token   0 | >1< | Priority: 0
+										Token   1 | >+< | Priority: 0
+										Token   2 | >4< | Priority: 0
+										Token   3 | >=< | Priority: 0
+										Token   4 | >2< | Priority: 0
+										Token   5 | >+< | Priority: 0
+										Token   6 | >3< | Priority: 0
+										Token   3 | >=< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <=> | 0 0
 									Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 									LHS: >1<
@@ -1751,9 +1772,10 @@ Start Debug!
 									LHS: >=<
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-											Token: 1 | Priority: 0
-											Token: + | Priority: 0
-											Token: 4 | Priority: 0
+											Token   0 | >1< | Priority: 0
+											Token   1 | >+< | Priority: 0
+											Token   2 | >4< | Priority: 0
+											Token   1 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >1<
@@ -1765,7 +1787,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 1 | Nodes under Father: 2
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -1775,7 +1798,8 @@ Start Debug!
 										LHS of size 1 under father 1
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 4 | Priority: 0
+												Token   0 | >4< | Priority: 0
+												Token   0 | >4< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 											Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -1787,9 +1811,10 @@ Start Debug!
 									LHS of size 3 under father 0
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-											Token: 2 | Priority: 0
-											Token: + | Priority: 0
-											Token: 3 | Priority: 0
+											Token   0 | >2< | Priority: 0
+											Token   1 | >+< | Priority: 0
+											Token   2 | >3< | Priority: 0
+											Token   1 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >2<
@@ -1799,7 +1824,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 4 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 2 | Priority: 0
+												Token   0 | >2< | Priority: 0
+												Token   0 | >2< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 											Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -1809,7 +1835,8 @@ Start Debug!
 										LHS of size 1 under father 4
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 3 | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   0 | >3< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 											Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2222,9 +2249,10 @@ Start Debug!
 									<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-											Token: X | Priority: 0
-											Token: = | Priority: 0
-											Token: 1 | Priority: 0
+											Token   0 | >X< | Priority: 0
+											Token   1 | >=< | Priority: 0
+											Token   2 | >1< | Priority: 0
+											Token   1 | >=< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <=> | 0 0
 										Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 										LHS: >X<
@@ -2236,7 +2264,8 @@ Start Debug!
 										LHS: >=<
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: X | Priority: 0
+												Token   0 | >X< | Priority: 0
+												Token   0 | >X< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <X> | 0 4
 											Core Token: >X< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2248,7 +2277,8 @@ Start Debug!
 										LHS of size 1 under father 0
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2533,17 +2563,18 @@ Start Debug!
 										<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 11 | Father 0
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11
-												Token: 3 | Priority: 0
-												Token: * | Priority: 0
-												Token: X | Priority: 0
-												Token: = | Priority: 0
-												Open | Priority: 1
-												Token: 5 | Priority: 1
-												Token: * | Priority: 1
-												Token: Y | Priority: 1
-												Close| Priority: 1
-												Token: + | Priority: 0
-												Token: C | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   1 | >*< | Priority: 0
+												Token   2 | >X< | Priority: 0
+												Token   3 | >=< | Priority: 0
+												Token   4 | Open | Priority: 1
+												Token   5 | >5< | Priority: 1
+												Token   6 | >*< | Priority: 1
+												Token   7 | >Y< | Priority: 1
+												Token   8 | Close| Priority: 1
+												Token   9 | >+< | Priority: 0
+												Token  10 | >C< | Priority: 0
+												Token   3 | >=< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11 | Highest Priority Token: <=> | 0 0
 											Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 											LHS: >3<
@@ -2563,9 +2594,10 @@ Start Debug!
 											LHS: >=<
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-												Token: 3 | Priority: 0
-												Token: * | Priority: 0
-												Token: X | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   1 | >*< | Priority: 0
+												Token   2 | >X< | Priority: 0
+												Token   1 | >*< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <*> | 0 1
 											Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 											LHS: >3<
@@ -2577,7 +2609,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 1 | Nodes under Father: 2
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 3 | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   0 | >3< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 											Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2587,7 +2620,8 @@ Start Debug!
 										LHS of size 1 under father 1
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 1
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: X | Priority: 0
+												Token   0 | >X< | Priority: 0
+												Token   0 | >X< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <X> | 0 4
 											Core Token: >X< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2599,13 +2633,14 @@ Start Debug!
 									LHS of size 3 under father 0
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-											Open | Priority: 1
-											Token: 5 | Priority: 1
-											Token: * | Priority: 1
-											Token: Y | Priority: 1
-											Close| Priority: 1
-											Token: + | Priority: 0
-											Token: C | Priority: 0
+											Token   0 | Open | Priority: 1
+											Token   1 | >5< | Priority: 1
+											Token   2 | >*< | Priority: 1
+											Token   3 | >Y< | Priority: 1
+											Token   4 | Close| Priority: 1
+											Token   5 | >+< | Priority: 0
+											Token   6 | >C< | Priority: 0
+											Token   5 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >(<
@@ -2619,14 +2654,15 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 4 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 4
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-												Open | Priority: 1
-												Token: 5 | Priority: 1
-												Token: * | Priority: 1
-												Token: Y | Priority: 1
-												Close| Priority: 1
+												Token   0 | Open | Priority: 1
+												Token   1 | >5< | Priority: 1
+												Token   2 | >*< | Priority: 1
+												Token   3 | >Y< | Priority: 1
+												Token   4 | Close| Priority: 1
 												Delete Open 0 | Priority: 1 | Min Priority: 1 
 												Delete Close 3 | Priority: 1 | Min Priority: 1 
 												Deleted redundant priority tokens | Tokens: 3
+												Token   1 | >*< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <*> | 0 1
 											Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 											LHS: >5<
@@ -2636,7 +2672,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 5 | Nodes under Father: 2
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 5
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 5 | Priority: 0
+												Token   0 | >5< | Priority: 0
+												Token   0 | >5< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 											Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2646,7 +2683,8 @@ Start Debug!
 										LHS of size 1 under father 5
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 5
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: Y | Priority: 0
+												Token   0 | >Y< | Priority: 0
+												Token   0 | >Y< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <Y> | 0 4
 											Core Token: >Y< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -2658,7 +2696,8 @@ Start Debug!
 									LHS of size 3 under father 4
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: C | Priority: 0
+											Token   0 | >C< | Priority: 0
+											Token   0 | >C< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <C> | 0 4
 										Core Token: >C< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -3248,11 +3287,12 @@ Start Debug!
 								<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 0
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-										Token: Pippo | Priority: 0
-										Token: = | Priority: 0
-										Token: Pluto | Priority: 0
-										Token: + | Priority: 0
-										Token: self_awareness | Priority: 0
+										Token   0 | >Pippo< | Priority: 0
+										Token   1 | >=< | Priority: 0
+										Token   2 | >Pluto< | Priority: 0
+										Token   3 | >+< | Priority: 0
+										Token   4 | >self_awareness< | Priority: 0
+										Token   1 | >=< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <=> | 0 0
 									Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 									LHS: >Pippo<
@@ -3266,7 +3306,8 @@ Start Debug!
 									LHS: >=<
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: Pippo | Priority: 0
+											Token   0 | >Pippo< | Priority: 0
+											Token   0 | >Pippo< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <Pippo> | 0 4
 										Core Token: >Pippo< | Size: 5 | Open/Close Priority: 0 | Symbol Priority: 4
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -3278,9 +3319,10 @@ Start Debug!
 									LHS of size 1 under father 0
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-											Token: Pluto | Priority: 0
-											Token: + | Priority: 0
-											Token: self_awareness | Priority: 0
+											Token   0 | >Pluto< | Priority: 0
+											Token   1 | >+< | Priority: 0
+											Token   2 | >self_awareness< | Priority: 0
+											Token   1 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >Pluto<
@@ -3290,7 +3332,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: Pluto | Priority: 0
+												Token   0 | >Pluto< | Priority: 0
+												Token   0 | >Pluto< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <Pluto> | 0 4
 											Core Token: >Pluto< | Size: 5 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -3300,7 +3343,8 @@ Start Debug!
 										LHS of size 1 under father 2
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: self_awareness | Priority: 0
+												Token   0 | >self_awareness< | Priority: 0
+												Token   0 | >self_awareness< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <self_awareness> | 0 4
 											Core Token: >self_awareness< | Size: 14 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -3641,13 +3685,14 @@ Start Debug!
 									<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-											Token: 3 | Priority: 0
-											Token: = | Priority: 0
-											Token: 1 | Priority: 0
-											Token: + | Priority: 0
-											Token: 1 | Priority: 0
-											Token: + | Priority: 0
-											Token: 1 | Priority: 0
+											Token   0 | >3< | Priority: 0
+											Token   1 | >=< | Priority: 0
+											Token   2 | >1< | Priority: 0
+											Token   3 | >+< | Priority: 0
+											Token   4 | >1< | Priority: 0
+											Token   5 | >+< | Priority: 0
+											Token   6 | >1< | Priority: 0
+											Token   1 | >=< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <=> | 0 0
 										Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 										LHS: >3<
@@ -3663,7 +3708,8 @@ Start Debug!
 										LHS: >=<
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 3 | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   0 | >3< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 											Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -3675,11 +3721,12 @@ Start Debug!
 										LHS of size 1 under father 0
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 0
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-												Token: 1 | Priority: 0
-												Token: + | Priority: 0
-												Token: 1 | Priority: 0
-												Token: + | Priority: 0
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >1< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >1< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >1<
@@ -3691,7 +3738,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -3701,9 +3749,10 @@ Start Debug!
 										LHS of size 1 under father 2
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 2
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-												Token: 1 | Priority: 0
-												Token: + | Priority: 0
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >1< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >1<
@@ -3713,7 +3762,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 2 | Own Index: 4 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -3723,7 +3773,8 @@ Start Debug!
 										LHS of size 1 under father 4
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4231,21 +4282,22 @@ Start Debug!
 								<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 15 | Father 0
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15
-										Token: 28 | Priority: 0
-										Token: = | Priority: 0
-										Token: 1 | Priority: 0
-										Token: + | Priority: 0
-										Token: 2 | Priority: 0
-										Token: + | Priority: 0
-										Token: 3 | Priority: 0
-										Token: + | Priority: 0
-										Token: 4 | Priority: 0
-										Token: + | Priority: 0
-										Token: 5 | Priority: 0
-										Token: + | Priority: 0
-										Token: 6 | Priority: 0
-										Token: + | Priority: 0
-										Token: 7 | Priority: 0
+										Token   0 | >28< | Priority: 0
+										Token   1 | >=< | Priority: 0
+										Token   2 | >1< | Priority: 0
+										Token   3 | >+< | Priority: 0
+										Token   4 | >2< | Priority: 0
+										Token   5 | >+< | Priority: 0
+										Token   6 | >3< | Priority: 0
+										Token   7 | >+< | Priority: 0
+										Token   8 | >4< | Priority: 0
+										Token   9 | >+< | Priority: 0
+										Token  10 | >5< | Priority: 0
+										Token  11 | >+< | Priority: 0
+										Token  12 | >6< | Priority: 0
+										Token  13 | >+< | Priority: 0
+										Token  14 | >7< | Priority: 0
+										Token   1 | >=< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15 | Highest Priority Token: <=> | 0 0
 									Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 									LHS: >28<
@@ -4269,7 +4321,8 @@ Start Debug!
 									LHS: >=<
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: 28 | Priority: 0
+											Token   0 | >28< | Priority: 0
+											Token   0 | >28< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <28> | 0 5
 										Core Token: >28< | Size: 2 | Open/Close Priority: 0 | Symbol Priority: 5
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -4281,19 +4334,20 @@ Start Debug!
 									LHS of size 1 under father 0
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 13 | Father 0
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13
-											Token: 1 | Priority: 0
-											Token: + | Priority: 0
-											Token: 2 | Priority: 0
-											Token: + | Priority: 0
-											Token: 3 | Priority: 0
-											Token: + | Priority: 0
-											Token: 4 | Priority: 0
-											Token: + | Priority: 0
-											Token: 5 | Priority: 0
-											Token: + | Priority: 0
-											Token: 6 | Priority: 0
-											Token: + | Priority: 0
-											Token: 7 | Priority: 0
+											Token   0 | >1< | Priority: 0
+											Token   1 | >+< | Priority: 0
+											Token   2 | >2< | Priority: 0
+											Token   3 | >+< | Priority: 0
+											Token   4 | >3< | Priority: 0
+											Token   5 | >+< | Priority: 0
+											Token   6 | >4< | Priority: 0
+											Token   7 | >+< | Priority: 0
+											Token   8 | >5< | Priority: 0
+											Token   9 | >+< | Priority: 0
+											Token  10 | >6< | Priority: 0
+											Token  11 | >+< | Priority: 0
+											Token  12 | >7< | Priority: 0
+											Token   1 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >1<
@@ -4313,7 +4367,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 1 | Priority: 0
+												Token   0 | >1< | Priority: 0
+												Token   0 | >1< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 											Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4323,17 +4378,18 @@ Start Debug!
 										LHS of size 1 under father 2
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 11 | Father 2
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11
-												Token: 2 | Priority: 0
-												Token: + | Priority: 0
-												Token: 3 | Priority: 0
-												Token: + | Priority: 0
-												Token: 4 | Priority: 0
-												Token: + | Priority: 0
-												Token: 5 | Priority: 0
-												Token: + | Priority: 0
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >2< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >3< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >4< | Priority: 0
+												Token   5 | >+< | Priority: 0
+												Token   6 | >5< | Priority: 0
+												Token   7 | >+< | Priority: 0
+												Token   8 | >6< | Priority: 0
+												Token   9 | >+< | Priority: 0
+												Token  10 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >2<
@@ -4351,7 +4407,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 2 | Own Index: 4 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 2 | Priority: 0
+												Token   0 | >2< | Priority: 0
+												Token   0 | >2< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 											Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4361,15 +4418,16 @@ Start Debug!
 										LHS of size 1 under father 4
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 9 | Father 4
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9
-												Token: 3 | Priority: 0
-												Token: + | Priority: 0
-												Token: 4 | Priority: 0
-												Token: + | Priority: 0
-												Token: 5 | Priority: 0
-												Token: + | Priority: 0
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >4< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >5< | Priority: 0
+												Token   5 | >+< | Priority: 0
+												Token   6 | >6< | Priority: 0
+												Token   7 | >+< | Priority: 0
+												Token   8 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >3<
@@ -4385,7 +4443,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 6 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 6
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 3 | Priority: 0
+												Token   0 | >3< | Priority: 0
+												Token   0 | >3< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 											Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4395,13 +4454,14 @@ Start Debug!
 										LHS of size 1 under father 6
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 6
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-												Token: 4 | Priority: 0
-												Token: + | Priority: 0
-												Token: 5 | Priority: 0
-												Token: + | Priority: 0
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >4< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >5< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >6< | Priority: 0
+												Token   5 | >+< | Priority: 0
+												Token   6 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >4<
@@ -4415,7 +4475,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 6 | Own Index: 8 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 8
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 4 | Priority: 0
+												Token   0 | >4< | Priority: 0
+												Token   0 | >4< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 											Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4425,11 +4486,12 @@ Start Debug!
 										LHS of size 1 under father 8
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 8
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-												Token: 5 | Priority: 0
-												Token: + | Priority: 0
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >5< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >6< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >5<
@@ -4441,7 +4503,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 8 | Own Index: 10 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 10
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 5 | Priority: 0
+												Token   0 | >5< | Priority: 0
+												Token   0 | >5< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 											Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4451,9 +4514,10 @@ Start Debug!
 										LHS of size 1 under father 10
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 10
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >6< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >6<
@@ -4463,7 +4527,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 10 | Own Index: 12 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 6 | Priority: 0
+												Token   0 | >6< | Priority: 0
+												Token   0 | >6< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <6> | 0 5
 											Core Token: >6< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -4473,7 +4538,8 @@ Start Debug!
 										LHS of size 1 under father 12
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 7 | Priority: 0
+												Token   0 | >7< | Priority: 0
+												Token   0 | >7< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <7> | 0 5
 											Core Token: >7< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -5510,7 +5576,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
+					ERR1135: Invalid Digit >> <<
 					SEEK_NEXT_TOKEN | Decode: >>+<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -5530,7 +5596,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
+					ERR1135: Invalid Digit >> <<
 					SEEK_NEXT_TOKEN | Decode: >>+<<
 					-->> "static bool User::Equation_parser::is_symbol(char)" | Digit: >>+<<
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
@@ -5596,29 +5662,30 @@ Start Debug!
 				<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 23 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 23
-						Token: Y | Priority: 0
-						Token: = | Priority: 0
-						Token: 1 | Priority: 0
-						Token: + | Priority: 0
-						Open | Priority: 1
-						Token: 3 | Priority: 1
-						Token: * | Priority: 1
-						Token: X | Priority: 1
-						Close| Priority: 1
-						Token: + | Priority: 0
-						Token: 2 | Priority: 0
-						Token: + | Priority: 0
-						Open | Priority: 1
-						Token: 5 | Priority: 1
-						Token: * | Priority: 1
-						Token: sephiroth | Priority: 1
-						Token: + | Priority: 1
-						Token: 100 | Priority: 1
-						Token: + | Priority: 1
-						Token: 101 | Priority: 1
-						Close| Priority: 1
-						Token: + | Priority: 0
-						Token: 4 | Priority: 0
+						Token   0 | >Y< | Priority: 0
+						Token   1 | >=< | Priority: 0
+						Token   2 | >1< | Priority: 0
+						Token   3 | >+< | Priority: 0
+						Token   4 | Open | Priority: 1
+						Token   5 | >3< | Priority: 1
+						Token   6 | >*< | Priority: 1
+						Token   7 | >X< | Priority: 1
+						Token   8 | Close| Priority: 1
+						Token   9 | >+< | Priority: 0
+						Token  10 | >2< | Priority: 0
+						Token  11 | >+< | Priority: 0
+						Token  12 | Open | Priority: 1
+						Token  13 | >5< | Priority: 1
+						Token  14 | >*< | Priority: 1
+						Token  15 | >sephiroth< | Priority: 1
+						Token  16 | >+< | Priority: 1
+						Token  17 | >100< | Priority: 1
+						Token  18 | >+< | Priority: 1
+						Token  19 | >101< | Priority: 1
+						Token  20 | Close| Priority: 1
+						Token  21 | >+< | Priority: 0
+						Token  22 | >4< | Priority: 0
+						Token   1 | >=< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 23 | Highest Priority Token: <=> | 0 0
 					Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 					LHS: >Y<
@@ -5650,7 +5717,8 @@ Start Debug!
 					LHS: >=<
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: Y | Priority: 0
+							Token   0 | >Y< | Priority: 0
+							Token   0 | >Y< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <Y> | 0 4
 						Core Token: >Y< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -5662,27 +5730,28 @@ Start Debug!
 					LHS of size 1 under father 0
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 21 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 21
-							Token: 1 | Priority: 0
-							Token: + | Priority: 0
-							Open | Priority: 1
-							Token: 3 | Priority: 1
-							Token: * | Priority: 1
-							Token: X | Priority: 1
-							Close| Priority: 1
-							Token: + | Priority: 0
-							Token: 2 | Priority: 0
-							Token: + | Priority: 0
-							Open | Priority: 1
-							Token: 5 | Priority: 1
-							Token: * | Priority: 1
-							Token: sephiroth | Priority: 1
-							Token: + | Priority: 1
-							Token: 100 | Priority: 1
-							Token: + | Priority: 1
-							Token: 101 | Priority: 1
-							Close| Priority: 1
-							Token: + | Priority: 0
-							Token: 4 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   1 | >+< | Priority: 0
+							Token   2 | Open | Priority: 1
+							Token   3 | >3< | Priority: 1
+							Token   4 | >*< | Priority: 1
+							Token   5 | >X< | Priority: 1
+							Token   6 | Close| Priority: 1
+							Token   7 | >+< | Priority: 0
+							Token   8 | >2< | Priority: 0
+							Token   9 | >+< | Priority: 0
+							Token  10 | Open | Priority: 1
+							Token  11 | >5< | Priority: 1
+							Token  12 | >*< | Priority: 1
+							Token  13 | >sephiroth< | Priority: 1
+							Token  14 | >+< | Priority: 1
+							Token  15 | >100< | Priority: 1
+							Token  16 | >+< | Priority: 1
+							Token  17 | >101< | Priority: 1
+							Token  18 | Close| Priority: 1
+							Token  19 | >+< | Priority: 0
+							Token  20 | >4< | Priority: 0
+							Token   1 | >+< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 21 | Highest Priority Token: <+> | 0 3
 						Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 						LHS: >1<
@@ -5710,7 +5779,8 @@ Start Debug!
 						<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-								Token: 1 | Priority: 0
+								Token   0 | >1< | Priority: 0
+								Token   0 | >1< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 							Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -5720,25 +5790,26 @@ Start Debug!
 						LHS of size 1 under father 2
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 19 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 19
-								Open | Priority: 1
-								Token: 3 | Priority: 1
-								Token: * | Priority: 1
-								Token: X | Priority: 1
-								Close| Priority: 1
-								Token: + | Priority: 0
-								Token: 2 | Priority: 0
-								Token: + | Priority: 0
-								Open | Priority: 1
-								Token: 5 | Priority: 1
-								Token: * | Priority: 1
-								Token: sephiroth | Priority: 1
-								Token: + | Priority: 1
-								Token: 100 | Priority: 1
-								Token: + | Priority: 1
-								Token: 101 | Priority: 1
-								Close| Priority: 1
-								Token: + | Priority: 0
-								Token: 4 | Priority: 0
+								Token   0 | Open | Priority: 1
+								Token   1 | >3< | Priority: 1
+								Token   2 | >*< | Priority: 1
+								Token   3 | >X< | Priority: 1
+								Token   4 | Close| Priority: 1
+								Token   5 | >+< | Priority: 0
+								Token   6 | >2< | Priority: 0
+								Token   7 | >+< | Priority: 0
+								Token   8 | Open | Priority: 1
+								Token   9 | >5< | Priority: 1
+								Token  10 | >*< | Priority: 1
+								Token  11 | >sephiroth< | Priority: 1
+								Token  12 | >+< | Priority: 1
+								Token  13 | >100< | Priority: 1
+								Token  14 | >+< | Priority: 1
+								Token  15 | >101< | Priority: 1
+								Token  16 | Close| Priority: 1
+								Token  17 | >+< | Priority: 0
+								Token  18 | >4< | Priority: 0
+								Token   5 | >+< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 19 | Highest Priority Token: <+> | 0 3
 							Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 							LHS: >(<
@@ -5764,14 +5835,15 @@ Start Debug!
 							<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 2 | Own Index: 4 | Nodes under Father: 3
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 4
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-									Open | Priority: 1
-									Token: 3 | Priority: 1
-									Token: * | Priority: 1
-									Token: X | Priority: 1
-									Close| Priority: 1
+									Token   0 | Open | Priority: 1
+									Token   1 | >3< | Priority: 1
+									Token   2 | >*< | Priority: 1
+									Token   3 | >X< | Priority: 1
+									Token   4 | Close| Priority: 1
 									Delete Open 0 | Priority: 1 | Min Priority: 1 
 									Delete Close 3 | Priority: 1 | Min Priority: 1 
 									Deleted redundant priority tokens | Tokens: 3
+									Token   1 | >*< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <*> | 0 1
 								Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 								LHS: >3<
@@ -5781,7 +5853,8 @@ Start Debug!
 								<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 5 | Nodes under Father: 2
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 5
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 3 | Priority: 0
+										Token   0 | >3< | Priority: 0
+										Token   0 | >3< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 									Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -5791,7 +5864,8 @@ Start Debug!
 								LHS of size 1 under father 5
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 5
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: X | Priority: 0
+										Token   0 | >X< | Priority: 0
+										Token   0 | >X< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <X> | 0 4
 									Core Token: >X< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 4
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -5803,19 +5877,20 @@ Start Debug!
 							LHS of size 3 under father 4
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 13 | Father 4
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13
-									Token: 2 | Priority: 0
-									Token: + | Priority: 0
-									Open | Priority: 1
-									Token: 5 | Priority: 1
-									Token: * | Priority: 1
-									Token: sephiroth | Priority: 1
-									Token: + | Priority: 1
-									Token: 100 | Priority: 1
-									Token: + | Priority: 1
-									Token: 101 | Priority: 1
-									Close| Priority: 1
-									Token: + | Priority: 0
-									Token: 4 | Priority: 0
+									Token   0 | >2< | Priority: 0
+									Token   1 | >+< | Priority: 0
+									Token   2 | Open | Priority: 1
+									Token   3 | >5< | Priority: 1
+									Token   4 | >*< | Priority: 1
+									Token   5 | >sephiroth< | Priority: 1
+									Token   6 | >+< | Priority: 1
+									Token   7 | >100< | Priority: 1
+									Token   8 | >+< | Priority: 1
+									Token   9 | >101< | Priority: 1
+									Token  10 | Close| Priority: 1
+									Token  11 | >+< | Priority: 0
+									Token  12 | >4< | Priority: 0
+									Token   1 | >+< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13 | Highest Priority Token: <+> | 0 3
 								Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 								LHS: >2<
@@ -5835,7 +5910,8 @@ Start Debug!
 								<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 8 | Nodes under Father: 3
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 8
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 2 | Priority: 0
+										Token   0 | >2< | Priority: 0
+										Token   0 | >2< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 									Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -5845,17 +5921,18 @@ Start Debug!
 								LHS of size 1 under father 8
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 11 | Father 8
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11
-										Open | Priority: 1
-										Token: 5 | Priority: 1
-										Token: * | Priority: 1
-										Token: sephiroth | Priority: 1
-										Token: + | Priority: 1
-										Token: 100 | Priority: 1
-										Token: + | Priority: 1
-										Token: 101 | Priority: 1
-										Close| Priority: 1
-										Token: + | Priority: 0
-										Token: 4 | Priority: 0
+										Token   0 | Open | Priority: 1
+										Token   1 | >5< | Priority: 1
+										Token   2 | >*< | Priority: 1
+										Token   3 | >sephiroth< | Priority: 1
+										Token   4 | >+< | Priority: 1
+										Token   5 | >100< | Priority: 1
+										Token   6 | >+< | Priority: 1
+										Token   7 | >101< | Priority: 1
+										Token   8 | Close| Priority: 1
+										Token   9 | >+< | Priority: 0
+										Token  10 | >4< | Priority: 0
+										Token   9 | >+< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11 | Highest Priority Token: <+> | 0 3
 									Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 									LHS: >(<
@@ -5873,18 +5950,19 @@ Start Debug!
 									<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 8 | Own Index: 10 | Nodes under Father: 3
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 9 | Father 10
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9
-											Open | Priority: 1
-											Token: 5 | Priority: 1
-											Token: * | Priority: 1
-											Token: sephiroth | Priority: 1
-											Token: + | Priority: 1
-											Token: 100 | Priority: 1
-											Token: + | Priority: 1
-											Token: 101 | Priority: 1
-											Close| Priority: 1
+											Token   0 | Open | Priority: 1
+											Token   1 | >5< | Priority: 1
+											Token   2 | >*< | Priority: 1
+											Token   3 | >sephiroth< | Priority: 1
+											Token   4 | >+< | Priority: 1
+											Token   5 | >100< | Priority: 1
+											Token   6 | >+< | Priority: 1
+											Token   7 | >101< | Priority: 1
+											Token   8 | Close| Priority: 1
 											Delete Open 0 | Priority: 1 | Min Priority: 1 
 											Delete Close 7 | Priority: 1 | Min Priority: 1 
 											Deleted redundant priority tokens | Tokens: 7
+											Token   1 | >*< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <*> | 0 1
 										Core Token: >*< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 1
 										LHS: >5<
@@ -5898,7 +5976,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 10 | Own Index: 11 | Nodes under Father: 2
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 11
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 5 | Priority: 0
+												Token   0 | >5< | Priority: 0
+												Token   0 | >5< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 											Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -5908,11 +5987,12 @@ Start Debug!
 										LHS of size 1 under father 11
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 11
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-												Token: sephiroth | Priority: 0
-												Token: + | Priority: 0
-												Token: 100 | Priority: 0
-												Token: + | Priority: 0
-												Token: 101 | Priority: 0
+												Token   0 | >sephiroth< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >100< | Priority: 0
+												Token   3 | >+< | Priority: 0
+												Token   4 | >101< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >sephiroth<
@@ -5924,7 +6004,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 11 | Own Index: 13 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 13
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: sephiroth | Priority: 0
+												Token   0 | >sephiroth< | Priority: 0
+												Token   0 | >sephiroth< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <sephiroth> | 0 4
 											Core Token: >sephiroth< | Size: 9 | Open/Close Priority: 0 | Symbol Priority: 4
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -5934,9 +6015,10 @@ Start Debug!
 										LHS of size 1 under father 13
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 13
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-												Token: 100 | Priority: 0
-												Token: + | Priority: 0
-												Token: 101 | Priority: 0
+												Token   0 | >100< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >101< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >100<
@@ -5946,7 +6028,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 13 | Own Index: 15 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 15
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 100 | Priority: 0
+												Token   0 | >100< | Priority: 0
+												Token   0 | >100< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <100> | 0 5
 											Core Token: >100< | Size: 3 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -5956,7 +6039,8 @@ Start Debug!
 										LHS of size 1 under father 15
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 15
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 101 | Priority: 0
+												Token   0 | >101< | Priority: 0
+												Token   0 | >101< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <101> | 0 5
 											Core Token: >101< | Size: 3 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -5972,7 +6056,8 @@ Start Debug!
 							LHS of size 7 under father 10
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 10
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-									Token: 4 | Priority: 0
+									Token   0 | >4< | Priority: 0
+									Token   0 | >4< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 								Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 								LHS Tokens: 0 | RHS Tokens: 0
@@ -7188,21 +7273,22 @@ Start Debug!
 			<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 			-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 15 | Father 0
 				-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15
-					Token: 28 | Priority: 0
-					Token: = | Priority: 0
-					Token: 1 | Priority: 0
-					Token: + | Priority: 0
-					Token: 2 | Priority: 0
-					Token: + | Priority: 0
-					Token: 3 | Priority: 0
-					Token: + | Priority: 0
-					Token: 4 | Priority: 0
-					Token: + | Priority: 0
-					Token: 5 | Priority: 0
-					Token: + | Priority: 0
-					Token: 6 | Priority: 0
-					Token: + | Priority: 0
-					Token: 7 | Priority: 0
+					Token   0 | >28< | Priority: 0
+					Token   1 | >=< | Priority: 0
+					Token   2 | >1< | Priority: 0
+					Token   3 | >+< | Priority: 0
+					Token   4 | >2< | Priority: 0
+					Token   5 | >+< | Priority: 0
+					Token   6 | >3< | Priority: 0
+					Token   7 | >+< | Priority: 0
+					Token   8 | >4< | Priority: 0
+					Token   9 | >+< | Priority: 0
+					Token  10 | >5< | Priority: 0
+					Token  11 | >+< | Priority: 0
+					Token  12 | >6< | Priority: 0
+					Token  13 | >+< | Priority: 0
+					Token  14 | >7< | Priority: 0
+					Token   1 | >=< | Highest priority token
 				<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15 | Highest Priority Token: <=> | 0 0
 				Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 				LHS: >28<
@@ -7226,7 +7312,8 @@ Start Debug!
 				LHS: >=<
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-						Token: 28 | Priority: 0
+						Token   0 | >28< | Priority: 0
+						Token   0 | >28< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <28> | 0 5
 					Core Token: >28< | Size: 2 | Open/Close Priority: 0 | Symbol Priority: 5
 					LHS Tokens: 0 | RHS Tokens: 0
@@ -7238,19 +7325,20 @@ Start Debug!
 				LHS of size 1 under father 0
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 13 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13
-						Token: 1 | Priority: 0
-						Token: + | Priority: 0
-						Token: 2 | Priority: 0
-						Token: + | Priority: 0
-						Token: 3 | Priority: 0
-						Token: + | Priority: 0
-						Token: 4 | Priority: 0
-						Token: + | Priority: 0
-						Token: 5 | Priority: 0
-						Token: + | Priority: 0
-						Token: 6 | Priority: 0
-						Token: + | Priority: 0
-						Token: 7 | Priority: 0
+						Token   0 | >1< | Priority: 0
+						Token   1 | >+< | Priority: 0
+						Token   2 | >2< | Priority: 0
+						Token   3 | >+< | Priority: 0
+						Token   4 | >3< | Priority: 0
+						Token   5 | >+< | Priority: 0
+						Token   6 | >4< | Priority: 0
+						Token   7 | >+< | Priority: 0
+						Token   8 | >5< | Priority: 0
+						Token   9 | >+< | Priority: 0
+						Token  10 | >6< | Priority: 0
+						Token  11 | >+< | Priority: 0
+						Token  12 | >7< | Priority: 0
+						Token   1 | >+< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13 | Highest Priority Token: <+> | 0 3
 					Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 					LHS: >1<
@@ -7270,7 +7358,8 @@ Start Debug!
 					<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: 1 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   0 | >1< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 						Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -7280,17 +7369,18 @@ Start Debug!
 					LHS of size 1 under father 2
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 11 | Father 2
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11
-							Token: 2 | Priority: 0
-							Token: + | Priority: 0
-							Token: 3 | Priority: 0
-							Token: + | Priority: 0
-							Token: 4 | Priority: 0
-							Token: + | Priority: 0
-							Token: 5 | Priority: 0
-							Token: + | Priority: 0
-							Token: 6 | Priority: 0
-							Token: + | Priority: 0
-							Token: 7 | Priority: 0
+							Token   0 | >2< | Priority: 0
+							Token   1 | >+< | Priority: 0
+							Token   2 | >3< | Priority: 0
+							Token   3 | >+< | Priority: 0
+							Token   4 | >4< | Priority: 0
+							Token   5 | >+< | Priority: 0
+							Token   6 | >5< | Priority: 0
+							Token   7 | >+< | Priority: 0
+							Token   8 | >6< | Priority: 0
+							Token   9 | >+< | Priority: 0
+							Token  10 | >7< | Priority: 0
+							Token   1 | >+< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11 | Highest Priority Token: <+> | 0 3
 						Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 						LHS: >2<
@@ -7308,7 +7398,8 @@ Start Debug!
 						<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 2 | Own Index: 4 | Nodes under Father: 3
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-								Token: 2 | Priority: 0
+								Token   0 | >2< | Priority: 0
+								Token   0 | >2< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 							Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -7318,15 +7409,16 @@ Start Debug!
 						LHS of size 1 under father 4
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 9 | Father 4
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9
-								Token: 3 | Priority: 0
-								Token: + | Priority: 0
-								Token: 4 | Priority: 0
-								Token: + | Priority: 0
-								Token: 5 | Priority: 0
-								Token: + | Priority: 0
-								Token: 6 | Priority: 0
-								Token: + | Priority: 0
-								Token: 7 | Priority: 0
+								Token   0 | >3< | Priority: 0
+								Token   1 | >+< | Priority: 0
+								Token   2 | >4< | Priority: 0
+								Token   3 | >+< | Priority: 0
+								Token   4 | >5< | Priority: 0
+								Token   5 | >+< | Priority: 0
+								Token   6 | >6< | Priority: 0
+								Token   7 | >+< | Priority: 0
+								Token   8 | >7< | Priority: 0
+								Token   1 | >+< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9 | Highest Priority Token: <+> | 0 3
 							Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 							LHS: >3<
@@ -7342,7 +7434,8 @@ Start Debug!
 							<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 6 | Nodes under Father: 3
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 6
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-									Token: 3 | Priority: 0
+									Token   0 | >3< | Priority: 0
+									Token   0 | >3< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 								Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 								LHS Tokens: 0 | RHS Tokens: 0
@@ -7352,13 +7445,14 @@ Start Debug!
 							LHS of size 1 under father 6
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 6
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-									Token: 4 | Priority: 0
-									Token: + | Priority: 0
-									Token: 5 | Priority: 0
-									Token: + | Priority: 0
-									Token: 6 | Priority: 0
-									Token: + | Priority: 0
-									Token: 7 | Priority: 0
+									Token   0 | >4< | Priority: 0
+									Token   1 | >+< | Priority: 0
+									Token   2 | >5< | Priority: 0
+									Token   3 | >+< | Priority: 0
+									Token   4 | >6< | Priority: 0
+									Token   5 | >+< | Priority: 0
+									Token   6 | >7< | Priority: 0
+									Token   1 | >+< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <+> | 0 3
 								Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 								LHS: >4<
@@ -7372,7 +7466,8 @@ Start Debug!
 								<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 6 | Own Index: 8 | Nodes under Father: 3
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 8
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 4 | Priority: 0
+										Token   0 | >4< | Priority: 0
+										Token   0 | >4< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 									Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -7382,11 +7477,12 @@ Start Debug!
 								LHS of size 1 under father 8
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 8
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-										Token: 5 | Priority: 0
-										Token: + | Priority: 0
-										Token: 6 | Priority: 0
-										Token: + | Priority: 0
-										Token: 7 | Priority: 0
+										Token   0 | >5< | Priority: 0
+										Token   1 | >+< | Priority: 0
+										Token   2 | >6< | Priority: 0
+										Token   3 | >+< | Priority: 0
+										Token   4 | >7< | Priority: 0
+										Token   1 | >+< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <+> | 0 3
 									Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 									LHS: >5<
@@ -7398,7 +7494,8 @@ Start Debug!
 									<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 8 | Own Index: 10 | Nodes under Father: 3
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 10
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: 5 | Priority: 0
+											Token   0 | >5< | Priority: 0
+											Token   0 | >5< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 										Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -7408,9 +7505,10 @@ Start Debug!
 									LHS of size 1 under father 10
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 10
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-											Token: 6 | Priority: 0
-											Token: + | Priority: 0
-											Token: 7 | Priority: 0
+											Token   0 | >6< | Priority: 0
+											Token   1 | >+< | Priority: 0
+											Token   2 | >7< | Priority: 0
+											Token   1 | >+< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 										Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >6<
@@ -7420,7 +7518,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 10 | Own Index: 12 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 6 | Priority: 0
+												Token   0 | >6< | Priority: 0
+												Token   0 | >6< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <6> | 0 5
 											Core Token: >6< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -7430,7 +7529,8 @@ Start Debug!
 										LHS of size 1 under father 12
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 7 | Priority: 0
+												Token   0 | >7< | Priority: 0
+												Token   0 | >7< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <7> | 0 5
 											Core Token: >7< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -8437,21 +8537,22 @@ Start Debug!
 				<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 15 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15
-						Token: 4 | Priority: 0
-						Token: = | Priority: 0
-						Token: 1 | Priority: 0
-						Token: - | Priority: 0
-						Token: 2 | Priority: 0
-						Token: + | Priority: 0
-						Token: 3 | Priority: 0
-						Token: - | Priority: 0
-						Token: 4 | Priority: 0
-						Token: + | Priority: 0
-						Token: 5 | Priority: 0
-						Token: - | Priority: 0
-						Token: 6 | Priority: 0
-						Token: + | Priority: 0
-						Token: 7 | Priority: 0
+						Token   0 | >4< | Priority: 0
+						Token   1 | >=< | Priority: 0
+						Token   2 | >1< | Priority: 0
+						Token   3 | >-< | Priority: 0
+						Token   4 | >2< | Priority: 0
+						Token   5 | >+< | Priority: 0
+						Token   6 | >3< | Priority: 0
+						Token   7 | >-< | Priority: 0
+						Token   8 | >4< | Priority: 0
+						Token   9 | >+< | Priority: 0
+						Token  10 | >5< | Priority: 0
+						Token  11 | >-< | Priority: 0
+						Token  12 | >6< | Priority: 0
+						Token  13 | >+< | Priority: 0
+						Token  14 | >7< | Priority: 0
+						Token   1 | >=< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 15 | Highest Priority Token: <=> | 0 0
 					Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 					LHS: >4<
@@ -8475,7 +8576,8 @@ Start Debug!
 					LHS: >=<
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: 4 | Priority: 0
+							Token   0 | >4< | Priority: 0
+							Token   0 | >4< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 						Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -8487,19 +8589,20 @@ Start Debug!
 					LHS of size 1 under father 0
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 13 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13
-							Token: 1 | Priority: 0
-							Token: - | Priority: 0
-							Token: 2 | Priority: 0
-							Token: + | Priority: 0
-							Token: 3 | Priority: 0
-							Token: - | Priority: 0
-							Token: 4 | Priority: 0
-							Token: + | Priority: 0
-							Token: 5 | Priority: 0
-							Token: - | Priority: 0
-							Token: 6 | Priority: 0
-							Token: + | Priority: 0
-							Token: 7 | Priority: 0
+							Token   0 | >1< | Priority: 0
+							Token   1 | >-< | Priority: 0
+							Token   2 | >2< | Priority: 0
+							Token   3 | >+< | Priority: 0
+							Token   4 | >3< | Priority: 0
+							Token   5 | >-< | Priority: 0
+							Token   6 | >4< | Priority: 0
+							Token   7 | >+< | Priority: 0
+							Token   8 | >5< | Priority: 0
+							Token   9 | >-< | Priority: 0
+							Token  10 | >6< | Priority: 0
+							Token  11 | >+< | Priority: 0
+							Token  12 | >7< | Priority: 0
+							Token   1 | >-< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 13 | Highest Priority Token: <-> | 0 3
 						Core Token: >-< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 						LHS: >1<
@@ -8519,7 +8622,8 @@ Start Debug!
 						<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-								Token: 1 | Priority: 0
+								Token   0 | >1< | Priority: 0
+								Token   0 | >1< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <1> | 0 5
 							Core Token: >1< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 							LHS Tokens: 0 | RHS Tokens: 0
@@ -8529,17 +8633,18 @@ Start Debug!
 						LHS of size 1 under father 2
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 11 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11
-								Token: 2 | Priority: 0
-								Token: + | Priority: 0
-								Token: 3 | Priority: 0
-								Token: - | Priority: 0
-								Token: 4 | Priority: 0
-								Token: + | Priority: 0
-								Token: 5 | Priority: 0
-								Token: - | Priority: 0
-								Token: 6 | Priority: 0
-								Token: + | Priority: 0
-								Token: 7 | Priority: 0
+								Token   0 | >2< | Priority: 0
+								Token   1 | >+< | Priority: 0
+								Token   2 | >3< | Priority: 0
+								Token   3 | >-< | Priority: 0
+								Token   4 | >4< | Priority: 0
+								Token   5 | >+< | Priority: 0
+								Token   6 | >5< | Priority: 0
+								Token   7 | >-< | Priority: 0
+								Token   8 | >6< | Priority: 0
+								Token   9 | >+< | Priority: 0
+								Token  10 | >7< | Priority: 0
+								Token   1 | >+< | Highest priority token
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 11 | Highest Priority Token: <+> | 0 3
 							Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 							LHS: >2<
@@ -8557,7 +8662,8 @@ Start Debug!
 							<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 2 | Own Index: 4 | Nodes under Father: 3
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 4
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-									Token: 2 | Priority: 0
+									Token   0 | >2< | Priority: 0
+									Token   0 | >2< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <2> | 0 5
 								Core Token: >2< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 								LHS Tokens: 0 | RHS Tokens: 0
@@ -8567,15 +8673,16 @@ Start Debug!
 							LHS of size 1 under father 4
 							-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 9 | Father 4
 								-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9
-									Token: 3 | Priority: 0
-									Token: - | Priority: 0
-									Token: 4 | Priority: 0
-									Token: + | Priority: 0
-									Token: 5 | Priority: 0
-									Token: - | Priority: 0
-									Token: 6 | Priority: 0
-									Token: + | Priority: 0
-									Token: 7 | Priority: 0
+									Token   0 | >3< | Priority: 0
+									Token   1 | >-< | Priority: 0
+									Token   2 | >4< | Priority: 0
+									Token   3 | >+< | Priority: 0
+									Token   4 | >5< | Priority: 0
+									Token   5 | >-< | Priority: 0
+									Token   6 | >6< | Priority: 0
+									Token   7 | >+< | Priority: 0
+									Token   8 | >7< | Priority: 0
+									Token   1 | >-< | Highest priority token
 								<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 9 | Highest Priority Token: <-> | 0 3
 								Core Token: >-< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 								LHS: >3<
@@ -8591,7 +8698,8 @@ Start Debug!
 								<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 4 | Own Index: 6 | Nodes under Father: 3
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 6
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-										Token: 3 | Priority: 0
+										Token   0 | >3< | Priority: 0
+										Token   0 | >3< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <3> | 0 5
 									Core Token: >3< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 									LHS Tokens: 0 | RHS Tokens: 0
@@ -8601,13 +8709,14 @@ Start Debug!
 								LHS of size 1 under father 6
 								-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 7 | Father 6
 									-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7
-										Token: 4 | Priority: 0
-										Token: + | Priority: 0
-										Token: 5 | Priority: 0
-										Token: - | Priority: 0
-										Token: 6 | Priority: 0
-										Token: + | Priority: 0
-										Token: 7 | Priority: 0
+										Token   0 | >4< | Priority: 0
+										Token   1 | >+< | Priority: 0
+										Token   2 | >5< | Priority: 0
+										Token   3 | >-< | Priority: 0
+										Token   4 | >6< | Priority: 0
+										Token   5 | >+< | Priority: 0
+										Token   6 | >7< | Priority: 0
+										Token   1 | >+< | Highest priority token
 									<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 7 | Highest Priority Token: <+> | 0 3
 									Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 									LHS: >4<
@@ -8621,7 +8730,8 @@ Start Debug!
 									<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 6 | Own Index: 8 | Nodes under Father: 3
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 8
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-											Token: 4 | Priority: 0
+											Token   0 | >4< | Priority: 0
+											Token   0 | >4< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 										Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 										LHS Tokens: 0 | RHS Tokens: 0
@@ -8631,11 +8741,12 @@ Start Debug!
 									LHS of size 1 under father 8
 									-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 5 | Father 8
 										-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5
-											Token: 5 | Priority: 0
-											Token: - | Priority: 0
-											Token: 6 | Priority: 0
-											Token: + | Priority: 0
-											Token: 7 | Priority: 0
+											Token   0 | >5< | Priority: 0
+											Token   1 | >-< | Priority: 0
+											Token   2 | >6< | Priority: 0
+											Token   3 | >+< | Priority: 0
+											Token   4 | >7< | Priority: 0
+											Token   1 | >-< | Highest priority token
 										<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 5 | Highest Priority Token: <-> | 0 3
 										Core Token: >-< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 										LHS: >5<
@@ -8647,7 +8758,8 @@ Start Debug!
 										<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 8 | Own Index: 10 | Nodes under Father: 3
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 10
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 5 | Priority: 0
+												Token   0 | >5< | Priority: 0
+												Token   0 | >5< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <5> | 0 5
 											Core Token: >5< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -8657,9 +8769,10 @@ Start Debug!
 										LHS of size 1 under father 10
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 3 | Father 10
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3
-												Token: 6 | Priority: 0
-												Token: + | Priority: 0
-												Token: 7 | Priority: 0
+												Token   0 | >6< | Priority: 0
+												Token   1 | >+< | Priority: 0
+												Token   2 | >7< | Priority: 0
+												Token   1 | >+< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 3 | Highest Priority Token: <+> | 0 3
 											Core Token: >+< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 3
 											LHS: >6<
@@ -8669,7 +8782,8 @@ Start Debug!
 											<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 10 | Own Index: 12 | Nodes under Father: 3
 											-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 												-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 6 | Priority: 0
+												Token   0 | >6< | Priority: 0
+												Token   0 | >6< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <6> | 0 5
 											Core Token: >6< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -8679,7 +8793,8 @@ Start Debug!
 										LHS of size 1 under father 12
 										-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 12
 											-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-												Token: 7 | Priority: 0
+												Token   0 | >7< | Priority: 0
+												Token   0 | >7< | Highest priority token
 											<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <7> | 0 5
 											Core Token: >7< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 											LHS Tokens: 0 | RHS Tokens: 0
@@ -9642,7 +9757,7 @@ Start Debug!
 					<<-- "static bool User::Equation_parser::is_symbol(char)" | N
 					-->> "static bool User::Equation_parser::is_operator(char)" | Digit: >> <<
 					<<-- "static bool User::Equation_parser::is_operator(char)" | N
-					ERR1133: Invalid Digit >> <<
+					ERR1135: Invalid Digit >> <<
 					Equations decoded into 27 tokens
 					Token: >>4<< | Type: 0 | Size: 1
 					Token: >>=<< | Type: 2 | Size: 1
@@ -9679,33 +9794,34 @@ Start Debug!
 				<<-- "bool User::Tree<Payload>::flush() [with Payload = User::Equation_parser::Token]" | Nodes inside the tree: 1
 				-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 27 | Father 0
 					-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 27
-						Token: 4 | Priority: 0
-						Token: = | Priority: 0
-						Open | Priority: 1
-						Open | Priority: 2
-						Open | Priority: 3
-						Open | Priority: 4
-						Open | Priority: 5
-						Open | Priority: 6
-						Token: 1 | Priority: 6
-						Token: - | Priority: 6
-						Token: 2 | Priority: 6
-						Close| Priority: 6
-						Token: + | Priority: 5
-						Token: 3 | Priority: 5
-						Close| Priority: 5
-						Token: - | Priority: 4
-						Token: 4 | Priority: 4
-						Close| Priority: 4
-						Token: + | Priority: 3
-						Token: 5 | Priority: 3
-						Close| Priority: 3
-						Token: - | Priority: 2
-						Token: 6 | Priority: 2
-						Close| Priority: 2
-						Token: + | Priority: 1
-						Token: 7 | Priority: 1
-						Close| Priority: 1
+						Token   0 | >4< | Priority: 0
+						Token   1 | >=< | Priority: 0
+						Token   2 | Open | Priority: 1
+						Token   3 | Open | Priority: 2
+						Token   4 | Open | Priority: 3
+						Token   5 | Open | Priority: 4
+						Token   6 | Open | Priority: 5
+						Token   7 | Open | Priority: 6
+						Token   8 | >1< | Priority: 6
+						Token   9 | >-< | Priority: 6
+						Token  10 | >2< | Priority: 6
+						Token  11 | Close| Priority: 6
+						Token  12 | >+< | Priority: 5
+						Token  13 | >3< | Priority: 5
+						Token  14 | Close| Priority: 5
+						Token  15 | >-< | Priority: 4
+						Token  16 | >4< | Priority: 4
+						Token  17 | Close| Priority: 4
+						Token  18 | >+< | Priority: 3
+						Token  19 | >5< | Priority: 3
+						Token  20 | Close| Priority: 3
+						Token  21 | >-< | Priority: 2
+						Token  22 | >6< | Priority: 2
+						Token  23 | Close| Priority: 2
+						Token  24 | >+< | Priority: 1
+						Token  25 | >7< | Priority: 1
+						Token  26 | Close| Priority: 1
+						Token   1 | >=< | Highest priority token
 					<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 27 | Highest Priority Token: <=> | 0 0
 					Core Token: >=< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 0
 					LHS: >4<
@@ -9741,7 +9857,8 @@ Start Debug!
 					LHS: >=<
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 1 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1
-							Token: 4 | Priority: 0
+							Token   0 | >4< | Priority: 0
+							Token   0 | >4< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 1 | Highest Priority Token: <4> | 0 5
 						Core Token: >4< | Size: 1 | Open/Close Priority: 0 | Symbol Priority: 5
 						LHS Tokens: 0 | RHS Tokens: 0
@@ -9753,34 +9870,35 @@ Start Debug!
 					LHS of size 1 under father 0
 					-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 25 | Father 0
 						-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 25
-							Open | Priority: 1
-							Open | Priority: 2
-							Open | Priority: 3
-							Open | Priority: 4
-							Open | Priority: 5
-							Open | Priority: 6
-							Token: 1 | Priority: 6
-							Token: - | Priority: 6
-							Token: 2 | Priority: 6
-							Close| Priority: 6
-							Token: + | Priority: 5
-							Token: 3 | Priority: 5
-							Close| Priority: 5
-							Token: - | Priority: 4
-							Token: 4 | Priority: 4
-							Close| Priority: 4
-							Token: + | Priority: 3
-							Token: 5 | Priority: 3
-							Close| Priority: 3
-							Token: - | Priority: 2
-							Token: 6 | Priority: 2
-							Close| Priority: 2
-							Token: + | Priority: 1
-							Token: 7 | Priority: 1
-							Close| Priority: 1
+							Token   0 | Open | Priority: 1
+							Token   1 | Open | Priority: 2
+							Token   2 | Open | Priority: 3
+							Token   3 | Open | Priority: 4
+							Token   4 | Open | Priority: 5
+							Token   5 | Open | Priority: 6
+							Token   6 | >1< | Priority: 6
+							Token   7 | >-< | Priority: 6
+							Token   8 | >2< | Priority: 6
+							Token   9 | Close| Priority: 6
+							Token  10 | >+< | Priority: 5
+							Token  11 | >3< | Priority: 5
+							Token  12 | Close| Priority: 5
+							Token  13 | >-< | Priority: 4
+							Token  14 | >4< | Priority: 4
+							Token  15 | Close| Priority: 4
+							Token  16 | >+< | Priority: 3
+							Token  17 | >5< | Priority: 3
+							Token  18 | Close| Priority: 3
+							Token  19 | >-< | Priority: 2
+							Token  20 | >6< | Priority: 2
+							Token  21 | Close| Priority: 2
+							Token  22 | >+< | Priority: 1
+							Token  23 | >7< | Priority: 1
+							Token  24 | Close| Priority: 1
 							Delete Open 0 | Priority: 1 | Min Priority: 1 
 							Delete Close 23 | Priority: 1 | Min Priority: 1 
 							Deleted redundant priority tokens | Tokens: 23
+							Token  18 | >-< | Highest priority token
 						<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 23 | Highest Priority Token: <-> | 1 3
 						Core Token: >-< | Size: 1 | Open/Close Priority: 1 | Symbol Priority: 3
 						LHS: >(<
@@ -9810,32 +9928,32 @@ Start Debug!
 						<<-- "size_t User::Tree<Payload>::create_child(size_t, Payload) [with Payload = User::Equation_parser::Token; size_t = unsigned int]" | Father Index: 0 | Own Index: 2 | Nodes under Father: 3
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 18 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 18
-								Open | Priority: 1
-								Open | Priority: 2
-								Open | Priority: 3
-								Open | Priority: 4
-								Open | Priority: 5
-								Token: 1 | Priority: 5
-								Token: - | Priority: 5
-								Token: 2 | Priority: 5
-								Close| Priority: 5
-								Token: + | Priority: 4
-								Token: 3 | Priority: 4
-								Close| Priority: 4
-								Token: - | Priority: 3
-								Token: 4 | Priority: 3
-								Close| Priority: 3
-								Token: + | Priority: 2
-								Token: 5 | Priority: 2
-								Close| Priority: 2
+								Token   0 | Open | Priority: 1
+								Token   1 | Open | Priority: 2
+								Token   2 | Open | Priority: 3
+								Token   3 | Open | Priority: 4
+								Token   4 | Open | Priority: 5
+								Token   5 | >1< | Priority: 5
+								Token   6 | >-< | Priority: 5
+								Token   7 | >2< | Priority: 5
+								Token   8 | Close| Priority: 5
+								Token   9 | >+< | Priority: 4
+								Token  10 | >3< | Priority: 4
+								Token  11 | Close| Priority: 4
+								Token  12 | >-< | Priority: 3
+								Token  13 | >4< | Priority: 3
+								Token  14 | Close| Priority: 3
+								Token  15 | >+< | Priority: 2
+								Token  16 | >5< | Priority: 2
+								Token  17 | Close| Priority: 2
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | ERR:729 | Unbalanced Brackets, extra open
-						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1327 | Priority computation failed
+						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1329 | Priority computation failed
 						LHS of size 18 under father 2
 						-->> "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | Token Array Size: 4 | Father 2
 							-->> "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | Tokens: 4
-								Token: 6 | Priority: 0
+								Token   0 | >6< | Priority: 0
 							<<-- "static bool User::Equation_parser::compute_token_array_priority(std::vector<User::Equation_parser::Token>&, std::vector<User::Equation_parser::Token>::iterator&)" | ERR:683 | Unbalanced Brackets, extra close at Token: 1
-						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1327 | Priority computation failed
+						<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | ERR:1329 | Priority computation failed
 						RHS of size 4 under father 2
 					<<-- "static bool User::Equation_parser::token_array_to_tree(std::vector<User::Equation_parser::Token>&, User::Tree<User::Equation_parser::Token>&, size_t)" | FAIL
 					RHS of size 23 under father 0
