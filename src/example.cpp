@@ -217,9 +217,14 @@ int unit_test_parse_token_array( void )
 	//----------------------------------------------------------------
 
 	//count the test patterns that failed the check
+	int n_cnt_fail_tokenizer = 0;
+	int n_cnt_fail_treeificator = 0;
 	int n_cnt_fail = 0;
-
-    //
+	//Remember which pattern failed
+	std::vector<int> an_index_failed_tokenizer;
+	std::vector<int> an_index_failed_treeificator;
+	std::vector<int> an_index_failed_pattern;
+	//Number of test patterns
 	size_t n_num_test_equations = sizeof( ast_test_pattern )/ sizeof(St_test_pattern);
 	std::cout << "Test patterns: " << n_num_test_equations << "\n";
 	DPRINT("Number of test patterns %d\n", int(n_num_test_equations) );
@@ -255,6 +260,9 @@ int unit_test_parse_token_array( void )
 						std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Wrong token | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str() << " | got: " << ras_array_token[n_array_token_index].c_str() << "\n";
                         DPRINT("ERR: Pattern: %d | Token %d | WRONG TOKEN expected >%s< got >%s<\n", int(n_test_pattern_index), int(n_array_token_index), ast_test_pattern[n_test_pattern_index].as_token_vector[n_array_token_index].c_str(), ras_array_token[n_array_token_index].c_str() );
                         n_cnt_fail++;
+                        n_cnt_fail_tokenizer++;
+                        an_index_failed_tokenizer.push_back( n_test_pattern_index );
+                        an_index_failed_pattern.push_back(n_test_pattern_index );
                         //Stop
                         n_array_token_index = n_num_tokens;
                     }
@@ -263,8 +271,27 @@ int unit_test_parse_token_array( void )
 			else
 			{
 				std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL: Inconsistent token count | expected: " << ast_test_pattern[n_test_pattern_index].as_token_vector.size() << " | got: " << n_num_tokens << "\n";
-				DPRINT("ERR: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", n_test_pattern_index, ast_test_pattern[n_test_pattern_index].as_token_vector.size(), n_num_tokens );
+				DPRINT("ERR%d: Pattern: %d | TOKEN COUNT expected %d | measured %d\n", __LINE__, n_test_pattern_index, ast_test_pattern[n_test_pattern_index].as_token_vector.size(), n_num_tokens );
 				n_cnt_fail++;
+				n_cnt_fail_tokenizer++;
+				an_index_failed_tokenizer.push_back( n_test_pattern_index );
+				an_index_failed_pattern.push_back(n_test_pattern_index );
+
+				//Show the expected and the got tokenizer side by side
+				DPRINT_TAB();
+				DPRINT_NOTAB("Parsed   | ");
+				for (auto an_iterator_parsed = ras_array_token.begin();an_iterator_parsed != ras_array_token.end();an_iterator_parsed++)
+				{
+					DPRINT_NOTAB("\t>%s<", (*an_iterator_parsed).c_str() );
+				}
+				DPRINT_NOTAB("\n");
+				DPRINT_TAB();
+				DPRINT_NOTAB("Expected | ");
+				for (auto an_iterator_expected = ast_test_pattern[n_test_pattern_index].as_token_vector.begin();an_iterator_expected != ast_test_pattern[n_test_pattern_index].as_token_vector.end();an_iterator_expected++)
+				{
+					DPRINT_NOTAB("\t>%s<", (*an_iterator_expected).c_str() );
+				}
+				DPRINT_NOTAB("\n");
 			}
 			//Get the tree representation of the equation
 			User::Tree<User::Equation_parser::Token> cl_tree_from_equation = cl_equation_parser.get_tree_of_token();
@@ -291,6 +318,9 @@ int unit_test_parse_token_array( void )
 					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Tree from parsing is not the same as tree from test pattern\n";
 					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
 					n_cnt_fail++;
+					n_cnt_fail_treeificator++;
+					an_index_failed_treeificator.push_back( n_test_pattern_index );
+					an_index_failed_pattern.push_back(n_test_pattern_index );
 				}
 			}
 			//if parser failed and I have a tree
@@ -306,6 +336,7 @@ int unit_test_parse_token_array( void )
 					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | A failed parsing has a tree\n";
 					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
 					n_cnt_fail++;
+					an_index_failed_pattern.push_back(n_test_pattern_index );
 				}
 			}
 		}	//If expected fail state
@@ -315,6 +346,7 @@ int unit_test_parse_token_array( void )
 			std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Inconsistent fail\n";
 			DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
 			n_cnt_fail++;
+			an_index_failed_pattern.push_back(n_test_pattern_index );
 		}
 	}   //For all test patterns
 
@@ -322,6 +354,32 @@ int unit_test_parse_token_array( void )
 	//	RETURN
 	//----------------------------------------------------------------
 
+	std::cout << "Number of Patterns: " << n_num_test_equations << "\n";
+	for (size_t n_test_pattern_index = 0; n_test_pattern_index < n_num_test_equations;n_test_pattern_index++)
+	{
+		std::cout << "PATTERN" << int(n_test_pattern_index) << " | " << ast_test_pattern[n_test_pattern_index].s_equation<< "\n";
+	}
+
+	std::cout << "Failed Tokenizations: " << n_cnt_fail_tokenizer << "\n";
+	for (auto cl_iterator = an_index_failed_tokenizer.begin();cl_iterator!=an_index_failed_tokenizer.end();cl_iterator++)
+	{
+		std::cout << *cl_iterator << " | ";
+	}
+	std::cout << "\n\n";
+
+	std::cout << "Failed Treeifications: " << n_cnt_fail_treeificator << "\n";
+	for (auto cl_iterator = an_index_failed_treeificator.begin();cl_iterator!=an_index_failed_treeificator.end();cl_iterator++)
+	{
+		std::cout << *cl_iterator << " | ";
+	}
+	std::cout << "\n\n";
+
+	std::cout << "Failed Patterns: " << n_cnt_fail << "\n";
+	for (auto cl_iterator = an_index_failed_pattern.begin();cl_iterator!=an_index_failed_pattern.end();cl_iterator++)
+	{
+		std::cout << *cl_iterator << " | ";
+	}
+	std::cout << "\n\n";
 	//Trace Return vith return value
 	DRETURN_ARG("Failed test patterns: %d", n_cnt_fail);
 	return n_cnt_fail; //OK
