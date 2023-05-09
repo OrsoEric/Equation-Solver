@@ -1,17 +1,18 @@
 # depslib dependency file v1.0
-1681552877 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
+1683266354 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
 	<cstdio>
 	"debug.h"
 
-1681552877 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
+1683266354 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1683179691 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1683561453 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
-	"parser.h"
+	"equation.h"
 	"test_patterns.h"
+	"equation_solver.h"
 
 1657782096 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tokenizer.h
 	<vector>
@@ -24,11 +25,11 @@
 	<iostream>
 	"tokenizer.h"
 
-1683180424 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
+1683555858 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.h
 	<vector>
 	"tree.hpp"
 
-1683181467 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
+1683557788 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\parser.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -36,7 +37,7 @@
 	<string>
 	"parser.h"
 
-1683134999 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+1683266354 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
 	<string>
 	<vector>
 	<stack>
@@ -44,7 +45,7 @@
 	<functional>
 	"Tree_interface.h"
 
-1681835193 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
+1683266354 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
 	<vector>
 
 1653285491 source:f:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
@@ -83,5 +84,88 @@
 	"debug.h"
 	"parser.h"
 
-1683180605 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+1683561027 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+
+1683561291 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.hpp
+	<vector>
+	"tree.hpp"
+	"equation.h"
+
+1683561448 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.cpp
+	<cstdio>
+	"debug.h"
+	<cstdio>
+	<iostream>
+	<string>
+	"equation_solver.h"
+
+1683561034 source:c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
+	<cstdio>
+	"debug.h"
+	<cstdio>
+	<iostream>
+	<string>
+	"equation.h"
+
+1683561023 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
+	<vector>
+	"tree.hpp"
+
+1683561291 c:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.h
+	<vector>
+	"tree.hpp"
+	"equation.h"
+
+1683266354 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.cpp
+	<cstdio>
+	"debug.h"
+
+1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
+	<cstdio>
+
+1683640618 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
+	<cstdio>
+	"debug.h"
+	<cstdio>
+	<iostream>
+	<string>
+	"equation.h"
+
+1683640608 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
+	<vector>
+	"tree.hpp"
+
+1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+	<string>
+	<vector>
+	<stack>
+	<algorithm>
+	<functional>
+	"Tree_interface.h"
+
+1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
+	<vector>
+
+1683561448 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.cpp
+	<cstdio>
+	"debug.h"
+	<cstdio>
+	<iostream>
+	<string>
+	"equation_solver.h"
+
+1683629875 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.h
+	<vector>
+	"tree.hpp"
+	"equation.h"
+
+1683640630 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+	<cstdio>
+	<iostream>
+	"debug.h"
+	"equation.h"
+	"test_patterns.h"
+	"equation_solver.h"
+
+1683637906 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
 

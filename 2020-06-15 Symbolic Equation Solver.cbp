@@ -41,9 +41,11 @@
 		<Unit filename="debug.log" />
 		<Unit filename="src/debug.cpp" />
 		<Unit filename="src/debug.h" />
+		<Unit filename="src/equation.cpp" />
+		<Unit filename="src/equation.h" />
+		<Unit filename="src/equation_solver.cpp" />
+		<Unit filename="src/equation_solver.h" />
 		<Unit filename="src/example.cpp" />
-		<Unit filename="src/parser.cpp" />
-		<Unit filename="src/parser.h" />
 		<Unit filename="src/rules.json" />
 		<Unit filename="src/saved_equation.json" />
 		<Unit filename="src/test_patterns.h" />

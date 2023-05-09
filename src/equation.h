@@ -1,41 +1,9 @@
 /**********************************************************************************
-BSD 3-Clause License
-
-Copyright (c) 2022, Orso Eric
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**********************************************************************************/
-
-/**********************************************************************************
 **  ENVIROMENT VARIABILE
 **********************************************************************************/
 
-#ifndef EQUATION_PARSER_H_
-    #define EQUATION_PARSER_H_
+#ifndef EQUATION_H_
+    #define EQUATION_H_
 
 /**********************************************************************************
 **  GLOBAL INCLUDES
@@ -79,7 +47,7 @@ namespace User
 **********************************************************************************/
 
 /************************************************************************************/
-//! @class      Equation_parser
+//! @class      Equation
 /************************************************************************************/
 //!	@author     Orso Eric
 //! @version    2022-06-DD
@@ -91,7 +59,7 @@ namespace User
 //! \n 2022-08-09 Functions work out of the box. It's a symbol with leaves. It's parsed correctly.
 /************************************************************************************/
 
-class Equation_parser
+class Equation
 {
     //Visible to all
     public:
@@ -150,21 +118,6 @@ class Equation_parser
 
 			//Unknown type
 			UNKNOWN
-			/*
-			//! @brief stringify a token type
-			friend const char *to_string( Token_type &ire_source )
-			{
-				switch(ire_source)
-				{
-					case BASE_NUMBER:
-					{
-						return "number"
-						break;
-					}
-
-				}
-			};
-			*/
         };
         //! @brief Describe a token. A token can be a symbol, a number or an operator. Symbols are further specialized as variable, function names, etc...
         struct Token
@@ -214,7 +167,26 @@ class Equation_parser
 			{
 				return (!(lhs == rhs));
 			}
-
+			//Stringify the token type
+			const char *get_token_type()
+			{
+				return Equation::get_token_type_string( this->e_type );
+			}
+			//false = token is not a number | true = token is a number
+			bool is_number( void )
+			{
+				return Equation::is_token_type_number( this->e_type );
+			}
+			//false = token is not a symbol | true = token is a symbol
+			bool is_symbol( void )
+			{
+				return Equation::is_token_type_symbol( this->e_type );
+			}
+			//string representation of the token
+			const char *to_string( void )
+			{
+				return Equation::get_token_string( (*this) );
+			}
         };
 
         /*********************************************************************************************************************************************************
@@ -224,7 +196,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //Empty Constructor
-        Equation_parser( void );
+        Equation( void );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -233,7 +205,7 @@ class Equation_parser
         *********************************************************************************************************************************************************/
 
         //Empty destructor
-        ~Equation_parser( void );
+        ~Equation( void );
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -273,6 +245,13 @@ class Equation_parser
         //Get current error state of the library
         const char *get_error( void );
 
+        // Convert Token_type to string
+		static const char *get_token_type_string(Token_type &ire_type);
+		// Convert a Token into a string. Converts into an error string if there is a problem. Handles negation and token type
+		static const char *get_token_string( Token &irst_token );
+		//reverse translate a tree into a token array into a string and return the string
+		std::string to_string();
+
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
         **  PUBLIC TESTERS
@@ -287,7 +266,7 @@ class Equation_parser
 
         //Reverse translation of a tree of tokens back to an equation is string form
         std::string tree_to_equation( void );
-		//Equation_parser public method
+		//Equation public method
         bool my_public_method( void );
 
         /*********************************************************************************************************************************************************
@@ -407,7 +386,7 @@ class Equation_parser
         //! @brief true = digit is a letter
         static bool is_letter( char is8_digit )
         {
-			return ((Equation_parser::is_letter_lower_case( is8_digit )) || (Equation_parser::is_letter_upper_case( is8_digit )));
+			return ((Equation::is_letter_lower_case( is8_digit )) || (Equation::is_letter_upper_case( is8_digit )));
         }
         //returns true if the digit is an operator token
 		static bool is_operator( char is8_digit );
@@ -431,6 +410,26 @@ class Equation_parser
 		{
 			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && ((irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_SUM) || (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_DIFF)) );
 		}
+		//! @brief true = token is a symbol
+		static bool is_token_type_symbol(Token_type &irst_source)
+		{
+			return ((irst_source == Token_type::BASE_SYMBOL) || (irst_source == Token_type::SYMBOL_CONST) || (irst_source == Token_type::SYMBOL_INPUT) || (irst_source == Token_type::SYMBOL_OUTPUT) || (irst_source == Token_type::SYMBOL_VAR));
+		}
+		//! @brief true = token is number
+		static bool is_token_type_number(Token_type &irst_source)
+		{
+			return (irst_source == Token_type::BASE_NUMBER);
+		}
+		//! @brief true = token is an operator
+		static bool is_token_type_operator( Token_type &irst_source )
+		{
+			return (irst_source == Token_type::BASE_OPERATOR);
+		}
+
+		static bool is_token_operator_equal( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL));
+		}
 
 		/*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -443,7 +442,7 @@ class Equation_parser
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
         static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father );
         //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
-        static bool token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
+        static bool convert_token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
         //Takes a vector of tokens, and compute priority
         static bool compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token );
 		//Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
@@ -463,7 +462,7 @@ class Equation_parser
         bool report_error( const char *ips8_error_code );
         //Tries to recover from an error. Automatically called by get_error. return false = OK | true = fail
         bool error_recovery( void );
-        //Equation_parser method to copy the code
+        //Equation method to copy the code
         bool my_private_method( void );
 
         /*********************************************************************************************************************************************************
@@ -490,7 +489,7 @@ class Equation_parser
         //! @brief Tree representing an equation
         Tree<Token> gcl_token_tree;
 
-};	//End Class: Equation_parser
+};	//End Class: Equation
 
 /**********************************************************************************
 **  NAMESPACE
@@ -499,5 +498,5 @@ class Equation_parser
 }	//end namespace
 
 #else
-    #warning "Multiple inclusion of hader file EQUATION_PARSER_H_"
+    #warning "Multiple inclusion of hader file EQUATION_H_"
 #endif

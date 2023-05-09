@@ -1,35 +1,3 @@
-/**********************************************************************************
-BSD 3-Clause License
-
-Copyright (c) 2022, Orso Eric
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**********************************************************************************/
-
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
 **	INCLUDES
@@ -88,7 +56,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //User Libraries
 
 //Class Header
-#include "parser.h"
+#include "equation.h"
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -107,7 +75,7 @@ namespace User
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Constructor: Equation_parser | void
+//! @brief Constructor: Equation | void
 /***************************************************************************/
 // @param
 //! @return no return
@@ -115,7 +83,7 @@ namespace User
 //! \n Empty constructor
 /***************************************************************************/
 
-Equation_parser::Equation_parser( void )
+Equation::Equation( void )
 {
     DENTER_ARG("This: %p", (void*)(&(*this)));   //Trace Enter
     //--------------------------------------------------------------------------
@@ -130,7 +98,7 @@ Equation_parser::Equation_parser( void )
     //--------------------------------------------------------------------------
     DRETURN();  //Trace Return
     return;
-}   //Constructor: Equation_parser | void
+}   //Constructor: Equation | void
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -139,7 +107,7 @@ Equation_parser::Equation_parser( void )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//!	@brief Destructor: Equation_parser | void
+//!	@brief Destructor: Equation | void
 /***************************************************************************/
 // @param
 //! @return no return
@@ -147,7 +115,7 @@ Equation_parser::Equation_parser( void )
 //! \n Empty destructor
 /***************************************************************************/
 
-Equation_parser::~Equation_parser( void )
+Equation::~Equation( void )
 {
     DENTER_ARG("This: %p", (void*)(&(*this)) );   //Trace Enter
     //--------------------------------------------------------------------------
@@ -163,7 +131,7 @@ Equation_parser::~Equation_parser( void )
     //--------------------------------------------------------------------------
     DRETURN();      //Trace Return
     return;         //OK
-}   //Destructor: Equation_parser | void
+}   //Destructor: Equation | void
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -181,7 +149,7 @@ Equation_parser::~Equation_parser( void )
 //! \n Stream Token
 /***************************************************************************/
 
-std::ostream& operator<<( std::ostream& icl_stream, const Equation_parser::Token &irst_rhs )
+std::ostream& operator<<( std::ostream& icl_stream, const Equation::Token &irst_rhs )
 {
     //--------------------------------------------------------------------------
     //	BODY
@@ -207,7 +175,7 @@ std::ostream& operator<<( std::ostream& icl_stream, const Equation_parser::Token
 //! \n Overloads the std stream operator to print out Arrays of Tokens
 /***************************************************************************/
 
-std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser::Token> &irclast_tokens )
+std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation::Token> &irclast_tokens )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -218,7 +186,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
     icl_stream << "Tokens ";
     DPRINT("Tokens   ");
 	//Scan all tokens
-    for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
+    for (std::vector<Equation::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
 		//Valid token
 		if (cl_token_iterator->cl_str.size() > 0)
@@ -237,7 +205,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
     //Show the priority in the line below
     DPRINT("Priority ");
 	//Scan all tokens
-    for (std::vector<Equation_parser::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
+    for (std::vector<Equation::Token>::iterator cl_token_iterator = irclast_tokens.begin(); cl_token_iterator != irclast_tokens.end(); cl_token_iterator++ )
     {
 		DPRINT_NOTAB("| %d", cl_token_iterator->s32_open_close_priority );
 		//Valid token
@@ -275,7 +243,7 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation_parser:
 //! \n Unary operators (+ and (- are tokenized at this stage, by deleting them and applying negation to the following token if needed
 /***************************************************************************/
 
-bool Equation_parser::parse( std::string is_equation )
+bool Equation::parse( std::string is_equation )
 {
     DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -295,7 +263,35 @@ bool Equation_parser::parse( std::string is_equation )
 		return true;
 	}
 	//Link the decorator for the tree to print out the token
-	std::string (*f_my_decorator)(Token ist_token) = [](Token ist_token){ return ist_token.cl_str +std::string(" | ") +std::to_string(ist_token.e_type); };
+	std::string (*f_my_decorator)(Token ist_token) =
+	[](Token ist_token)
+	{
+		std::string s_return;
+		//Symbols and numbers have a unary sign, handles sign negation when needed
+		if ((ist_token.is_symbol()) || (ist_token.is_number()))
+		{
+			if (ist_token.u1_negative==false)
+			{
+				s_return += std::string("+");
+			}
+			else //if (ist_token.u1_negative==true)
+			{
+				s_return += std::string("-");
+			}
+		}
+		//operators can't have a sign
+		else
+		{
+			s_return += std::string(" ");
+		}
+		//Append token
+		s_return += ist_token.cl_str;
+		//Also show token type
+		s_return += std::string(" | ");
+		s_return += Equation::get_token_type_string(ist_token.e_type);
+		//Token stringified
+		return s_return;
+	};
 	//Link the provided decorator to replace the default decorator
 	this->gcl_token_tree.link_decorator( f_my_decorator );
 	//Tree must be empty before conversion of token array to token tree
@@ -317,6 +313,7 @@ bool Equation_parser::parse( std::string is_equation )
 	this->gcl_token_tree.show(0);
 	std::cout << "--------------------------------------\n";
 
+	/*
 	//Recursively
 	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
 	if (s32_ret < 0)
@@ -329,6 +326,7 @@ bool Equation_parser::parse( std::string is_equation )
 	std::cout << "Aggregate\n";
 	this->gcl_token_tree.show(0);
 	std::cout << "--------------------------------------\n";
+	*/
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -351,7 +349,7 @@ bool Equation_parser::parse( std::string is_equation )
 //! \n Reverse translation of a tree of tokens back to an equation is string form
 /***************************************************************************/
 
-std::string Equation_parser::tree_to_equation( void )
+std::string Equation::tree_to_equation( void )
 {
     DENTER(); //Trace Enter
     std::string cl_str;
@@ -378,7 +376,7 @@ std::string Equation_parser::tree_to_equation( void )
 //! \n Try to recover from errors
 /***************************************************************************/
 
-const char *Equation_parser::get_error( void )
+const char *Equation::get_error( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -402,6 +400,113 @@ const char *Equation_parser::get_error( void )
     return err_code; //OK
 }   //Public Getter: get_error | void |
 
+/***************************************************************************/
+//! @brief Public Getter: get_token_type_string | Token_type &ire_type |
+/***************************************************************************/
+//! @param ire_type The token type to convert to string
+//! @return const char * A string representation of the token type
+//! @details
+//! \n This function returns a string corresponding to the given token type
+//! \n It is used for debugging and error reporting purposes
+//! \n If the token type is unknown, it returns "UNKNOWN"
+/***************************************************************************/
+
+const char* Equation::get_token_type_string(Token_type &ire_type)
+{
+	switch (ire_type)
+	{
+		case BASE_NUMBER:
+			return "BASE_NUMBER";
+		case BASE_SYMBOL:
+			return "BASE_SYMBOL";
+		case BASE_OPERATOR:
+			return "BASE_OPERATOR";
+		case BASE_OPEN:
+			return "BASE_OPEN";
+		case BASE_CLOSE:
+			return "BASE_CLOSE";
+		case SYMBOL_FUNCTION:
+			return "SYMBOL_FUNCTION";
+		case SYMBOL_INPUT:
+			return "SYMBOL_INPUT";
+		case SYMBOL_OUTPUT:
+			return "SYMBOL_OUTPUT";
+		case SYMBOL_VAR:
+			return "SYMBOL_VAR";
+		case SYMBOL_CONST:
+			return "SYMBOL_CONST";
+		default:
+			break;
+	}
+
+	return "UNKNOWN";
+}
+
+/***************************************************************************/
+//! @brief Public Getter: get_token_string | void |
+/***************************************************************************/
+//! @param irst_token token to be stringfied
+//! @return const char *
+//! @details
+//! \n Convert a Token into a string. Converts into an error string if there is a problem. Handles negation and token type
+/***************************************************************************/
+
+const char *Equation::get_token_string( Equation::Token &irst_token )
+{
+	//--------------------------------------------------------------------------
+    //	Construct String
+    //--------------------------------------------------------------------------
+    std::string s_ret;
+	if ((irst_token.is_symbol()) || (irst_token.is_number()))
+	{
+		if (irst_token.u1_negative == false)
+		{
+			s_ret += std::string("+");
+		}
+		else //if (irst_token.u1_negative == true)
+		{
+			s_ret += std::string("-");
+		}
+	}
+	else
+	{
+		s_ret += std::string(" ");
+	}
+	//Append token
+	s_ret += irst_token.cl_str;
+
+	//--------------------------------------------------------------------------
+    //	Return
+    //--------------------------------------------------------------------------
+    return s_ret.c_str();
+}
+
+/***************************************************************************/
+//! @brief Public Getter: to_string | void |
+/***************************************************************************/
+//! @return const char *
+//! @details
+//! \n reverse translate a tree into a token array into a string and return the string
+/***************************************************************************/
+
+std::string Equation::to_string()
+{
+	//--------------------------------------------------------------------------
+    //	Construct String
+    //--------------------------------------------------------------------------
+
+    //Allocate a vector for the array of token structure
+    std::vector<Token> clast_tokens;
+
+    Equation::convert_token_tree_to_array( this->gcl_token_tree, clast_tokens);
+
+
+	//--------------------------------------------------------------------------
+    //	Return
+    //--------------------------------------------------------------------------
+    return std::string();
+}	//to_string | void
+
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
 **  PUBLIC METHODS
@@ -417,7 +522,7 @@ const char *Equation_parser::get_error( void )
 //! \n Method
 /***************************************************************************/
 
-bool Equation_parser::my_public_method( void )
+bool Equation::my_public_method( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -450,7 +555,7 @@ bool Equation_parser::my_public_method( void )
 //! \n Initialize class vars
 /***************************************************************************/
 
-bool Equation_parser::init_class_vars( void )
+bool Equation::init_class_vars( void )
 {
     DENTER();		//Trace Enter
     //--------------------------------------------------------------------------
@@ -481,7 +586,7 @@ bool Equation_parser::init_class_vars( void )
 //! \n returns true if the digit is an operator token
 /***************************************************************************/
 
-bool Equation_parser::is_operator( char is8_digit )
+bool Equation::is_operator( char is8_digit )
 {
     DENTER_ARG("Digit: >>%c<<", (is8_digit!='\0')?(is8_digit):(' ')  ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -524,7 +629,7 @@ bool Equation_parser::is_operator( char is8_digit )
 //! \n returns true if the digit is a symbol digit
 /***************************************************************************/
 
-bool Equation_parser::is_symbol( char is8_digit )
+bool Equation::is_symbol( char is8_digit )
 {
     DENTER_ARG("Digit: >>%c<<", (is8_digit!='\0')?(is8_digit):(' ') ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -532,7 +637,7 @@ bool Equation_parser::is_symbol( char is8_digit )
     //--------------------------------------------------------------------------
 	//Temp return
 	bool u1_ret;
-    if (Equation_parser::is_letter(is8_digit) == true)
+    if (Equation::is_letter(is8_digit) == true)
     {
 		//Symbol digit
 		u1_ret = true;
@@ -594,9 +699,19 @@ bool Equation_parser::is_symbol( char is8_digit )
 //! \n		e.g. lowest = 1 "redundant priority token deletion" kicks in deleting all "priority" tokens of priority 1 or lower
 //! \n	Tokens:		(((((1)))))	"redundant priority token deletion" -> 1
 //! \n	Priority: 	12345554321	                                    -> 0
+//! \n	-------------------------------------------------------------------
+//! \n	2023-05-05 BUG pattern 19
+//! \n	4=((((((1-2)+3)-4)+5)-6)+7)
+//! \n                       ^
+//! \n	- and + are both candidates, whish is the real problem?
+//! \n	detecting the last symbol fixes it, but inverts all operands in chain operations
+//! \n	I think it's a miscalculation of the min that lets the - pass throguh when it shoudln't
+//! \n
+//! \n
+//! \n
 /***************************************************************************/
 
-bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token )
+bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token )
 {
     DENTER_ARG("Tokens: %d", int(irclacl_token_array.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -625,14 +740,14 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
 	{
 		//Compute symbol priority
-		Equation_parser::compute_token_symbol_priority( *cl_token_iterator );
+		Equation::compute_token_symbol_priority( *cl_token_iterator );
 		//"Priority" open
 		if (cl_token_iterator->e_type == Token_type::BASE_OPEN)
 		{
 			//Open, increase priority of what comes after
 			s32_open_close_priority++;
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
-			DPRINT("Open | Priority: %d\n", s32_open_close_priority );
+			DPRINT("Token%4d | Open | Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), s32_open_close_priority );
 		}
 		//"Priority" close
 		else if (cl_token_iterator->e_type == Token_type::BASE_CLOSE)
@@ -640,12 +755,12 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//If: I have more close tokens than open tokens
 			if (s32_open_close_priority <= 0)
 			{
-				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
+				DRETURN_ARG("ERR:%3d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
 			//Open, decrease priority of what comes after
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
-			DPRINT("Close| Priority: %d\n", s32_open_close_priority );
+			DPRINT("Token%4d | Close| Priority: %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), s32_open_close_priority );
 			s32_open_close_priority--;
 		}
 		//"Non Priority"
@@ -672,7 +787,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			{
 				//Do nothing
 			}
-			DPRINT("Token: %s | Priority: %d\n", cl_token_iterator->cl_str.c_str() , s32_open_close_priority );
+			DPRINT("Token%4d | >%s< | Open Close Priority: %d | Symbol Priority %d \n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , s32_open_close_priority, cl_token_iterator->s32_symbol_priority );
 		}
 	}	//Scan the given array of token and compute the open/clsoe priority
 	//DEBUG
@@ -699,12 +814,16 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	//--------------------------------------------------------------------------
     //	REMOVE REDUNDANT PRIORITY TOKENS
     //--------------------------------------------------------------------------
+    //	s32_min_priority tells you the priority of the first non open non close token.
+	//	when s32_min_priority is not zero, that's the number of open/close you can safely remove
 	//	Remove extra parenthesis that are not needed
 	//	Update the priority of what remains to avoid recomputing the priority
 
 	//If: I have redundant priority tokens
 	if (s32_min_priority > 0)
 	{
+		//Remember what's the highest priority bracket deleted
+		int n_highest_priority_open_deleted = -1;
 		//Initialize scan
 		cl_token_iterator = irclacl_token_array.begin();
 		//While: scan is not complete
@@ -713,7 +832,12 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//Redundant "Priority" open token
 			if ((cl_token_iterator->e_type == Token_type::BASE_OPEN) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Open %d | Priority: %d | Min Priority: %d \n", size_t(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				//Is the highest priority deleted bracket?
+				if ((n_highest_priority_open_deleted == -1) || (cl_token_iterator->s32_open_close_priority > n_highest_priority_open_deleted))
+				{
+					n_highest_priority_open_deleted = cl_token_iterator->s32_open_close_priority;
+				}
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -721,7 +845,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 			//"Priority" close
 			else if ((cl_token_iterator->e_type == Token_type::BASE_CLOSE) && (cl_token_iterator->s32_open_close_priority <= s32_min_priority))
 			{
-				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", int(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
+				DPRINT("Delete Close %d | Priority: %d | Min Priority: %d \n", size_t(cl_token_iterator-irclacl_token_array.begin()), cl_token_iterator->s32_open_close_priority, s32_min_priority );
 				//Remove this element from the array
 				irclacl_token_array.erase( cl_token_iterator );
 				//Do not advance scan
@@ -739,9 +863,21 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				}
 			}
 		}	//While: scan is not complete
-		DPRINT("Deleted redundant priority tokens | Tokens: %d\n", int(irclacl_token_array.size()) );
-		//DEBUG
-		//std::cout << irclacl_token_array << "\n";
+		//If: algorithmic delition error
+		if (n_highest_priority_open_deleted != s32_min_priority)
+		{
+			DRETURN_ARG("ERR: I was expected to delete open brackets up to %d open close priority but only deleted %d priority\n", s32_min_priority, n_highest_priority_open_deleted );
+			return true;
+		}
+		//BUGFIX: This was super tricky
+		//I'm done deleting redundant brackets and updating priority, now the minimum open close is by definition non redundant
+		s32_min_priority -= n_highest_priority_open_deleted;
+		//DEBUG show the tokens after deleting the redundant tokens
+		DPRINT("Deleted redundant priority tokens | Tokens: %d | Min Open Close Priority: %d\n", int(irclacl_token_array.size()), s32_min_priority);
+		for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
+		{
+			DPRINT("Token%4d | >%s< | Open Close Priority: %d | Symbol Priority %d \n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str() , cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority );
+		}
 	}	//If: I have redundant priority tokens
 
 	//--------------------------------------------------------------------------
@@ -756,7 +892,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
     //Reset open close priority
     s32_open_close_priority = 0;
 	//Scan all tokens
-    for (cl_token_iterator = irclacl_token_array.begin(); cl_token_iterator != irclacl_token_array.end(); cl_token_iterator++ )
+    for (cl_token_iterator = irclacl_token_array.begin();cl_token_iterator != irclacl_token_array.end();cl_token_iterator++)
     {
 			//Check forbracket balance
 		//!@todo I can do better than repeating this code. Look to make a lambda or split hierarch and add incapsulate priority computation
@@ -776,10 +912,11 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				DRETURN_ARG("ERR:%d | Unbalanced Brackets, extra close at Token: %d", __LINE__, int(cl_token_iterator -irclacl_token_array.begin()) );
 				return true;
 			}
-			//Open, decrease priority of what comes after
+			//Close, decrease priority of what comes after
 			cl_token_iterator->s32_open_close_priority = s32_open_close_priority;
 			s32_open_close_priority--;
 		}
+		//! @todo s32_min_priority should ALWAYS be zero here?
 		//If the token has the lowest open/close priority
 		else if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
 		{
@@ -795,18 +932,22 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+				DPRINT("Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d | Default\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
-			//Current symbol has stronger priority then best symbol
-			else if (s32_best_priority > cl_token_iterator->s32_symbol_priority)
+			//Current symbol has stronger priority then best symbol.
+			//TIP: using <= instead of < inverts the order of children in same priority chains, but the result is still correct
+			else if (cl_token_iterator->s32_symbol_priority < s32_best_priority)
 			{
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+				DPRINT("Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
 			//Current symbol has weaker priority then best symbol
 			else
 			{
 				//Ignore it
+				DPRINT("Ignore%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d | Best Priority %d\n", size_t(cl_token_iterator -irclacl_token_array.begin()), cl_token_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority, s32_best_priority );
 			}
 		}
 		//If token has higher open/close priority
@@ -829,6 +970,15 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 	}
 	//Return highest priority token
 	orclacl_highest_priority_token = cl_best_iterator;
+	//Having deleted the open, what comes after is index +1 to be consistent with original input
+	DPRINT("Token%4d | >%s< | Highest priority token\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str() );
+	/*
+	if (( size_t(cl_best_iterator -irclacl_token_array.begin()) == 18 ) && (cl_best_iterator->cl_str[0] == '-'))
+	{
+		return false;
+	}
+	*/
+
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -846,7 +996,7 @@ bool Equation_parser::compute_token_array_priority( std::vector<Token> &irclacl_
 //! \n Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
 /***************************************************************************/
 
-bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
+bool Equation::compute_token_symbol_priority( Token &irst_token )
 {
     DENTER_ARG_CONDITIONAL(Config::CU1_DEBUG_COMPUTE_SYMBOL_PRIORITY, "Token type: %d | Token size: %d", irst_token.e_type, int(irst_token.cl_str.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -929,14 +1079,15 @@ bool Equation_parser::compute_token_symbol_priority( Token &irst_token )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation_parser::Token> &
+//! @brief Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
 /***************************************************************************/
 //! @return return false = OK | true = fail
 //! @details
-//! \n Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+//! \n	Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+//! \n	2023-05-09BUGFIX "=-1" wasn't tripping the unary detection, despite being a valid token sequence. = followed by -1 number, trigger can happen if+/- is the first character
 /***************************************************************************/
 
-bool Equation_parser::equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation_parser::Token> &orast_token_array )
+bool Equation::equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation::Token> &orast_token_array )
 {
 	DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -951,7 +1102,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 
     //Flush arrays
 	oras_token_array = std::vector<std::string>();
-	orast_token_array = std::vector<Equation_parser::Token>();
+	orast_token_array = std::vector<Equation::Token>();
 
     //--------------------------------------------------------------------------
     //	BODY
@@ -991,8 +1142,8 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 	//Detect if a unary operator has been detected and if negation has to be applied to the next token
 	bool u1_unary_operator = false;
     bool u1_unary_negation = false;
-    //Detect if the previous token was an OPEN
-    bool u1_unary_previous_open = false;
+    //Detect if the previous token allows for unary detection
+    bool x_previous_token_can_trip_unary_detection = true;
 	//Count open and close brackets
     int s32_cnt_open = 0, s32_cnt_close = 0;
     //While: Iterate until all characters inside the string object have been scanned
@@ -1014,7 +1165,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 			case Fsm_state::SEEK_NEXT_TOKEN:
 				DPRINT_CONDITIONAL( ((Config::CU1_PARSER_EXTENDED_DEBUG==true) && (clst_item != is_equation.end())) , "SEEK_NEXT_TOKEN | Decode: >>%c<<\n",s8_digit);
 				//Detect a number digit
-                if (Equation_parser::is_number(s8_digit) == true)
+                if (Equation::is_number(s8_digit) == true)
                 {
 					//Append digit to the token
 					cl_token.cl_str.push_back( s8_digit );
@@ -1029,17 +1180,17 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 					e_fsm_state = Fsm_state::TOKEN_NUMBER;
                 }
                 //Detect a symbol digit. Symbols must start with a symbol digit. Symbols are things like constants or variable names
-                else if (Equation_parser::is_symbol(s8_digit) == true)
+                else if (Equation::is_symbol(s8_digit) == true)
                 {
 					//Append digit to the token
 					cl_token.cl_str.push_back( s8_digit );
 					e_fsm_state = Fsm_state::TOKEN_SYMBOL;
                 }
                 //Detect Operator
-                else if (Equation_parser::is_operator(s8_digit))
+                else if (Equation::is_operator(s8_digit))
                 {
 					//Special Unary Positive Detection. "(+"
-					if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_SUM))
+					if ((x_previous_token_can_trip_unary_detection == true) && (s8_digit == Token_legend::CS8_OPERATOR_SUM))
 					{
 						//Detected a + unary operator, It has no effect other than deleting the token
 						u1_unary_operator = true;
@@ -1047,7 +1198,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
                         DPRINT("Unary + detected\n");
 					}
 					//Special Unary Negative Detection "(-"
-					else if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_DIFF))
+					else if ((x_previous_token_can_trip_unary_detection == true) && (s8_digit == Token_legend::CS8_OPERATOR_DIFF))
 					{
 						//Detected an unary operator. It has the effect of setting the negate flag of the next token
 						u1_unary_operator = true;
@@ -1112,7 +1263,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 					//Do nothing
 				}
 				//More numbers or decimal separators
-				else if ((Equation_parser::is_number(s8_digit)) || (s8_digit == Token_legend::CS8_DECIMAL_SEPARATOR))
+				else if ((Equation::is_number(s8_digit)) || (s8_digit == Token_legend::CS8_DECIMAL_SEPARATOR))
 				{
 					//!@todo Parser should check that the decimal separator token is in the right place
 					//Append digit to the token, not done yet
@@ -1142,7 +1293,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 					cl_token.e_type = Token_type::BASE_SYMBOL;
 				}
 				//Detect a symbol digit or a number digit
-				else if ((Equation_parser::is_symbol(s8_digit) == true) || (Equation_parser::is_number(s8_digit) == true))
+				else if ((Equation::is_symbol(s8_digit) == true) || (Equation::is_number(s8_digit) == true))
                 {
 					//Append digit to the token
 					cl_token.cl_str.push_back( s8_digit );
@@ -1185,8 +1336,8 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 				//Clear negation (can be skipped for performance)
 				u1_unary_negation = false;
 			}
-			//Special detection of previous OPEN, used for Unary detection
-			u1_unary_previous_open = (cl_token.e_type == Token_type::BASE_OPEN);
+			//Special detection of previous token that can trip the Unary detection
+			x_previous_token_can_trip_unary_detection = (cl_token.e_type == Token_type::BASE_OPEN) || is_token_type_operator( cl_token.e_type );
 			//If: decoding resulted in an empty token
 			if (cl_token.cl_str.size() <= 0)
 			{
@@ -1252,7 +1403,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
     //--------------------------------------------------------------------------
     DRETURN_ARG("Decoded %d tokens", int(oras_token_array.size()) );
     return false;
-}   //Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation_parser::Token> &
+}   //Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
 
 /***************************************************************************/
 //! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
@@ -1266,7 +1417,7 @@ bool Equation_parser::equation_to_token_array( std::string is_equation, std::vec
 //! \n The tokenizer wants to use only sum and negation, with large number of leaves if possible
 /***************************************************************************/
 
-bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father )
+bool Equation::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father )
 {
     DENTER_ARG("Token Array Size: %d | Father %d", int(irclacl_token_array.size()), int(in_index_father) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1281,7 +1432,7 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
     //Token that will become the branch
     std::vector<Token>::iterator cl_core_iterator;
 	//Compute priorities and search for the strongest symbol
-    bool u1_ret = Equation_parser::compute_token_array_priority( irclacl_token_array, cl_core_iterator );
+    bool u1_ret = Equation::compute_token_array_priority( irclacl_token_array, cl_core_iterator );
 	if (u1_ret == true)
 	{
 		DRETURN_ARG("ERR:%d | Priority computation failed", __LINE__);
@@ -1407,16 +1558,33 @@ bool Equation_parser::token_array_to_tree( std::vector<Token> &irclacl_token_arr
 //! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
 /***************************************************************************/
 
-bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
+bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
 
+    //If empty tree
+    if (ircl_tree_root.size() <= 0)
+    {
+		DRETURN_ARG("ERR%d: Empty Tree %d...", __LINE__, ircl_tree_root.size() );
+		return true;
+    }
+
+    //I need to have root = with an LHS and a RHS, i reverse translate those, and merge the arrays together
+	if (Equation::is_token_operator_equal(ircl_tree_root[0]) == false)
+	{
+		DRETURN_ARG("ERR%d: Tree root is not operator equal %s...", __LINE__, ircl_tree_root[0].to_string() );
+		return true;
+	}
+
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
+
+    //for (
+
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -1456,9 +1624,43 @@ bool Equation_parser::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vec
 //! \n			-						-4
 //! \n				3
 //! \n				4
+//! \n
+//! \n	Aggregate sum/diff needs to transform - into + and offload the negative into token negation
+//!	\n when I find a candidate, I need to turn all - into +, and remember what needs to be sign flipped
+//! \n	e.g.
+//! \n 	+1	+2	+3 	+4
+//! \n	+	+1	+2	+3	+4
+//! \n
+//! \n 	-1 +2 +3 +4
+//! \n	+	-1	+2	+3	+4
+//! \n	-					+				+
+//! \n		+1					-1				-1
+//! \n		+					+2				+2
+//! \n			+2				+				+3
+//! \n			+					+3			+4
+//! \n				+3				+4
+//! \n				+4
+//! \n
+//! \n 	-1 +2 -3 +4
+//! \n	-					+				+
+//! \n		+1					-1				-1
+//! \n		+					+2				+2
+//! \n			+2				-				-3
+//! \n			-					+3			+4
+//! \n				+3				+4
+//! \n				+4
+//! \n	1 - 2 + 3 - 4
+//! \n 	+1  - +2  + +3  - +4
+//! \n	-					+!				+
+//! \n		+1					+1				+1
+//! \n		+					-2!				-2
+//! \n			+2				-				+3
+//! \n			-					+3			-4!
+//! \n				+3				+4
+//! \n				+4
 /***************************************************************************/
 
-int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
+int Equation::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1488,14 +1690,18 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 		if
 		(
 			//The node is a sum/diff operator
-			(Equation_parser::is_operator_sum_diff( ircl_tree_root[n_index_token] ) == true) &&
+			(Equation::is_operator_sum_diff( ircl_tree_root[n_index_token] ) == true) &&
 			//It's father is a sum/diff operator
-			(Equation_parser::is_operator_sum_diff( ircl_tree_root[n_index_father] ) == true)
+			(Equation::is_operator_sum_diff( ircl_tree_root[n_index_father] ) == true)
 		)
 		{
 			//This token is a candidate for aggregation.
 			//To be selected it needs to have ONLY symbols/numbers as children? NO. I can promote the subtrees upward!
 			DPRINT("Candidate %d\n", n_index_token );
+				//DIFF HANDLING
+			//I need to turn all - operators into + operators and offload the negation to the individual tokens
+
+
 			//While the target node has children
 			do
 			{
@@ -1570,7 +1776,7 @@ int Equation_parser::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root 
 //! \n flush the token array and the token tree
 /***************************************************************************/
 
-bool Equation_parser::flush( void )
+bool Equation::flush( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1609,7 +1815,7 @@ bool Equation_parser::flush( void )
 //! \n Report an error. return false: OK | true: Unknown error code
 /***************************************************************************/
 
-bool Equation_parser::report_error( const char *ips8_error_code )
+bool Equation::report_error( const char *ips8_error_code )
 {
     DENTER_ARG("ERR: %p", ips8_error_code ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1645,7 +1851,7 @@ bool Equation_parser::report_error( const char *ips8_error_code )
 //! \n Automatically called by get_error.
 /***************************************************************************/
 
-bool Equation_parser::error_recovery( void )
+bool Equation::error_recovery( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1668,7 +1874,7 @@ bool Equation_parser::error_recovery( void )
 //! \n Method
 /***************************************************************************/
 
-bool Equation_parser::my_private_method( void )
+bool Equation::my_private_method( void )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
