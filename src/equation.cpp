@@ -1556,6 +1556,21 @@ bool Equation::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tre
 //! @return bool | false = OK | true = FAIL |
 //! @details
 //! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
+//! \n Algorithm:
+//! \n A+B+C=a+b+c
+//! \n the tree scans as
+//! \n = + A + B C + a + b c
+//! \n Reverse translates to:
+//! \n (A +(B + C)) = (a + (b + c))
+//! \n string
+//! \n =
+//! \n going down, open bracket and insert token before
+//! \n ( + =
+//! \n ( A + =
+//! \n ( A + ( +
+//! \n ( A + ( B + C )) =
+//! \n ( A + ( B + C )) = ( +
+
 /***************************************************************************/
 
 bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
@@ -1583,7 +1598,12 @@ bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::ve
     //	BODY
     //--------------------------------------------------------------------------
 
-    //for (
+    std::cout << "Scan";
+    //Scan the tree
+    for (auto cl_iterator_tree = ircl_tree_root.begin();cl_iterator_tree != ircl_tree_root.end();cl_iterator_tree++)
+    {
+		std::cout << (*cl_iterator_tree).t_payload << "\n";
+    }
 
 
     //--------------------------------------------------------------------------

@@ -123,7 +123,7 @@
 1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1683640618 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
+1683649676 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -131,7 +131,7 @@
 	<string>
 	"equation.h"
 
-1683640608 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
+1683649292 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
 	<vector>
 	"tree.hpp"
 
@@ -146,7 +146,7 @@
 1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree_interface.h
 	<vector>
 
-1683561448 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.cpp
+1683649292 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -154,12 +154,12 @@
 	<string>
 	"equation_solver.h"
 
-1683629875 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.h
+1683649292 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation_solver.h
 	<vector>
 	"tree.hpp"
 	"equation.h"
 
-1683640630 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1683649292 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
@@ -167,5 +167,5 @@
 	"test_patterns.h"
 	"equation_solver.h"
 
-1683637906 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+1683650057 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
 
