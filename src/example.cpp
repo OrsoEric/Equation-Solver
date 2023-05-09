@@ -65,7 +65,7 @@
 #include "debug.h"
 
 //#include "tokenizer.h"
-#include "parser.h"
+#include "equation.h"
 //Header with the test pattern arrays to be fed to the unit tests
 #include "test_patterns.h"
 
@@ -92,6 +92,8 @@ using std::endl;
 extern bool test_bench( void );
 
 extern int unit_test_parse_token_array( void );
+
+extern bool unit_test_equation_solver( void );
 
 /****************************************************************
 **	GLOBAL VARIABILES
@@ -174,12 +176,18 @@ bool test_bench( void )
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
+	/*
     //unit test the token array parser
 	int n_fail = unit_test_parse_token_array();
 	DPRINT("Failed test patterns: %d\n", n_fail );
 	std::cout << "----------------------------------------------------------------\n";
 	std::cout << "Unit Test: Failed patterns:" << n_fail << "\n";
 	std::cout << "----------------------------------------------------------------\n";
+	*/
+
+	unit_test_equation_solver();
+
+
 
 	//----------------------------------------------------------------
 	//	RETURN
@@ -210,7 +218,7 @@ int unit_test_parse_token_array( void )
 	//	VARS
 	//----------------------------------------------------------------
 
-	User::Equation_parser cl_equation_parser;
+	User::Equation cl_equation_parser;
 
 	//----------------------------------------------------------------
 	//	INIT
@@ -294,7 +302,7 @@ int unit_test_parse_token_array( void )
 				DPRINT_NOTAB("\n");
 			}
 			//Get the tree representation of the equation
-			User::Tree<User::Equation_parser::Token> cl_tree_from_equation = cl_equation_parser.get_tree_of_token();
+			User::Tree<User::Equation::Token> cl_tree_from_equation = cl_equation_parser.get_tree_of_token();
 			//if the parser passed, I should have a tree
 			if (x_fail == false)
 			{
@@ -303,7 +311,7 @@ int unit_test_parse_token_array( void )
 				cl_tree_from_equation.show(0);
 				//Construct a tree from the test pattern
 				std::cout << "tree constructed from test pattern:\n";
-				User::Tree<User::Equation_parser::Token> cl_tree_from_test_pattern = User::Tree<User::Equation_parser::Token>( ast_test_pattern[n_test_pattern_index].ast_minimal_node );
+				User::Tree<User::Equation::Token> cl_tree_from_test_pattern = User::Tree<User::Equation::Token>( ast_test_pattern[n_test_pattern_index].ast_minimal_node );
 				cl_tree_from_test_pattern.link_decorator( cl_tree_from_equation.get_decorator() );
 				cl_tree_from_test_pattern.show(0);
 				//tree from parsing is the same as tree from test pattern
@@ -316,11 +324,42 @@ int unit_test_parse_token_array( void )
 				else
 				{
 					std::cout << "ERR Pattern " << n_test_pattern_index << " FAIL | Tree from parsing is not the same as tree from test pattern\n";
-					DPRINT("ERR: FAIL test pattern: %d\n", n_test_pattern_index );
+					DPRINT("ERR%d: FAIL TREE | Test pattern: %d\n", __LINE__, n_test_pattern_index );
 					n_cnt_fail++;
 					n_cnt_fail_treeificator++;
 					an_index_failed_treeificator.push_back( n_test_pattern_index );
 					an_index_failed_pattern.push_back(n_test_pattern_index );
+
+					//Parsed tree of tokens
+					std::vector<User::Equation::Token> ast_tree_token_parsed;
+					for (auto an_iterator_parsed = cl_tree_from_equation.begin();an_iterator_parsed != cl_tree_from_equation.end();an_iterator_parsed++)
+					{
+						ast_tree_token_parsed.push_back( (*an_iterator_parsed).t_payload );
+					}
+					//Expected tree of tokens
+					std::vector<User::Equation::Token> ast_tree_token_expected;
+					for (auto an_iterator_expected = cl_tree_from_test_pattern.begin();an_iterator_expected != cl_tree_from_test_pattern.end();an_iterator_expected++)
+					{
+						ast_tree_token_expected.push_back( (*an_iterator_expected).t_payload );
+					}
+
+					DPRINT_TAB();
+					DPRINT_NOTAB("Tree Parsed   | ");
+					for (auto an_iterator = ast_tree_token_parsed.begin();an_iterator != ast_tree_token_parsed.end();an_iterator++)
+					{
+
+						DPRINT_NOTAB("\t>%s<", (*an_iterator).to_string() );
+					}
+					DPRINT_NOTAB("\n");
+					DPRINT_TAB();
+					DPRINT_NOTAB("Tree Expected | ");
+					for (auto an_iterator = ast_tree_token_expected.begin();an_iterator != ast_tree_token_expected.end();an_iterator++)
+					{
+
+						DPRINT_NOTAB("\t>%s<", (*an_iterator).to_string() );
+					}
+					DPRINT_NOTAB("\n");
+
 				}
 			}
 			//if parser failed and I have a tree
@@ -384,3 +423,15 @@ int unit_test_parse_token_array( void )
 	DRETURN_ARG("Failed test patterns: %d", n_cnt_fail);
 	return n_cnt_fail; //OK
 }	//end function: Dummy | bool
+
+#include "equation_solver.h"
+
+bool unit_test_equation_solver( void )
+{
+	User::Equation_solver cl_equation;
+
+	cl_equation.load( "1=1" );
+
+	cl_equation.preprocess_tree();
+
+}
