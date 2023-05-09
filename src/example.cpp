@@ -176,16 +176,15 @@ bool test_bench( void )
 	//----------------------------------------------------------------
 	//! @details algorithm:
 
-	/*
     //unit test the token array parser
 	int n_fail = unit_test_parse_token_array();
 	DPRINT("Failed test patterns: %d\n", n_fail );
 	std::cout << "----------------------------------------------------------------\n";
 	std::cout << "Unit Test: Failed patterns:" << n_fail << "\n";
 	std::cout << "----------------------------------------------------------------\n";
-	*/
 
-	unit_test_equation_solver();
+
+	//unit_test_equation_solver();
 
 
 
@@ -199,8 +198,7 @@ bool test_bench( void )
 }	//end function: Dummy | bool
 
 /****************************************************************************
-**	@brief Function
-**	f | bool
+**	@brief unit_test_parse_token_array | void
 ****************************************************************************/
 //! @param f bool
 //! @return bool |
@@ -317,6 +315,9 @@ int unit_test_parse_token_array( void )
 				//tree from parsing is the same as tree from test pattern
 				if (cl_tree_from_equation == cl_tree_from_test_pattern)
 				{
+					//Do a reverse translation from tree to string
+					std::string s_tree_reverse_translation = cl_equation_parser.to_string();
+
 					//Do nothing
 					std::cout << "PASS pattern: "  << n_test_pattern_index << "\n";
 					DPRINT("PASS pattern: %d\n", n_test_pattern_index );
@@ -422,7 +423,7 @@ int unit_test_parse_token_array( void )
 	//Trace Return vith return value
 	DRETURN_ARG("Failed test patterns: %d", n_cnt_fail);
 	return n_cnt_fail; //OK
-}	//end function: Dummy | bool
+}	//unit_test_parse_token_array | void
 
 #include "equation_solver.h"
 

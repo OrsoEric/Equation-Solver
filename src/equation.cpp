@@ -454,7 +454,7 @@ const char* Equation::get_token_type_string(Token_type &ire_type)
 const char *Equation::get_token_string( Equation::Token &irst_token )
 {
 	//--------------------------------------------------------------------------
-    //	Negation Handling
+    //	Construct String
     //--------------------------------------------------------------------------
     std::string s_ret;
 	if ((irst_token.is_symbol()) || (irst_token.is_number()))
@@ -476,10 +476,36 @@ const char *Equation::get_token_string( Equation::Token &irst_token )
 	s_ret += irst_token.cl_str;
 
 	//--------------------------------------------------------------------------
-    //	Negation Handling
+    //	Return
     //--------------------------------------------------------------------------
     return s_ret.c_str();
 }
+
+/***************************************************************************/
+//! @brief Public Getter: to_string | void |
+/***************************************************************************/
+//! @return const char *
+//! @details
+//! \n reverse translate a tree into a token array into a string and return the string
+/***************************************************************************/
+
+std::string Equation::to_string()
+{
+	//--------------------------------------------------------------------------
+    //	Construct String
+    //--------------------------------------------------------------------------
+
+    //Allocate a vector for the array of token structure
+    std::vector<Token> clast_tokens;
+
+    Equation::convert_token_tree_to_array( this->gcl_token_tree, clast_tokens);
+
+
+	//--------------------------------------------------------------------------
+    //	Return
+    //--------------------------------------------------------------------------
+    return std::string();
+}	//to_string | void
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
@@ -1057,7 +1083,8 @@ bool Equation::compute_token_symbol_priority( Token &irst_token )
 /***************************************************************************/
 //! @return return false = OK | true = fail
 //! @details
-//! \n Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+//! \n	Equation Tokenizer. Translates an equation in string form to an array of string tokens.
+//! \n	2023-05-09BUGFIX "=-1" wasn't tripping the unary detection, despite being a valid token sequence. = followed by -1 number, trigger can happen if+/- is the first character
 /***************************************************************************/
 
 bool Equation::equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation::Token> &orast_token_array )
@@ -1115,8 +1142,8 @@ bool Equation::equation_to_token_array( std::string is_equation, std::vector<std
 	//Detect if a unary operator has been detected and if negation has to be applied to the next token
 	bool u1_unary_operator = false;
     bool u1_unary_negation = false;
-    //Detect if the previous token was an OPEN
-    bool u1_unary_previous_open = false;
+    //Detect if the previous token allows for unary detection
+    bool x_previous_token_can_trip_unary_detection = true;
 	//Count open and close brackets
     int s32_cnt_open = 0, s32_cnt_close = 0;
     //While: Iterate until all characters inside the string object have been scanned
@@ -1163,7 +1190,7 @@ bool Equation::equation_to_token_array( std::string is_equation, std::vector<std
                 else if (Equation::is_operator(s8_digit))
                 {
 					//Special Unary Positive Detection. "(+"
-					if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_SUM))
+					if ((x_previous_token_can_trip_unary_detection == true) && (s8_digit == Token_legend::CS8_OPERATOR_SUM))
 					{
 						//Detected a + unary operator, It has no effect other than deleting the token
 						u1_unary_operator = true;
@@ -1171,7 +1198,7 @@ bool Equation::equation_to_token_array( std::string is_equation, std::vector<std
                         DPRINT("Unary + detected\n");
 					}
 					//Special Unary Negative Detection "(-"
-					else if ((u1_unary_previous_open == true) && (s8_digit == Token_legend::CS8_OPERATOR_DIFF))
+					else if ((x_previous_token_can_trip_unary_detection == true) && (s8_digit == Token_legend::CS8_OPERATOR_DIFF))
 					{
 						//Detected an unary operator. It has the effect of setting the negate flag of the next token
 						u1_unary_operator = true;
@@ -1309,8 +1336,8 @@ bool Equation::equation_to_token_array( std::string is_equation, std::vector<std
 				//Clear negation (can be skipped for performance)
 				u1_unary_negation = false;
 			}
-			//Special detection of previous OPEN, used for Unary detection
-			u1_unary_previous_open = (cl_token.e_type == Token_type::BASE_OPEN);
+			//Special detection of previous token that can trip the Unary detection
+			x_previous_token_can_trip_unary_detection = (cl_token.e_type == Token_type::BASE_OPEN) || is_token_type_operator( cl_token.e_type );
 			//If: decoding resulted in an empty token
 			if (cl_token.cl_str.size() <= 0)
 			{
@@ -1531,16 +1558,33 @@ bool Equation::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tre
 //! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
 /***************************************************************************/
 
-bool Equation::token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
+bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
 {
     DENTER(); //Trace Enter
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
 
+    //If empty tree
+    if (ircl_tree_root.size() <= 0)
+    {
+		DRETURN_ARG("ERR%d: Empty Tree %d...", __LINE__, ircl_tree_root.size() );
+		return true;
+    }
+
+    //I need to have root = with an LHS and a RHS, i reverse translate those, and merge the arrays together
+	if (Equation::is_token_operator_equal(ircl_tree_root[0]) == false)
+	{
+		DRETURN_ARG("ERR%d: Tree root is not operator equal %s...", __LINE__, ircl_tree_root[0].to_string() );
+		return true;
+	}
+
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
+
+    //for (
+
 
     //--------------------------------------------------------------------------
     //	RETURN

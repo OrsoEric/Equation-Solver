@@ -47,16 +47,35 @@ namespace User
 **********************************************************************************/
 
 /************************************************************************************/
-//! @class      Equation
+//! @class      Equation_solver
 /************************************************************************************/
 //!	@author     Orso Eric
-//! @version    2022-06-DD
-//! @brief      xxx
+//! @version    2023-05
+//! @brief      Stores a system of equations (vector of Equation classes) and solves them using simple fraction method
 //! @copyright  BSD 3-Clause License Copyright (c) 2020, Orso Eric
+//! @todo		Equation.get_symbols creates a vector with all the symbols that appear in an equation
 //! @details
-//! \n This class translates an equation in string form into an equation in tree form
-//! \n 2022-08-09 Implements Unary +/- Operators
-//! \n 2022-08-09 Functions work out of the box. It's a symbol with leaves. It's parsed correctly.
+//! \n	ALGORITHM: overall, I implements the simple fraction algorihm, that is very mechanical to execute.
+//! \n	IDEA: I need a rule based system to handle the streamlining of the tree
+//! \n	RULE: aggregate all +/- chains
+//! \n	0 = 0 + 0 + 0 + 0
+//! \n	parsed					after aggregation
+//! \n	=						=
+//! \n		0						0
+//! \n		+						+
+//! \n			0						0
+//! \n			+						0
+//! \n				0					0
+//! \n				+					0
+//! \n					0
+//! \n					0
+//! \n
+//! \n	RULE:  solve operators with only number as children
+//! \n	2+3 -> 5
+//! \n
+//! \n	IDEA: Could I make a script to explain the steps?
+//! \n	IDEA: Convert a spice netlist into a system of equation to be solved
+//! \n
 /************************************************************************************/
 
 class Equation_solver

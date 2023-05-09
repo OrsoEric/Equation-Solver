@@ -317,8 +317,9 @@ St_test_pattern ast_test_pattern[] =
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
 			}
 		),
 	},
@@ -356,88 +357,36 @@ St_test_pattern ast_test_pattern[] =
 		(
 			{
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-			}
-		),
-	},
-	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	St_test_pattern
-	{
-		"Complex sum aggregator (PASS)",
-		//Source equation string to be fed
-		"Y=1+(3*X)+2+(5*sephiroth +100 +101)+4",
-		//Expected failure state
-		false,
-		//Expected output of the tokenizer
-		std::vector<std::string>
-		(
-			{
-				std::string("Y"),
-				std::string("="),
-				std::string("1"),
-				std::string("+"),
-				std::string("("),
-				std::string("3"),
-				std::string("*"),
-				std::string("X"),
-				std::string(")"),
-				std::string("+"),
-				std::string("2"),
-				std::string("+"),
-				std::string("("),
-				std::string("5"),
-				std::string("*"),
-				std::string("sephiroth"),
-				std::string("+"),
-				std::string("100"),
-				std::string("+"),
-				std::string("101"),
-				std::string(")"),
-				std::string("+"),
-				std::string("4"),
-			}
-		),
-		//Expected output of the treeficator
-		std::vector<User::Tree<User::Equation::Token>::St_minimal_node>
-		(
-			{
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("Y"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
 
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
 
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("X"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
 
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
 
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("sephiroth"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 11, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("100"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("101"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 8, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 8, },
 
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 10, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
 			}
 		),
 	},
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	St_test_pattern
 	{
-		"Deep sum diff aggregator (PASS)",
+		"Deep diff with unary(PASS)",
 		//Source equation string to be fed
-		"28=1+2+3+4+5+6+7",
+		"-28=-1-2-3-4-5-6-7",
 		//Expected failure state
 		false,
 		//Expected output of the tokenizer
@@ -447,17 +396,17 @@ St_test_pattern ast_test_pattern[] =
 				std::string("28"),
 				std::string("="),
 				std::string("1"),
-				std::string("+"),
+				std::string("-"),
 				std::string("2"),
-				std::string("+"),
+				std::string("-"),
 				std::string("3"),
-				std::string("+"),
+				std::string("-"),
 				std::string("4"),
-				std::string("+"),
+				std::string("-"),
 				std::string("5"),
-				std::string("+"),
+				std::string("-"),
 				std::string("6"),
-				std::string("+"),
+				std::string("-"),
 				std::string("7"),
 			}
 		),
@@ -466,15 +415,27 @@ St_test_pattern ast_test_pattern[] =
 		(
 			{
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 8, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 8, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 10, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
 			}
 		),
 	},
@@ -512,15 +473,27 @@ St_test_pattern ast_test_pattern[] =
 		(
 			{
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 8, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 8, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 10, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
 			}
 		),
 	},
@@ -570,15 +543,27 @@ St_test_pattern ast_test_pattern[] =
 		(
 			{
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 3, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 3, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 5, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 5, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 7, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 7, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 9, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 9, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
 			}
 		),
 	},
@@ -630,15 +615,122 @@ St_test_pattern ast_test_pattern[] =
 		(
 			{
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("28"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, true, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 8, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("-"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 8, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 10, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 12, },
+			}
+		),
+	},
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	St_test_pattern
+	{
+		"Complex sum aggregator (PASS)",
+		//Source equation string to be fed
+		"Y=1+(3*X)+2+(5*sephiroth +100 +101)+4",
+		//Expected failure state
+		false,
+		//Expected output of the tokenizer
+		std::vector<std::string>
+		(
+			{
+				std::string("Y"),
+				std::string("="),
+				std::string("1"),
+				std::string("+"),
+				std::string("("),
+				std::string("3"),
+				std::string("*"),
+				std::string("X"),
+				std::string(")"),
+				std::string("+"),
+				std::string("2"),
+				std::string("+"),
+				std::string("("),
+				std::string("5"),
+				std::string("*"),
+				std::string("sephiroth"),
+				std::string("+"),
+				std::string("100"),
+				std::string("+"),
+				std::string("101"),
+				std::string(")"),
+				std::string("+"),
+				std::string("4"),
+			}
+		),
+		//Expected output of the treeficator
+		std::vector<User::Tree<User::Equation::Token>::St_minimal_node>
+		(
+			{
+				//0
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("Y"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				//3
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
+				//5
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 4, },
+				//7
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 5, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("X"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 5, },
+				//9
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+				//11
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 10, },
+				//13
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("sephiroth"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 11, },
+				//15
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 10, },
+
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("101"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+
+
+				/* aggregated SUM
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("="), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("Y"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 0, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 0, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("1"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("2"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("*"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 2, },
 				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("4"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("6"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
-				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("7"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 2, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("3"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 4, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("X"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 4, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("5"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 6, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("+"), User::Equation::Token_type::BASE_OPERATOR, 0, 0, false, }, 6, },
+
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("sephiroth"), User::Equation::Token_type::BASE_SYMBOL, 0, 0, false, }, 11, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("100"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				User::Tree<User::Equation::Token>::St_minimal_node{ User::Equation::Token{ std::string("101"), User::Equation::Token_type::BASE_NUMBER, 0, 0, false, }, 11, },
+				*/
 			}
 		),
 	},

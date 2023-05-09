@@ -249,6 +249,8 @@ class Equation
 		static const char *get_token_type_string(Token_type &ire_type);
 		// Convert a Token into a string. Converts into an error string if there is a problem. Handles negation and token type
 		static const char *get_token_string( Token &irst_token );
+		//reverse translate a tree into a token array into a string and return the string
+		std::string to_string();
 
         /*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -418,6 +420,16 @@ class Equation
 		{
 			return (irst_source == Token_type::BASE_NUMBER);
 		}
+		//! @brief true = token is an operator
+		static bool is_token_type_operator( Token_type &irst_source )
+		{
+			return (irst_source == Token_type::BASE_OPERATOR);
+		}
+
+		static bool is_token_operator_equal( Token &irst_source )
+		{
+			return ((irst_source.e_type == Token_type::BASE_OPERATOR) && (irst_source.cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL));
+		}
 
 		/*********************************************************************************************************************************************************
         **********************************************************************************************************************************************************
@@ -430,7 +442,7 @@ class Equation
 		//Recursive function that finds the highest priority token, and push that into the tree. Recursively push more tokens.
         static bool token_array_to_tree( std::vector<Token> &irclacl_token_array, Tree<Token> &orcl_token_tree, size_t in_index_father );
         //Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
-        static bool token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
+        static bool convert_token_tree_to_array( Tree<Token> &ircl_token_tree, std::vector<Token> &irast_token_array );
         //Takes a vector of tokens, and compute priority
         static bool compute_token_array_priority( std::vector<Token> &irclacl_token_array, std::vector<Token>::iterator &orclacl_highest_priority_token );
 		//Compute the priority of a token removed from the open/close priority. Used to decide precedence between operators
