@@ -158,7 +158,7 @@ class Tree : public Tree_interface<Payload>
             //Distance from root of this node, computed by create_child
             size_t n_distance_from_root;
         };
-		//! @brief this structure is meant to allow fast save/load/reconstruction of a Tree class, it's a recused set of Node as it's not functional.
+		//! @brief this structure is meant to allow fast save/load/reconstruction of a Tree class, it's a reduced set of Node
         struct St_minimal_node
         {
 			//Payload inside the node
@@ -262,6 +262,11 @@ class Tree : public Tree_interface<Payload>
         {
 			return this->gf_lambda_decorator;
         }
+		//! @brief return the node, fast with no checks
+        Node get_node(size_t in_index )
+        {
+			return this->gast_nodes[in_index];
+        }
         //! @brief get the index of the father
         size_t get_index_father( size_t in_index )
         {
@@ -274,12 +279,12 @@ class Tree : public Tree_interface<Payload>
         }
 
         //Find the children of a node of a given index, and push their indexes inside a vector
-        bool find_children( size_t in_father_index, std::vector<size_t> &ira_children_indexes );
+        bool get_children( size_t in_father_index, std::vector<size_t> &ira_children_indexes );
         //Overloads used when a ector has to be created.
         std::vector<size_t> get_children( size_t in_father_index )
         {
 			std::vector<size_t> an_children;
-			find_children( in_father_index, an_children );
+			get_children( in_father_index, an_children );
 			return an_children;
         }
         //From the tree extract a vector of payload, that can be reinserted sequentially to form an identical tree
@@ -306,6 +311,11 @@ class Tree : public Tree_interface<Payload>
 			//return ((this->gast_nodes.size() < 1) || (this->gps8_error_code != Error_code::CPS8_OK));
 			//! @bug broken error reporting!!!
 			return false;
+        }
+        //! @brief false = index is valid | true = index is OOB
+        bool is_index_oob( size_t in_index )
+        {
+			return (in_index >= this->gast_nodes.size());
         }
         //! @brief check if two nodes are direct relatives
         bool is_descendant( size_t in_lhs, size_t in_rhs );
@@ -497,7 +507,7 @@ class Tree : public Tree_interface<Payload>
                         }
                         //I find all the children of the node I just popped, and push them
                         std::vector<size_t> an_children_indexes;
-                        bool x_fail = this->grcl_tree.find_children( n_current_index, an_children_indexes );
+                        bool x_fail = this->grcl_tree.get_children( n_current_index, an_children_indexes );
                         if (x_fail == true)
                         {
                             DRETURN_ARG("ERR%d: find children failed", __LINE__);
@@ -880,7 +890,7 @@ template <class Payload>
 Payload& Tree<Payload>::operator []( size_t in_index )
 {
     //Trace Enter
-    DENTER_ARG("Object: %p, Index: %d", &(*this), (int)in_index );
+    //DENTER_ARG("Object: %p, Index: %d", &(*this), (int)in_index );
     //--------------------------------------------------------------------------
     //	CHECK
     //--------------------------------------------------------------------------
@@ -888,7 +898,7 @@ Payload& Tree<Payload>::operator []( size_t in_index )
     //The user is trying to access a node outside the range
     if (in_index >= this->gast_nodes.size())
     {
-        DRETURN_ARG("Index OOB: %d of %d", int(in_index), int(this->gast_nodes.size()) );
+        DPRINT("ERR:%d | Index OOB: %d of %d", __LINE__, int(in_index), int(this->gast_nodes.size()) );
         //Return a reference to the dummy payload
         return this->gt_dummy;
     }
@@ -897,7 +907,7 @@ Payload& Tree<Payload>::operator []( size_t in_index )
     //	RETURN
     //--------------------------------------------------------------------------
     //Trace Return from main
-    DRETURN();
+    //DRETURN();
     return this->gast_nodes[in_index].t_payload;
 }	//end method: operator & | int |
 
@@ -1877,7 +1887,7 @@ bool Tree<Payload>::flush( void )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Protected Getter | find_children | size_t | std::vector<size_t> &
+//! @brief Protected Getter | get_children | size_t | std::vector<size_t> &
 /***************************************************************************/
 //! @param in_father_index | index of the father of which I want to find children
 //! @return std::vector<size_t> | array containing the indexes of the children, from the highest priority to the lowest priority
@@ -1888,7 +1898,7 @@ bool Tree<Payload>::flush( void )
 /***************************************************************************/
 
 template <class Payload>
-bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &iran_children_indexes )
+bool Tree<Payload>::get_children( size_t in_father_index,std::vector<size_t> &iran_children_indexes )
 {
     DENTER_ARG("Father: %d", int(in_father_index) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -2006,7 +2016,7 @@ bool Tree<Payload>::find_children( size_t in_father_index,std::vector<size_t> &i
 
     DRETURN_ARG("Found %d | %d children", int(n_num_found_children), int(iran_children_indexes.size()) ); //Trace Return
     return false;
-}	//Protected Getter | find_children | size_t | std::vector<size_t> &
+}	//Protected Getter | get_children | size_t | std::vector<size_t> &
 
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************

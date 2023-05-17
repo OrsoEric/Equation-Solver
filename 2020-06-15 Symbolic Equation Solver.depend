@@ -123,7 +123,7 @@
 1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\debug.h
 	<cstdio>
 
-1683649676 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
+1684252149 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.cpp
 	<cstdio>
 	"debug.h"
 	<cstdio>
@@ -131,11 +131,11 @@
 	<string>
 	"equation.h"
 
-1683649292 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
+1684251309 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\equation.h
 	<vector>
 	"tree.hpp"
 
-1683266354 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
+1684240647 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\tree.hpp
 	<string>
 	<vector>
 	<stack>
@@ -159,13 +159,23 @@
 	"tree.hpp"
 	"equation.h"
 
-1683649292 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
+1684250629 source:d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\example.cpp
 	<cstdio>
 	<iostream>
 	"debug.h"
 	"equation.h"
-	"test_patterns.h"
+	"st_test_pattern.hpp"
 	"equation_solver.h"
 
-1683650057 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+1684242579 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\test_patterns.h
+	<iostream>
+	<fstream>
+	<sstream>
+
+1684249037 d:\data\project\project programming\project codeblock incomplete\2020-06-15 symbolic equation solver\src\st_test_pattern.hpp
+	<iostream>
+	<sstream>
+	<fstream>
+	"tree.hpp"
+	"equation.h"
 

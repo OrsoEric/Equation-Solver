@@ -233,108 +233,6 @@ std::ostream& operator<<( std::ostream& icl_stream, std::vector<Equation::Token>
 **********************************************************************************************************************************************************
 *********************************************************************************************************************************************************/
 
-/***************************************************************************/
-//! @brief Public Setter: parse | std::string |
-/***************************************************************************/
-//! @param icl_equation_string | string containing the equation to be parsed into a vector of string tokens
-//! @return bool | false = OK | true = FAIL |
-//! @details
-//! \n Parse a string into a vector of string tokens. Basically slice the string into individual tokens.
-//! \n Unary operators (+ and (- are tokenized at this stage, by deleting them and applying negation to the following token if needed
-/***************************************************************************/
-
-bool Equation::parse( std::string is_equation )
-{
-    DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
-    //--------------------------------------------------------------------------
-    //	LINEAR PARSER
-    //--------------------------------------------------------------------------
-    //	The first pass translates a string into a vector of tokens with base token types
-
-    //Allocate a vector for the array of token structure
-    std::vector<Token> clast_tokens;
-    //Try to translate an equation into an array of string tokens, and an array of token structure
-    bool x_fail = this->equation_to_token_array( is_equation, this->gclacl_tokens, clast_tokens );
-	if (x_fail == true)
-	{
-		//Clear partial results
-		this->flush();
-		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n", __LINE__ );
-		return true;
-	}
-	//Link the decorator for the tree to print out the token
-	std::string (*f_my_decorator)(Token ist_token) =
-	[](Token ist_token)
-	{
-		std::string s_return;
-		//Symbols and numbers have a unary sign, handles sign negation when needed
-		if ((ist_token.is_symbol()) || (ist_token.is_number()))
-		{
-			if (ist_token.u1_negative==false)
-			{
-				s_return += std::string("+");
-			}
-			else //if (ist_token.u1_negative==true)
-			{
-				s_return += std::string("-");
-			}
-		}
-		//operators can't have a sign
-		else
-		{
-			s_return += std::string(" ");
-		}
-		//Append token
-		s_return += ist_token.cl_str;
-		//Also show token type
-		s_return += std::string(" | ");
-		s_return += Equation::get_token_type_string(ist_token.e_type);
-		//Token stringified
-		return s_return;
-	};
-	//Link the provided decorator to replace the default decorator
-	this->gcl_token_tree.link_decorator( f_my_decorator );
-	//Tree must be empty before conversion of token array to token tree
-	if (this->gcl_token_tree.size() > 1)
-	{
-		DPRINT("Tree wasn't empty: %d | FLUSH\n", this->gcl_token_tree.size() );
-		this->gcl_token_tree.flush();
-	}
-	//Recursively translate an array of token into a tree of tokens, starting from the root
-	bool u1_ret = this->token_array_to_tree( clast_tokens, this->gcl_token_tree, 0 );
-	if (u1_ret == true)
-	{
-		//Clear partial results
-		this->flush();
-		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
-		return true;
-	}
-	std::cout << "Array->Tree\n";
-	this->gcl_token_tree.show(0);
-	std::cout << "--------------------------------------\n";
-
-	/*
-	//Recursively
-	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
-	if (s32_ret < 0)
-	{
-		//Clear partial results
-		this->flush();
-		DRETURN_ARG("ERR:%d | Could not aggregate sum/diff operators into wide sum operators...", __LINE__ );
-		return true;
-	}
-	std::cout << "Aggregate\n";
-	this->gcl_token_tree.show(0);
-	std::cout << "--------------------------------------\n";
-	*/
-
-    //--------------------------------------------------------------------------
-    //	RETURN
-    //--------------------------------------------------------------------------
-    DRETURN_ARG( "Token array size: %d | Token tree size: %d", int(this->gclacl_tokens.size()), int(this->gcl_token_tree.size()) ); //Trace Return
-    return false; //OK
-} //Public Setter: parse | const char * |
-
 /*********************************************************************************************************************************************************
 **********************************************************************************************************************************************************
 **	PUBLIC GETTERS
@@ -443,7 +341,7 @@ const char* Equation::get_token_type_string(Token_type &ire_type)
 }
 
 /***************************************************************************/
-//! @brief Public Getter: get_token_string | void |
+//! @brief Public Getter: to_string | Equation::Token & |
 /***************************************************************************/
 //! @param irst_token token to be stringfied
 //! @return const char *
@@ -451,7 +349,7 @@ const char* Equation::get_token_type_string(Token_type &ire_type)
 //! \n Convert a Token into a string. Converts into an error string if there is a problem. Handles negation and token type
 /***************************************************************************/
 
-const char *Equation::get_token_string( Equation::Token &irst_token )
+std::string Equation::to_string( Equation::Token &irst_token )
 {
 	//--------------------------------------------------------------------------
     //	Construct String
@@ -474,12 +372,55 @@ const char *Equation::get_token_string( Equation::Token &irst_token )
 	}
 	//Append token
 	s_ret += irst_token.cl_str;
+	//Also show token type
+	//s_ret += std::string(" | ");
+	//s_ret += Equation::get_token_type_string(irst_token.e_type);
 
 	//--------------------------------------------------------------------------
     //	Return
     //--------------------------------------------------------------------------
-    return s_ret.c_str();
-}
+    return s_ret;
+}	//Public Getter: to_string | Equation::Token & |
+
+/***************************************************************************/
+//! @brief Public Getter: to_string | void |
+/***************************************************************************/
+//! @param
+//! @return const char *
+//! @details
+//! \n reverse translate a tree into a token array into a string and return the string
+/***************************************************************************/
+
+bool Equation::to_string( std::string &ors_equation )
+{
+	DENTER_ARG("Tokens: %d", ors_equation.size() );
+	//--------------------------------------------------------------------------
+    //	Construct String
+    //--------------------------------------------------------------------------
+
+    //Allocate a vector for the array of token structure
+    std::vector<Token> clast_tokens;
+	//Reverse translate tree of token into an array of token
+    bool x_fail = Equation::convert_token_tree_to_array( this->gcl_token_tree, clast_tokens);
+    if (x_fail == true)
+    {
+		DRETURN_ARG("ERR%d: Failed to convert tree of token into array of token", __LINE__ );
+		return true;
+    }
+	//Convert vector of token into a string
+    x_fail = Equation::convert_token_array_to_string( clast_tokens, ors_equation );
+    if (x_fail == true)
+    {
+		DRETURN_ARG("ERR%d: Failed to convert vector of token into string", __LINE__ );
+		return true;
+    }
+
+	//--------------------------------------------------------------------------
+    //	Return
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("Equation: %s | Size: %d", ors_equation.c_str(), ors_equation.size() );
+    return false;
+}	//to_string | void
 
 /***************************************************************************/
 //! @brief Public Getter: to_string | void |
@@ -489,22 +430,27 @@ const char *Equation::get_token_string( Equation::Token &irst_token )
 //! \n reverse translate a tree into a token array into a string and return the string
 /***************************************************************************/
 
-std::string Equation::to_string()
+std::string Equation::to_string( void )
 {
+	DENTER();
 	//--------------------------------------------------------------------------
     //	Construct String
     //--------------------------------------------------------------------------
 
-    //Allocate a vector for the array of token structure
-    std::vector<Token> clast_tokens;
-
-    Equation::convert_token_tree_to_array( this->gcl_token_tree, clast_tokens);
-
+    //Allocate string
+	std::string s_equation;
+	bool x_fail = this->to_string( s_equation );
+	if (x_fail == true)
+	{
+		DRETURN_ARG("ERR%d: Failed to reverse translate array of tokens...", __LINE__ );
+		return std::string();
+	}
 
 	//--------------------------------------------------------------------------
     //	Return
     //--------------------------------------------------------------------------
-    return std::string();
+    DRETURN_ARG("Equation: %s | Size: %d", s_equation.c_str(), s_equation.size() );
+    return s_equation;
 }	//to_string | void
 
 /*********************************************************************************************************************************************************
@@ -671,6 +617,80 @@ bool Equation::is_symbol( char is8_digit )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
+//! @brief Private Static Method: parse | std::string | std::vector<std::string>& | std::vector<Equation::Token> &
+/***************************************************************************/
+//! @param icl_equation_string | string containing the equation to be parsed into a vector of string tokens
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n Parse a string into a vector of string tokens. Basically slice the string into individual tokens.
+//! \n Unary operators (+ and (- are tokenized at this stage, by deleting them and applying negation to the following token if needed
+/***************************************************************************/
+
+bool Equation::parse( std::string is_equation, std::vector<std::string>& oras_string_tokens, std::vector<Equation::Token> &orast_tokens, User::Tree<Equation::Token> &oracl_tree_tokens )
+{
+    DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	LINEAR PARSER
+    //--------------------------------------------------------------------------
+    //	The first pass translates a string into a vector of tokens with base token types
+
+    //Try to translate an equation into an array of string tokens, and an array of token structure
+    bool x_fail = Equation::convert_equation_string_to_array_token( is_equation, oras_string_tokens, orast_tokens );
+	if (x_fail == true)
+	{
+		DRETURN_ARG("ERR%d | failed to parse an equation into an array of string tokens...\n", __LINE__ );
+		return true;
+	}
+	//Link the decorator for the tree to print out the token
+	std::string (*f_my_decorator)(Token ist_token) =
+	[](Token ist_token)
+	{
+		return Equation::to_string( ist_token );
+	};
+	//Link the provided decorator to replace the default decorator
+	oracl_tree_tokens.link_decorator( f_my_decorator );
+	//Tree must be empty before conversion of token array to token tree
+	if (oracl_tree_tokens.size() > 1)
+	{
+		DPRINT("Tree wasn't empty: %d | FLUSH\n", oracl_tree_tokens.size() );
+		oracl_tree_tokens.flush();
+	}
+	//Recursively translate an array of token into a tree of tokens, starting from the root
+	bool u1_ret = Equation::token_array_to_tree( orast_tokens, oracl_tree_tokens, 0 );
+	if (u1_ret == true)
+	{
+		//Clear partial results
+		oracl_tree_tokens.flush();
+		DRETURN_ARG("ERR:%d | Could not convert from token array to tree...", __LINE__ );
+		return true;
+	}
+	std::cout << "Array->Tree\n";
+	oracl_tree_tokens.show(0);
+	std::cout << "--------------------------------------\n";
+
+	/*
+	//Recursively
+	int s32_ret = this->aggregate_tree_token_sum_diff( this->gcl_token_tree );
+	if (s32_ret < 0)
+	{
+		//Clear partial results
+		this->flush();
+		DRETURN_ARG("ERR:%d | Could not aggregate sum/diff operators into wide sum operators...", __LINE__ );
+		return true;
+	}
+	std::cout << "Aggregate\n";
+	this->gcl_token_tree.show(0);
+	std::cout << "--------------------------------------\n";
+	*/
+
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG( "Number of String Tokens: %d | Number of Tokens: %d | Tree Token Size: %d", int(oras_string_tokens.size()), int(orast_tokens.size()), int(oracl_tree_tokens.size()) ); //Trace Return
+    return false; //OK
+} //Private Static Method: parse | const char * |
+
+/***************************************************************************/
 //! @brief Private Static Method: compute_token_array_priority | std::vector<Token> & | std::vector<Token>::iterator & |
 /***************************************************************************/
 //! @param irclacl_token_array | array of Tokens for which open/close priority must be computed
@@ -700,12 +720,22 @@ bool Equation::is_symbol( char is8_digit )
 //! \n	Tokens:		(((((1)))))	"redundant priority token deletion" -> 1
 //! \n	Priority: 	12345554321	                                    -> 0
 //! \n	-------------------------------------------------------------------
-//! \n	2023-05-05 BUG pattern 19
+//! \n		BUG2023-05-05
 //! \n	4=((((((1-2)+3)-4)+5)-6)+7)
 //! \n                       ^
 //! \n	- and + are both candidates, whish is the real problem?
 //! \n	detecting the last symbol fixes it, but inverts all operands in chain operations
 //! \n	I think it's a miscalculation of the min that lets the - pass throguh when it shoudln't
+//! \n	-------------------------------------------------------------------
+//! \n		BUG2023-05-16
+//! \n	Y=3*4-5+6"
+//! \n	Reverse translation:
+//! \n	Y=(3*(4-(5+6)))
+//! \n	Correct reverse translation:
+//! \n	Y=(((3*4)-5)+6)
+//! \n	When I have a choice of multiple operators, I have to pick the LOWEST first. I pick the highest priority non operator otherwise
+//! \n	This way * gets at the bottom of the tree, - above, preserving RHS negation, then + that doesn't matter
+//! \n
 //! \n
 //! \n
 //! \n
@@ -891,13 +921,29 @@ bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_a
     int s32_best_priority = -1;
     //Reset open close priority
     s32_open_close_priority = 0;
+    //false = no operators detected at this priority | true = at least an operator detected at this priority
+	bool x_operator_detected = false;
+	//Start search
+	cl_token_iterator = irclacl_token_array.begin();
+
+	bool x_continue = true;
+
 	//Scan all tokens
-    for (cl_token_iterator = irclacl_token_array.begin();cl_token_iterator != irclacl_token_array.end();cl_token_iterator++)
+	while (x_continue == true)
     {
 			//Check forbracket balance
 		//!@todo I can do better than repeating this code. Look to make a lambda or split hierarch and add incapsulate priority computation
+		//"Equal" operator always is to be selected
+		if (cl_token_iterator->cl_str[0] == Token_legend::CS8_OPERATOR_EQUAL)
+		{
+			//Equal found
+			cl_best_iterator = cl_token_iterator;
+			//Stop search
+			x_continue = false;
+			DPRINT("Equal\n");
+		}
 		//"Priority" open
-		if (cl_token_iterator->e_type == Token_type::BASE_OPEN)
+		else if (cl_token_iterator->e_type == Token_type::BASE_OPEN)
 		{
 			//Open, increase priority of what comes after
 			s32_open_close_priority++;
@@ -917,7 +963,7 @@ bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_a
 			s32_open_close_priority--;
 		}
 		//! @todo s32_min_priority should ALWAYS be zero here?
-		//If the token has the lowest open/close priority
+		//If I haven't detected an high priority operator and the token has the lowest open/close priority
 		else if (cl_token_iterator->s32_open_close_priority <= s32_min_priority)
 		{
 			//There is an algorithmic error, symbol priority is uninitialized
@@ -929,6 +975,12 @@ bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_a
 			//No best token has been found yet
 			else if (s32_best_priority == -1)
 			{
+				//If token is an operator
+				if (Equation::is_token(*cl_token_iterator, Token_type::BASE_OPERATOR)==true)
+				{
+					//Switch detection mode. Now seek the lowest priority operator to resolve
+					x_operator_detected = true;
+				}
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
@@ -936,12 +988,26 @@ bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_a
 			}
 			//Current symbol has stronger priority then best symbol.
 			//TIP: using <= instead of < inverts the order of children in same priority chains, but the result is still correct
-			else if (cl_token_iterator->s32_symbol_priority < s32_best_priority)
+			else if ((x_operator_detected == false) && (cl_token_iterator->s32_symbol_priority < s32_best_priority))
 			{
+				//If token is an operator
+				if (Equation::is_token(*cl_token_iterator, Token_type::BASE_OPERATOR)==true)
+				{
+					//Switch detection mode. Now seek the lowest priority operator to resolve
+					x_operator_detected = true;
+				}
 				//New best
 				cl_best_iterator = cl_token_iterator;
 				s32_best_priority = cl_token_iterator->s32_symbol_priority;
-				DPRINT("Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
+				DPRINT("High Priority Mode | Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
+			}
+			//If I detected an high priority operator token, I can only detect an operator with the same open/close priority, but LOWER symbol priority.
+			else if ((x_operator_detected == true) && (Equation::is_token(*cl_token_iterator, Token_type::BASE_OPERATOR)==true) && (cl_token_iterator->s32_symbol_priority > s32_best_priority))
+			{
+				//New worse operator
+				cl_best_iterator = cl_token_iterator;
+				s32_best_priority = cl_token_iterator->s32_symbol_priority;
+				DPRINT("Low Priority Mode | Candidate%4d | >%s< | Open Close Priority %d | Symbol Priority %d | Min Priority %d\n", size_t(cl_best_iterator -irclacl_token_array.begin()), cl_best_iterator->cl_str.c_str(), cl_token_iterator->s32_open_close_priority, cl_token_iterator->s32_symbol_priority, s32_min_priority );
 			}
 			//Current symbol has weaker priority then best symbol
 			else
@@ -954,6 +1020,12 @@ bool Equation::compute_token_array_priority( std::vector<Token> &irclacl_token_a
 		else
 		{
 			//Ignore it
+		}
+		//Next token
+		cl_token_iterator++;
+		if (cl_token_iterator == irclacl_token_array.end())
+		{
+			x_continue = false;
 		}
     }	//Scan all tokens
     //If search couldn't find the best token
@@ -1026,30 +1098,30 @@ bool Equation::compute_token_symbol_priority( Token &irst_token )
 				s32_symbol_priority = 0;
 				break;
 			case Token_legend::CS8_OPERATOR_MUL:
-				//Highest priority
 				s32_symbol_priority = 1;
 				break;
 			case Token_legend::CS8_OPERATOR_DIV:
-				//Highest priority
 				s32_symbol_priority = 2;
 				break;
-			case Token_legend::CS8_OPERATOR_SUM:
-				//Highest priority
+
+			case Token_legend::CS8_OPERATOR_DIFF:
+				//Diff is not commutative, I need to preserve it's RHS
 				s32_symbol_priority = 3;
 				break;
-			case Token_legend::CS8_OPERATOR_DIFF:
-				//Highest priority
-				s32_symbol_priority = 3;
+
+			case Token_legend::CS8_OPERATOR_SUM:
+				//Sum is commutative, I don't care about order
+				s32_symbol_priority = 4;
 				break;
 		}
 	}
 	else if (irst_token.e_type == Token_type::BASE_SYMBOL)
 	{
-		s32_symbol_priority = 4;
+		s32_symbol_priority = 5;
 	}
 	else if (irst_token.e_type == Token_type::BASE_NUMBER)
 	{
-		s32_symbol_priority = 5;
+		s32_symbol_priority = 6;
 	}
 	else if ((irst_token.e_type == Token_type::BASE_OPEN) || (irst_token.e_type == Token_type::BASE_CLOSE))
 	{
@@ -1079,7 +1151,7 @@ bool Equation::compute_token_symbol_priority( Token &irst_token )
 *********************************************************************************************************************************************************/
 
 /***************************************************************************/
-//! @brief Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
+//! @brief Private Method: convert_equation_string_to_array_token | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
 /***************************************************************************/
 //! @return return false = OK | true = fail
 //! @details
@@ -1087,7 +1159,7 @@ bool Equation::compute_token_symbol_priority( Token &irst_token )
 //! \n	2023-05-09BUGFIX "=-1" wasn't tripping the unary detection, despite being a valid token sequence. = followed by -1 number, trigger can happen if+/- is the first character
 /***************************************************************************/
 
-bool Equation::equation_to_token_array( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation::Token> &orast_token_array )
+bool Equation::convert_equation_string_to_array_token( std::string is_equation, std::vector<std::string> &oras_token_array, std::vector<Equation::Token> &orast_token_array )
 {
 	DENTER_ARG("Parse: %s | Size: %d", is_equation.c_str(), int(is_equation.size()) ); //Trace Enter
     //--------------------------------------------------------------------------
@@ -1403,7 +1475,7 @@ bool Equation::equation_to_token_array( std::string is_equation, std::vector<std
     //--------------------------------------------------------------------------
     DRETURN_ARG("Decoded %d tokens", int(oras_token_array.size()) );
     return false;
-}   //Private Method: equation_to_token_array | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
+}   //Private Method: convert_equation_string_to_array_token | std::string, std::vector<std::string> &, std::vector<Equation::Token> &
 
 /***************************************************************************/
 //! @brief Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
@@ -1557,20 +1629,66 @@ bool Equation::token_array_to_tree( std::vector<Token> &irclacl_token_array, Tre
 //! @details
 //! \n Reverse translation from a tree of tokens to a vector of token. Will add open and close tokens where needed
 //! \n Algorithm:
-//! \n A+B+C=a+b+c
-//! \n the tree scans as
-//! \n = + A + B C + a + b c
-//! \n Reverse translates to:
-//! \n (A +(B + C)) = (a + (b + c))
-//! \n string
-//! \n =
-//! \n going down, open bracket and insert token before
-//! \n ( + =
-//! \n ( A + =
-//! \n ( A + ( +
-//! \n ( A + ( B + C )) =
-//! \n ( A + ( B + C )) = ( +
-
+//! \n	RULES:
+//! \n	>Not first child?
+//! \n		>Not x_already_processed?
+//! \n			>APPEND this.father
+//! \n	>Symbol/Number?
+//! \n		>First Child?
+//! \n			>APPEND Open "("
+//! \n		>APPEND this
+//! \n	>Operator?
+//! \n		x_already_processed == false?
+//! \n			Y>APPEND this with x_already_processed = true
+//! \n			Y>APPEND this.children
+//! \n		x_already_processed == true?
+//! \n			Y>APPEND Close ")"
+//! \n	@todo handle functions E.G. sin( 30.0 ) E.G. Int( 0, INF, 1/x)
+//! \n
+//! \n	E.g. A+B-C=100
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	=		|	+		|	100		|	0/0 L0
+//! \n	Push +
+//! \n	Push 100
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	+		|	A		|	-		|	0/1	L1
+//! \n	Push A
+//! \n	Push -
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	A		|			|			|	0/1	L2
+//! \n	>>Write OPEN "(" << Suppress the first bracket
+//! \n	>>Write "A"
+//!	\n	Pop this
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	-		|	B		|	C		|	1/1 L2
+//! \n	Push B
+//! \n	Push C
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	B		|			|			|	0/1 L3
+//! \n	>>Write Open "("
+//! \n	>>Write Symbol "B"
+//!	\n	Pop this
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	C		|			|			|	1/1 L3
+//! \n	>>Write Father "-"
+//! \n	>>Write Symbol "C"
+//!	\n	Pop this
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP
+//! \n	-		|			|			|	1/1 L3
+//! \n	>>Write Father "-"
+//! \n	>>Write Symbol "C"
+//! \n
+//! \n	TOKEN	|	LHS		|	RHS		|	OP		|	NOTE
+//! \n	-		|			|			|	1/1 L3	|	I reprocess the node "-", this time I pop it and close
+//! \n	>>Write Symbol ")"
+//!	\n	Pop this
+//! \n
 /***************************************************************************/
 
 bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::vector<Token> &orast_token_array )
@@ -1586,25 +1704,176 @@ bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::ve
 		DRETURN_ARG("ERR%d: Empty Tree %d...", __LINE__, ircl_tree_root.size() );
 		return true;
     }
-
     //I need to have root = with an LHS and a RHS, i reverse translate those, and merge the arrays together
 	if (Equation::is_token_operator_equal(ircl_tree_root[0]) == false)
 	{
-		DRETURN_ARG("ERR%d: Tree root is not operator equal %s...", __LINE__, ircl_tree_root[0].to_string() );
+		DRETURN_ARG("ERR%d: Tree root is not operator equal %s...", __LINE__, ircl_tree_root[0].to_string().c_str() );
 		return true;
 	}
+	//Default tokens
+	const User::Equation::Token cst_token_open = { std::string("("), Equation::Token_type::BASE_OPEN, 0, 0, false };
+	const User::Equation::Token cst_token_close = { std::string(")"), Equation::Token_type::BASE_CLOSE, 0, 0, false };
 
     //--------------------------------------------------------------------------
     //	BODY
     //--------------------------------------------------------------------------
 
-    std::cout << "Scan";
-    //Scan the tree
-    for (auto cl_iterator_tree = ircl_tree_root.begin();cl_iterator_tree != ircl_tree_root.end();cl_iterator_tree++)
+	//! @brief stack entry. Minimum information required to do a reverse navigation of the tree. Can't be done with Tree::iterator because of additional metadata required
+    struct Token_pseudorecursive_decoding
     {
-		std::cout << (*cl_iterator_tree).t_payload << "\n";
-    }
+		//
+		size_t n_index_father;
+		size_t n_index_own;
+		size_t n_priority_max;
+		size_t n_priority_own;
+		size_t n_level;
+		//true = when procesed the token is to be removed from the queue
+		bool x_already_processed;
+		//Fill the structure from a Node, cannot know the number of siblings (n_priority_max) and the level (depth could be wrong)
+		bool load( User::Tree<User::Equation::Token>::Node irst_source, size_t in_priority_max, size_t in_level )
+		{
+			this->n_index_father = irst_source.n_index_father;
+			this->n_index_own = irst_source.n_own_index;
+			this->n_priority_max = in_priority_max;
+			this->n_priority_own = irst_source.n_own_priority;
+			this->n_level = in_level;
+			this->x_already_processed = false;
+			return false;
+		}
+		//Stringify the stack entry
+		std::string to_string( void )
+		{
+			return std::string("Father: ") +std::to_string(this->n_index_father) + std::string(" | Index: ") + std::to_string(this->n_index_own) + std::string(" | Priority Max: ") + std::to_string(this->n_priority_max) + std::string(" | Priority Own: ") + std::to_string(this->n_priority_own) + std::string(" | Level: ") + std::to_string(this->n_level);
+		}
+    };
+    //Minimum level that trigger OPEN/CLOSE
+    const size_t cn_min_open_close_append = 0;
+	//Temp stack element
+    Token_pseudorecursive_decoding st_stack_entry;
+    Token_pseudorecursive_decoding st_stack_child;
+	//Allocate the stack
+	std::stack<Token_pseudorecursive_decoding> ast_pseudorecursive_stack;
+	//Temp level
+    size_t n_old_level = 0;
+	//Nested Open Close nesting. start from no breackets
+	size_t n_open_close_priority = 0;
+	//memory flag for the CLOSE. When I processed a last child, I need to POP the father operators that are reprocessed
+	bool x_last_child_processed = false;
 
+	bool x_pop = false;
+	//Load the root
+    st_stack_entry.load( ircl_tree_root.get_node(0), 0, n_old_level );
+	ast_pseudorecursive_stack.push( st_stack_entry );
+	DPRINT("PUSH | Token: %s | Size: %d | %s\n", ircl_tree_root[st_stack_entry.n_index_own].to_string().c_str(), ast_pseudorecursive_stack.size() ,st_stack_entry.to_string().c_str() );
+	//Allocate vector of children
+	std::vector<size_t> an_children;
+	//While there are stack elements to be processed
+	while (ast_pseudorecursive_stack.size() > 0)
+	{
+		//PEEK
+		//Get the next node information
+		st_stack_entry = ast_pseudorecursive_stack.top();
+		DPRINT("PEEK | Token: %s | Size: %d | Stack: %s\n", ircl_tree_root[st_stack_entry.n_index_own].to_string().c_str(), ast_pseudorecursive_stack.size(), st_stack_entry.to_string().c_str() );
+		ast_pseudorecursive_stack.pop();
+		//REVERSE DECODE INTO TOKEN
+		//If going down one level and not first bracked, OPEN
+		if (st_stack_entry.n_level == n_old_level +1)
+		{
+			//
+			if (st_stack_entry.n_level >= cn_min_open_close_append +2)
+			{
+				orast_token_array.push_back( cst_token_open );
+				DPRINT("APPEND | OPEN | Tokens: %d | Level %d\n", orast_token_array.size(), st_stack_entry.n_level );
+			}
+			else
+			{
+				DPRINT("SKIP | OPEN | Level %d\n", st_stack_entry.n_level );
+			}
+		}
+		Token &rst_token = ircl_tree_root[st_stack_entry.n_index_own];
+		//If the token is NOT the first child, append also the father
+		//e.g. 3 +2 +4 you need to write the father on each later child
+		if ((st_stack_entry.n_priority_own != 0) && (st_stack_entry.x_already_processed == false))
+		{
+			Token &rst_token_father = ircl_tree_root[st_stack_entry.n_index_father];
+			//Append the father
+			orast_token_array.push_back( rst_token_father );
+			DPRINT("APPEND FATHER | %s | Tokens: %d\n", rst_token_father.to_string().c_str(), orast_token_array.size() );
+		}
+		//if token is a symbol/number append it to the token vector
+		if (Equation::is_token_type_symbol(rst_token.e_type) || Equation::is_token_type_number(rst_token.e_type))
+		{
+			if ((Config::CU1_INTERNAL_CHECKS == true) && (st_stack_entry.x_already_processed == true))
+			{
+				DRETURN_ARG("ERR%d: a symbol should have been popped when processed, it's still here!!!");
+				orast_token_array.clear();
+				return true;
+			}
+			/*
+			if ((Config::CU1_INTERNAL_CHECKS == true) && (ircl_tree_root.count_children( st_stack_entry.n_index_own ) > 0))
+			{
+				DRETURN_ARG("ERR%d: A symbol should not have children...");
+				orast_token_array.clear();
+				return true;
+			}
+			*/
+			//Append the token
+			orast_token_array.push_back( rst_token );
+			DPRINT("APPEND OWN | %s | Tokens: %d\n", rst_token.to_string().c_str(), orast_token_array.size() );
+		}
+		//Operator
+		else if (Equation::is_token_type_operator(rst_token.e_type))
+		{
+			//If wasn't processed before
+			if (st_stack_entry.x_already_processed == false)
+			{
+				//Symbols are to be removed from queue when decoded
+				st_stack_entry.x_already_processed = true;
+				//Repush the item with the processed flag to true
+				ast_pseudorecursive_stack.push( st_stack_entry );
+				DPRINT("PUSH*| Token: %s | Size: %d | %s\n", ircl_tree_root[st_stack_entry.n_index_own].to_string().c_str(), ast_pseudorecursive_stack.size() ,st_stack_entry.to_string().c_str() );
+				//Get the children of this node
+				ircl_tree_root.get_children( st_stack_entry.n_index_own, an_children );
+				//Push the children, push in reverse order, so that the highest priority child is popped first
+				for (std::vector<size_t>::reverse_iterator cl_iterator = an_children.rbegin();cl_iterator != an_children.rend(); cl_iterator++ )
+				{
+					//Push the child on top of the stack
+					st_stack_child.load( ircl_tree_root.get_node( (*cl_iterator) ), st_stack_entry.n_priority_own, st_stack_entry.n_level +1 );
+					ast_pseudorecursive_stack.push( st_stack_child );
+					DPRINT("PUSH | Token: %s | Size: %d | %s\n", ircl_tree_root[(*cl_iterator)].to_string().c_str(), ast_pseudorecursive_stack.size() ,st_stack_child.to_string().c_str() );
+				}
+			}
+			//Was processed before
+			else
+			{
+				//If it's not a blank bracket
+				if (st_stack_entry.n_level > cn_min_open_close_append)
+				{
+					orast_token_array.push_back( cst_token_close );
+					DPRINT("APPEND | CLOSE | Tokens: %d | Level %d\n", orast_token_array.size(), st_stack_entry.n_level );
+				}
+				else
+				{
+					DPRINT("SKIP | CLOSE | Level %d\n", st_stack_entry.n_level );
+				}
+			}
+		}
+		else
+		{
+			DRETURN_ARG("ERR%d: Token not implemented yet...", __LINE__ );
+			orast_token_array.clear();
+			return true;
+		}
+		//Remember level for next pseudorecirsive cycle
+		n_old_level = st_stack_entry.n_level;
+	}
+    DPRINT("Scan: ");
+    //Scan the tree
+    for (auto cl_iterator_tree = orast_token_array.begin();cl_iterator_tree != orast_token_array.end();cl_iterator_tree++)
+    {
+		DPRINT_NOTAB(" %s |", (*cl_iterator_tree).cl_str.c_str());
+    }
+    DPRINT_NOTAB("\n");
 
     //--------------------------------------------------------------------------
     //	RETURN
@@ -1612,6 +1881,53 @@ bool Equation::convert_token_tree_to_array( Tree<Token> &ircl_tree_root, std::ve
     DRETURN(); //Trace Return
     return false;	//OK
 }   //Static Private Method | token_array_to_tree | std::vector<Token> & | Tree<Token> & |
+
+/***************************************************************************/
+//! @brief Private Method: convert_token_array_to_string | std::vector<Token> & | std::string &
+/***************************************************************************/
+//! @param irast_token_array | reference to array of tokens, source of the reverse translation
+//! @param ors_equation | string where the result is loaded
+//! @return bool | false = OK | true = FAIL |
+//! @details
+//! \n Reverse translation from an array of tokens to a string
+/***************************************************************************/
+
+bool Equation::convert_token_array_to_string( std::vector<Token> &irast_token_array, std::string &ors_equation )
+{
+    DENTER_ARG("Tokens: %d", irast_token_array.size() ); //Trace Enter
+    //--------------------------------------------------------------------------
+    //	INIT
+    //--------------------------------------------------------------------------
+
+    if ((Config::CU1_EXTERNAL_CHECKS == true) && (false))
+    {
+
+		return true;
+    }
+
+    //--------------------------------------------------------------------------
+    //	BODY
+    //--------------------------------------------------------------------------
+
+    for (auto cl_iterator_tree = irast_token_array.begin();cl_iterator_tree != irast_token_array.end();cl_iterator_tree++)
+    {
+		//Token
+		//Equation::Token &rst_token = (*cl_iterator_tree);
+		//If token is negated
+		if ((*cl_iterator_tree).u1_negative == true)
+		{
+			//Token_legend::CS8_OPERATOR_DIFF
+			ors_equation += std::string("-");
+		}
+		//Append token
+		ors_equation += (*cl_iterator_tree).cl_str;
+    }
+    //--------------------------------------------------------------------------
+    //	RETURN
+    //--------------------------------------------------------------------------
+    DRETURN_ARG("Equation: %s | length: %d", ors_equation.c_str(), ors_equation.size() ); //Trace Return
+    return false;	//OK
+}   //Private Method: convert_token_array_to_string | std::vector<Token> & | std::string &
 
 /***************************************************************************/
 //! @brief Static Private Method | aggregate_tree_token_sum_diff | Tree<Token> & |
@@ -1726,7 +2042,7 @@ int Equation::aggregate_tree_token_sum_diff( Tree<Token> &ircl_tree_root )
 			do
 			{
 				//get an array filled with all the children of this node
-				bool x_fail = ircl_tree_root.find_children( n_index_token, an_index_children );
+				bool x_fail = ircl_tree_root.get_children( n_index_token, an_index_children );
 				if (an_index_children.size() > 0)
 				{
 					DPRINT("Children: %d\n", an_index_children.size() );
@@ -1804,18 +2120,20 @@ bool Equation::flush( void )
     //--------------------------------------------------------------------------
 
     //Clear the array of tokens
+    /*
     this->gclacl_tokens.clear();
     if (this->gclacl_tokens.size() != 0)
     {
 		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT CLEAR VECTOR", int(this->gclacl_tokens.size()) );
 		return true;
     }
+    */
 
     //Clear the array of tokens
     this->gcl_token_tree.flush();
     if (this->gcl_token_tree.size() != 1)
     {
-		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT FLUSH TREE", int(this->gclacl_tokens.size()) );
+		DRETURN_ARG("ERR%d | CRITICAL ERROR!!! COULD NOT FLUSH TREE", int(this->gcl_token_tree.size()) );
 		return true;
     }
 
